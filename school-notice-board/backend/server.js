@@ -9,6 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.get('/health', (req, res) => res.json({ status: 'OK' }));
+
 // Import routes
 const noticeRoutes = require('./routes/noticeroutes');
 app.use('/api/notices', noticeRoutes);
