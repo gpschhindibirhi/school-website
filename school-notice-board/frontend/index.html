@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Notice Board for Government Primary School, Chhindibirhi - Stay updated with school announcements." />
+  <title>नोटिस बोर्ड - सरकारी प्राथमिक स्कूल, छिंदिबिरही | Notice Board</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Placeholder for a simple logo or icon (can be replaced with an actual image) -->
+  <link rel="icon" href="images/school-logo.png" type="image/png" />
+</head>
+<body>
+  <header>
+    <div class="logo-placeholder">🏫 सरकारी प्राथमिक स्कूल, छिंदिबिरही</div>
+    <p class="slogan">शिक्षा हर बच्चे का अधिकार | Education for Every Child</p>
+  </header>
+
+  <nav class="navbar">
+    <a href="../../index.html">होम | Home</a>
+    <a href="../../about.html">हमारे बारे में | About</a>
+    <a href="../../gallery.html">गैलरी | Gallery</a>
+    <a href="../../contact.html">संपर्क | Contact</a>
+  </nav>
+
+  <main>
+    <section class="notice-header">
+      <h1>📢 नोटिस बोर्ड | Notice Board</h1>
+    </section>
+
+    <!-- Teacher Tools (hidden by default) -->
+    <div id="teacherTools" style="display: none;">
+      <form id="noticeForm" class="notice-form">
+        <input type="text" id="title" placeholder="नोटिस का शीर्षक लिखें | Enter Notice Title" required />
+        <textarea id="content" placeholder="नोटिस का विवरण लिखें | Enter Notice Content" required></textarea>
+        <button type="submit" id="submitBtn">नई नोटिस जोड़ें | Add Notice</button>
+      </form>
+      <button id="logoutBtn" class="logout-btn">लॉगआउट | Logout</button>
+    </div>
+
+    <!-- Login Link for Visitors -->
+    <div id="loginLink" class="login-link" style="text-align: center; margin: 10px 0;">
+      <a href="teacher-login.html">शिक्षक लॉगिन | Teacher Login</a>
+    </div>
+
+    <section class="notice-list">
+      <h2>सभी नोटिस | All Notices</h2>
+      <div id="noticeList"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 सरकारी प्राथमिक स्कूल, छिंदिबिरही | Government Primary School, Chhindibirhi</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

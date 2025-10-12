@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Teacher Login for Government Primary School, Chhindibirhi Notice Board." />
+  <title>शिक्षक लॉगिन | Teacher Login | Govt. Primary School Chhindibirhi</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Hind', Arial, sans-serif;
+      background-color: #f5e8c7; /* Warm earthy background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background: #fff7e6; /* Light terracotta */
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 320px;
+      text-align: center;
+    }
+
+    h2 { 
+      margin-bottom: 20px; 
+      color: #4a2c2a; /* Dark brown for formality */
+      font-size: 1.5rem;
+    }
+    input { 
+      width: 100%; 
+      padding: 12px; 
+      margin: 10px 0; 
+      border-radius: 8px; 
+      border: 1px solid #8b5e3c; /* Earthy border */
+      font-size: 1rem;
+    }
+    button { 
+      background-color: #6b4e31; /* Deep brown */
+      color: white; 
+      border: none; 
+      padding: 12px 20px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 1rem;
+      width: 100%;
+    }
+    button:hover { 
+      background-color: #5a4228; 
+    }
+    .error-message { 
+      color: #d32f2f; /* Red for errors */
+      font-size: 0.9rem; 
+      margin-top: 10px; 
+    }
+    .back-link { 
+      display: block; 
+      margin-top: 15px; 
+      text-decoration: none; 
+      color: #6b4e31; 
+      font-weight: bold;
+    }
+    @media (max-width: 400px) {
+      .login-container { padding: 15px; }
+      h2 { font-size: 1.2rem; }
+      input, button { font-size: 0.9rem; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>शिक्षक लॉगिन | Teacher Login</h2>
+    <form id="loginForm">
+      <input type="text" id="email" placeholder="ईमेल | Email" required><br>
+      <input type="password" id="password" placeholder="पासवर्ड | Password" required><br>
+      <button type="submit">लॉगिन | Login</button>
+      <p class="error-message" id="errorMsg"></p>
+      <a href="index.html" class="back-link">⬅ होम पर वापस | Back to Home</a>
+    </form>
+  </div>
+
+  <script>
+    const backendURL = "http://localhost:5000/api/auth/teacher/login";
+
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const res = await fetch(backendURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          localStorage.setItem('token', data.token); // Store JWT token
+          localStorage.setItem('teacherName', data.teacher.name);
+          window.location.href = "index.html"; // Redirect to notice board
+        } else {
+          errorMsg.textContent = data.message || "अमान्य प्रमाण | Invalid credentials";
+        }
+      } catch (err) {
+        errorMsg.textContent = "सर्वर से कनेक्शन त्रुटि | Error connecting to server";
+      }
+    });
+  </script>
+</body>
+</html>

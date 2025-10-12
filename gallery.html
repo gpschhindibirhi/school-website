@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gallery of Government Primary School, Chhindibirhi - Photos of school activities." />
+  <title>गैलरी - सरकारी प्राथमिक स्कूल, छिंदिबिरही | Gallery</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="images/school-logo.png" type="image/png" />
+</head>
+<body>
+  <header>
+    <div class="logo-placeholder">🏫 सरकारी प्राथमिक स्कूल, छिंदिबिरही</div>
+    <p class="slogan">शिक्षा हर बच्चे का अधिकार | Education for Every Child</p>
+  </header>
+
+  <nav class="navbar">
+    <a href="index.html">होम | Home</a>
+    <a href="about.html">हमारे बारे में | About</a>
+    <a href="gallery.html">गैलरी | Gallery</a>
+    <a href="contact.html">संपर्क | Contact</a>
+    <a href="school-notice-board/frontend/index.html">नोटिस बोर्ड | Notice Board</a>
+  </nav>
+
+  <main>
+    <section class="gallery">
+      <h1>गैलरी | Gallery</h1>
+      <div class="gallery-grid top-level">
+        <a href="?category=school_photos" class="gallery-card">📷 स्कूल फोटो | School Photos</a>
+        <a href="?category=events" class="gallery-card">📅 आयोजन | Events</a>
+        <a href="?category=other_folders" class="gallery-card">📂 अन्य फोल्डर | Other Folders</a>
+      </div>
+
+      <!-- Dynamic content for sub-levels (handled by JavaScript) -->
+      <div id="subGallery" class="gallery-grid sub-level" style="display: none;"></div>
+      <div id="photoGrid" class="gallery-grid photo-level" style="display: none;"></div>
+    </section>
+    <p class="gallery-note">नोट: तस्वीरें स्कूल कार्यालय से प्राप्त करें। | Note: Photos can be obtained from the school office.</p>
+  </main>
+
+  <footer>
+    <p>© 2025 सरकारी प्राथमिक स्कूल, छिंदिबिरही | Government Primary School, Chhindibirhi</p>
+  </footer>
+
+  <script>
+    // Simple JavaScript for gallery navigation (simulated)
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get('category');
+    const subGallery = document.getElementById('subGallery');
+    const photoGrid = document.getElementById('photoGrid');
+
+    if (category) {
+      document.querySelector('.top-level').style.display = 'none';
+      subGallery.style.display = 'grid';
+
+      const subFolders = {
+        'school_photos': ['inside', 'outside'],
+        'events': ['independence_day_2024', 'independence_day_2025', 'sports_day_2025'],
+        'other_folders': ['plantation_drive', 'classroom_activities', 'cultural_programs']
+      };
+
+      subFolders[category].forEach(folder => {
+        const card = document.createElement('a');
+        card.href = `?category=${category}&subfolder=${folder}`;
+        card.className = 'gallery-card';
+        card.textContent = `📷 ${folder.replace(/_/g, ' ').toUpperCase()} | ${folder.replace(/_/g, ' ')}`;
+        subGallery.appendChild(card);
+      });
+    }
+
+    const subfolder = urlParams.get('subfolder');
+    if (subfolder) {
+      subGallery.style.display = 'none';
+      photoGrid.style.display = 'grid';
+
+      // Simulated photo grid (replace with actual image paths)
+      const photoCount = 6; // Example number of photos
+      for (let i = 1; i <= photoCount; i++) {
+        const photo = document.createElement('div');
+        photo.className = 'gallery-photo';
+        photo.innerHTML = `<img src="images/gallery/${category}/${subfolder}/img${i}.jpg" alt="${subfolder} Photo ${i}">`;
+        photoGrid.appendChild(photo);
+      }
+    }
+  </script>
+</body>
+</html>

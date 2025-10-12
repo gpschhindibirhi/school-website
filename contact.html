@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contact Government Primary School, Chhindibirhi for inquiries." />
+  <title>संपर्क - सरकारी प्राथमिक स्कूल, छिंदिबिरही | Contact</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="images/school-logo.png" type="image/png" />
+</head>
+<body>
+  <header>
+    <div class="logo-placeholder">🏫 सरकारी प्राथमिक स्कूल, छिंदिबिरही</div>
+    <p class="slogan">शिक्षा हर बच्चे का अधिकार | Education for Every Child</p>
+  </header>
+
+  <nav class="navbar">
+    <a href="index.html">होम | Home</a>
+    <a href="about.html">हमारे बारे में | About</a>
+    <a href="gallery.html">गैलरी | Gallery</a>
+    <a href="contact.html">संपर्क | Contact</a>
+    <a href="school-notice-board/frontend/index.html">नोटिस बोर्ड | Notice Board</a>
+  </nav>
+
+  <main>
+    <section class="contact">
+      <h1>संपर्क | Contact Us</h1>
+      <p><strong>स्कूल जानकारी | School Information</strong></p>
+      <p><strong>नाम:</strong> सरकारी प्राथमिक स्कूल, छिंदिबिरही | Name: Government Primary School, Chhindibirhi</p>
+      <p><strong>ब्लॉक:</strong> [ब्लॉक नाम] | Block: [Block Name]</p>
+      <p><strong>जिला:</strong> [जिला नाम], छत्तीसगढ़ | District: [District Name], Chhattisgarh</p>
+      <p><strong>फोन:</strong> +91-98765-43210 | Phone: +91-98765-43210</p>
+      <p><strong>ईमेल:</strong> gps.chhindibirhi@cg.gov.in | Email: gps.chhindibirhi@cg.gov.in</p>
+
+      <h2>🕒 स्कूल समय | School Timings</h2>
+      <ul>
+        <li>सोमवार - शुक्रवार: 10:00 पूर्वाह्न - 4:00 अपराह्न | Monday – Friday: 10:00 AM – 4:00 PM</li>
+        <li>शनिवार: 7:00 पूर्वाह्न - 12:30 अपराह्न | Saturday: 7:00 AM – 12:30 PM</li>
+        <li>रविवार: बंद | Sunday: Closed</li>
+      </ul>
+
+      <h2>🗺️ स्थान | Location</h2>
+      <p>हमारा स्कूल छिंदिबिरही गाँव के दिल में स्थित है। [गूगल मैप्स लिंक या स्थिर छवि जोड़ें] | Our school is located in the heart of Chhindibirhi village. [Embed Google Maps link or static image of location]</p>
+
+      <h2>📝 हमें संदेश भेजें | Send Us a Message</h2>
+      <p>(विकल्पीय, गाँव वालों/माता-पिता के लिए जो लिख या डिजिटल रूप से संपर्क कर सकते हैं) | (Optional, for villagers/parents who can write or digitally reach you)</p>
+      <form id="contactForm" class="contact-form">
+        <label for="name">नाम | Name:</label><br>
+        <input type="text" id="name" name="name" placeholder="अपना नाम लिखें | Enter your name" required><br>
+        <label for="email">ईमेल | Email:</label><br>
+        <input type="email" id="email" name="email" placeholder="अपना ईमेल लिखें | Enter your email"><br>
+        <label for="phone">फोन | Phone:</label><br>
+        <input type="tel" id="phone" name="phone" placeholder="अपना फोन नंबर लिखें | Enter your phone"><br>
+        <label for="message">संदेश | Message:</label><br>
+        <textarea id="message" name="message" placeholder="अपना संदेश लिखें | Enter your message" required></textarea><br>
+        <button type="submit">जमा करें | Submit</button>
+      </form>
+      <p id="formResponse" class="form-note"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 सरकारी प्राथमिक स्कूल, छिंदिबिरही | Government Primary School, Chhindibirhi</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('contactForm');
+    const formResponse = document.getElementById('formResponse');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      try {
+        const response = await fetch('http://localhost:5000/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, phone, message })
+        });
+
+        const data = await response.json();
+        formResponse.textContent = data.message || data.error;
+        formResponse.style.color = response.ok ? '#6b4e31' : '#d32f2f';
+
+        if (response.ok) {
+          form.reset();
+        }
+      } catch (error) {
+        formResponse.textContent = 'सर्वर से कनेक्शन त्रुटि। कृपया बाद में पुनः प्रयास करें। | Server error. Please try again later.';
+        formResponse.style.color = '#d32f2f';
+        console.error('Error submitting form:', error);
+      }
+    });
+  </script>
+</body>
+</html>
