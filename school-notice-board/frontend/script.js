@@ -1,5 +1,5 @@
 // ====== School Notice Board Script ======
-const backendURL = "http://localhost:5000/api/notices";
+const backendURL = "https://school-backend-14ld.onrender.com/api/notices";
 
 const form = document.getElementById("noticeForm");
 const noticeList = document.getElementById("noticeList");
