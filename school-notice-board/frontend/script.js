@@ -32,9 +32,23 @@ function checkAuth() {
 // ---- Fetch and display all notices ----
 async function fetchNotices() {
   if (!noticeList) return;
+  noticeList.innerHTML = "<p>लोड हो रहा है... | Loading...</p>"; // Show loading indicator
+
+  // Load cached notices if available
+  const cachedNotices = localStorage.getItem('cachedNotices');
+  if (cachedNotices) {
+    allNotices = JSON.parse(cachedNotices);
+    renderNotices(showingAll);
+  }
+
   try {
+    const headers = {};
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`; // Include token only if logged in
+    }
     const response = await fetch(backendURL, {
-      headers: { 'Authorization': `Bearer ${localStorage.getItem('token') || ''}` }
+      headers: headers
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const notices = await response.json();
@@ -42,23 +56,26 @@ async function fetchNotices() {
     allNotices = Array.isArray(notices)
       ? notices.slice().sort((a, b) => new Date(b.date) - new Date(a.date))
       : [];
+    localStorage.setItem('cachedNotices', JSON.stringify(allNotices)); // Cache notices
     renderNotices(showingAll);
   } catch (error) {
     console.error("Error fetching notices:", error);
-    noticeList.innerHTML = "<p>नोटिस लोड करने में त्रुटि। बैकेंड जांचें। | Failed to load notices. Check backend.</p>";
+    if (!cachedNotices) {
+      noticeList.innerHTML = "<p>नोटिस लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें। | Failed to load notices. Please try again later.</p>";
+    }
   }
 }
 
 // ---- Render Notices ----
 function renderNotices(showAll = false) {
   if (!noticeList) return;
-  noticeList.innerHTML = "";
+  noticeList.innerHTML = ""; // Clear previous content
   const token = localStorage.getItem('token');
 
   const noticesToShow = showAll ? allNotices : allNotices.slice(0, 10);
 
   if (!noticesToShow || noticesToShow.length === 0) {
-    noticeList.innerHTML = "<p>कोई नोटिस नहीं। | No notices yet.</p>";
+    noticeList.innerHTML = "<p>कोई नोटिस उपलब्ध नहीं है। | No notices available.</p>";
     return;
   }
 
@@ -67,9 +84,9 @@ function renderNotices(showAll = false) {
     div.classList.add("notice");
 
     div.innerHTML = `
-      <h4>${escapeHtml(notice.title || "")}</h4>
-      <p>${escapeHtml(notice.content || "")}</p>
-      <small>${notice.date ? new Date(notice.date).toLocaleString() : ""}</small>
+      <h4>${escapeHtml(notice.title || "Untitled")}</h4>
+      <p>${escapeHtml(notice.content || "No content")}</p>
+      <small>${notice.date ? new Date(notice.date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : "No date"}</small>
     `;
 
     if (token) {
@@ -185,6 +202,7 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     localStorage.removeItem('token');
     localStorage.removeItem('teacherName');
+    localStorage.removeItem('cachedNotices'); // Clear cached notices on logout
     window.location.href = "index.html"; // Redirect to notice board
   });
 }

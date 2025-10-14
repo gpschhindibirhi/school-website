@@ -139,6 +139,12 @@ button:hover {
   border-bottom: none;
 }
 
+.notice p {
+  white-space: pre-wrap; /* Preserve line breaks and formatting */
+  margin: 10px 0; /* Add spacing for readability */
+  line-height: 1.8; /* Improve readability */
+}
+
 .editBtn {
   background: #ffc107;
   color: white;
