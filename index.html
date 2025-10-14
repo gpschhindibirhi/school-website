@@ -4,78 +4,190 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Welcome to Government Primary School, Chhindibirhi - Providing quality education to rural children." />
-  <title>होम - सरकारी प्राथमिक स्कूल, छिंदिबिरही | Home</title>
+  <meta property="og:title" content="Government Primary School, Chhindibirhi" />
+  <meta property="og:description" content="Providing quality education to rural children." />
+  <meta property="og:image" content="/images/school-logo.png" />
+  <title>होम - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="images/school-logo.png" type="image/png" />
 </head>
 <body>
   <header>
-    <div class="logo-placeholder">🏫 सरकारी प्राथमिक स्कूल, छिंदिबिरही</div>
-    <p class="slogan">शिक्षा हर बच्चे का अधिकार | Education for Every Child</p>
+    <a href="index.html" class="header-link" aria-label="Return to homepage">
+      <div class="logo-placeholder">
+        <img src="images/school-logo.png" alt="Government Primary School Chhindibirhi Logo" class="logo" loading="lazy">
+        <span class="lang-hindi" lang="hi">🏫 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
+        <span class="lang-english" lang="en">Government Primary School, Chhindibirhi</span>
+      </div>
+    </a>
   </header>
 
   <nav class="navbar">
-    <a href="index.html">होम | Home</a>
-    <a href="about.html">हमारे बारे में | About</a>
-    <a href="gallery.html">गैलरी | Gallery</a>
-    <a href="contact.html">संपर्क | Contact</a>
-    <a href="school-notice-board/frontend/index.html">नोटिस बोर्ड | Notice Board</a>
+    <button class="menu-toggle" aria-label="Toggle navigation">☰</button>
+    <div class="nav-links">
+      <a href="index.html">होम | Home</a>
+      <a href="about.html">हमारे बारे में | About Us</a>
+      <a href="gallery.html">गैलरी | Gallery</a>
+      <a href="contact.html">संपर्क | Contact</a>
+      <a href="school-notice-board/frontend/index.html">नोटिस बोर्ड | Notice Board</a>
+    </div>
   </nav>
 
   <main>
     <section class="hero">
-      <h1>स्वागत है | Welcome</h1>
-      <p>सरकारी प्राथमिक स्कूल, छिंदिबिरही में आपका स्वागत है! हमारा मिशन छिंदिबिरही गाँव के प्रत्येक बच्चे को गुणवत्तापूर्ण शिक्षा प्रदान करना है। हम सीखने, अनुशासन, स्वच्छता और हर छात्र की देखभाल पर ध्यान देते हैं। यह स्कूल छत्तीसगढ़ सरकार, स्कूल शिक्षा विभाग द्वारा संचालित है।</p>
-      <p>Welcome to Government Primary School, Chhindibirhi! Our mission is to provide quality education to every child in Chhindibirhi village. We focus on learning, discipline, cleanliness, and care for every student. This school is managed by the Government of Chhattisgarh, School Education Department.</p>
+      <div class="hero-slider" role="region" aria-label="School image slideshow">
+        <img src="images/school-front.jpg" alt="Front view of Government Primary School, Chhindibirhi" class="active" loading="lazy">
+        <img src="images/students-learning.jpg" alt="Students" loading="lazy">
+        <img src="images/image (1).jpg" alt="School Campus" loading="lazy">
+        <img src="images/image (2).jpg" alt="School Campus" loading="lazy">
+        <img src="images/image (3).jpg" alt="School Campus" loading="lazy">
+        <img src="images/image (4).jpg" alt="Students" loading="lazy">
+        <img src="images/image (5).jpg" alt="Students" loading="lazy">
+        <button class="slider-prev" aria-label="Previous slide">❮</button>
+        <button class="slider-next" aria-label="Next slide">❯</button>
+      </div>
+      <h1 data-animate>
+        <span class="lang-hindi" lang="hi">स्वागत है</span>
+        <span class="lang-english" lang="en">Welcome</span>
+      </h1>
+      <div class="text-block">
+        <p class="lang-hindi" lang="hi">सरकारी प्राथमिक स्कूल, छिंदिबिरही में आपका स्वागत है! हमारा मिशन छिंदिबिरही गाँव के प्रत्येक बच्चे को गुणवत्तापूर्ण शिक्षा प्रदान करना है। हम सीखने, अनुशासन, स्वच्छता और हर छात्र की देखभाल पर ध्यान देते हैं। यह स्कूल छत्तीसगढ़ सरकार, स्कूल शिक्षा विभाग द्वारा संचालित है।</p>
+        <p class="lang-english" lang="en">Welcome to Government Primary School, Chhindibirhi! Our mission is to provide quality education to every child in Chhindibirhi village. We focus on learning, discipline, cleanliness, and care for every student. This school is managed by the Government of Chhattisgarh, School Education Department.</p>
+      </div>
     </section>
 
     <section class="content">
-      <h2>स्कूल एक नजर में | School at a Glance</h2>
-      <table>
-        <tr><td>स्थापना</td><td>1995</td></tr>
-        <tr><td>प्रधानाचार्य / प्रधान शिक्षक</td><td>श्री रमेश कुमार | Shri Ramesh Kumar</td></tr>
-        <tr><td>शिक्षक</td><td>2</td></tr>
-        <tr><td>छात्र</td><td>80+</td></tr>
-        <tr><td>स्कूल समय</td><td>सोम-शुक्र: 10:00 पूर्वाह्न - 4:00 अपराह्न<br>शनि: 7:00 पूर्वाह्न - 12:30 अपराह्न<br>रवि: बंद | Mon-Fri: 10:00 AM - 4:00 PM<br>Sat: 7:00 AM - 12:30 PM<br>Sun: Closed</td></tr>
-        <tr><td>संबद्धता</td><td>छत्तीसगढ़ सरकार</td></tr>
-        <tr><td>स्थान</td><td>छिंदिबिरही, [ब्लॉक नाम], [जिला नाम], छत्तीसगढ़ | Chhindibirhi, [Block Name], [District Name], Chhattisgarh</td></tr>
-      </table>
+      <h2 data-animate>
+        <span class="lang-hindi" lang="hi">स्कूल एक नजर में</span>
+        <span class="lang-english" lang="en">School at a Glance</span>
+      </h2>
+      <div class="table-wrapper">
+        <table role="grid" aria-label="School details">
+          <tr><th scope="col">स्थापना | Established</th><td>1995</td></tr>
+          <tr><th scope="col">प्रधानाचार्य | Principal</th><td>प्रधानपाठक पद वर्तमान में रिक्त है | The post of Headmaster is presently vacant</td></tr>
+          <tr><th scope="col">शिक्षक | Teachers</th><td>2</td></tr>
+          <tr><th scope="col">छात्र | Students</th><td>30+</td></tr>
+          <tr><th scope="col">स्कूल समय | School Timings</th><td>
+            <span class="lang-hindi" lang="hi">सोम-शुक्र: 10:00 AM - 4:00 PM<br>शनि: 7:00 AM - 12:30 PM<br>रवि: बंद</span>
+            <span class="lang-english" lang="en">Mon-Fri: 10:00 AM - 4:00 PM<br>Sat: 7:00 AM - 12:30 PM<br>Sun: Closed</span>
+          </td></tr>
+          <tr><th scope="col">संबद्धता | Affiliation</th><td><span class="lang-hindi" lang="hi">छत्तीसगढ़ सरकार</span><span class="lang-english" lang="en">Government of Chhattisgarh</span></td></tr>
+          <tr><th scope="col">स्थान | Location</th><td><span class="lang-hindi" lang="hi">छिंदिबिरही, राजनांदगाँव, छत्तीसगढ़</span><span class="lang-english" lang="en">Chhindibirhi, Rajnandgaon, Chhattisgarh</span></td></tr>
+        </table>
+      </div>
 
-      <h2>शिक्षण स्टाफ | Teaching Staff Details</h2>
-      <table>
-        <tr><th>S.No.</th><th>शिक्षक का नाम | Name</th><th>पद | Post</th><th>अध्ययन विषय | Subjects Taught</th><th>कक्षा | Classes Handled</th><th>जॉइनिंग तिथि | Date of Joining</th></tr>
-        <tr><td>1</td><td>स्मत. [टीचर 1 नाम] | Smt. [Teacher 1 Name]</td><td>सहायक शिक्षक | Assistant Teacher</td><td>हिंदी, पर्यावरण अध्ययन | Hindi, EVS</td><td>कक्षा 1 - 3 | Class 1 - 3</td><td>[DD/MM/YYYY]</td></tr>
-        <tr><td>2</td><td>श्री [टीचर 2 नाम] | Shri [Teacher 2 Name]</td><td>सहायक शिक्षक | Assistant Teacher</td><td>गणित, अंग्रेजी | Mathematics, English</td><td>कक्षा 4 - 5 | Class 4 - 5</td><td>[DD/MM/YYYY]</td></tr>
-      </table>
+      <h2 data-animate>
+        <span class="lang-hindi" lang="hi">शिक्षण स्टाफ</span>
+        <span class="lang-english" lang="en">Teaching Staff Details</span>
+      </h2>
+      <div class="table-wrapper">
+        <table role="grid" aria-label="Teaching staff details">
+          <tr>
+            <th scope="col">S.No.</th>
+            <th scope="col">शिक्षक का नाम | Name</th>
+            <th scope="col">पद | Post</th>
+            <th scope="col">अध्ययन विषय | Subjects Taught</th>
+            <th scope="col">कक्षा | Classes Handled</th>
+            <th scope="col">जॉइनिंग तिथि | Date of Joining</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td><span class="lang-hindi" lang="hi">श्री भोज कुमार</span><span class="lang-english" lang="en">Shri Bhoj Kumar</span></td>
+            <td><span class="lang-hindi" lang="hi">सहायक शिक्षक</span><span class="lang-english" lang="en">Assistant Teacher</span></td>
+            <td><span class="lang-hindi" lang="hi">हिंदी, पर्यावरण अध्ययन</span><span class="lang-english" lang="en">Hindi, EVS</span></td>
+            <td><span class="lang-hindi" lang="hi">कक्षा 1 - 3</span><span class="lang-english" lang="en">Class 1 - 3</span></td>
+            <td>15/06/2008</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="lang-hindi" lang="hi">—</span><span class="lang-english" lang="en">—</span></td>
+            <td><span class="lang-hindi" lang="hi">सहायक शिक्षक</span><span class="lang-english" lang="en">Assistant Teacher</span></td>
+            <td><span class="lang-hindi" lang="hi">—</span><span class="lang-english" lang="en">—</span></td>
+            <td><span class="lang-hindi" lang="hi">—</span><span class="lang-english" lang="en">—</span></td>
+            <td>—</td>
+          </tr>
+        </table>
+      </div>
 
-      <h2>उपलब्ध सुविधाएँ | Facilities Available</h2>
+      <h2 data-animate>
+        <span class="lang-hindi" lang="hi">उपलब्ध सुविधाएँ</span>
+        <span class="lang-english" lang="en">Facilities Available</span>
+      </h2>
       <ul>
-        <li>निःशुल्क पाठ्यपुस्तक और वर्दी | Free textbooks and uniforms</li>
-        <li>मध्याह्न भोजन (MDM) | Mid-Day Meal (MDM)</li>
-        <li>पीने का पानी | Drinking water facility</li>
-        <li>लड़कों और लड़कियों के लिए अलग शौचालय | Separate toilets for boys and girls</li>
-        <li>खेल का मैदान और खेल सामग्री | Playground and sports area</li>
-        <li>पुस्तकालय (मूल स्तर) | Library (basic level)</li>
-        <li>स्मार्ट कक्षा / प्रोजेक्टर-आधारित शिक्षण | Smart class / projector-based teaching</li>
-        <li>कंप्यूटर और मूल डिजिटल शिक्षा | Computer and basic digital learning</li>
-        <li>विज्ञान लर्निंग किट और चार्ट | Science learning kit and charts</li>
-        <li>स्वास्थ्य जांच और टीकाकरण शिविर | Health check-up and vaccination camps</li>
-        <li>विकलांग बच्चों के लिए रैंप | Ramps for differently-abled students</li>
-        <li>पौधरोपण और स्वच्छता गतिविधियाँ | Plantation and cleanliness activities</li>
+        <li><span class="lang-hindi" lang="hi">निःशुल्क पाठ्यपुस्तक और यूनिफार्म</span><span class="lang-english" lang="en">Free textbooks and uniforms</span></li>
+        <li><span class="lang-hindi" lang="hi">मध्याह्न भोजन (MDM)</span><span class="lang-english" lang="en">Mid-Day Meal (MDM)</span></li>
+        <li><span class="lang-hindi" lang="hi">पीने का पानी</span><span class="lang-english" lang="en">Drinking water facility</span></li>
+        <li><span class="lang-hindi" lang="hi">लड़कों और लड़कियों के लिए अलग शौचालय</span><span class="lang-english" lang="en">Separate toilets for boys and girls</span></li>
+        <li><span class="lang-hindi" lang="hi">खेल का मैदान और खेल सामग्री</span><span class="lang-english" lang="en">Playground and sports area</span></li>
+        <li><span class="lang-hindi" lang="hi">पुस्तकालय (मूल स्तर)</span><span class="lang-english" lang="en">Library (basic level)</span></li>
+        <li><span class="lang-hindi" lang="hi">स्मार्ट कक्षा</span><span class="lang-english" lang="en">Smart class / projector-based teaching</span></li>
+        <li><span class="lang-hindi" lang="hi">कंप्यूटर और मूल डिजिटल शिक्षा</span><span class="lang-english" lang="en">Computer and basic digital learning</span></li>
+        <li><span class="lang-hindi" lang="hi">विज्ञान लर्निंग किट और चार्ट</span><span class="lang-english" lang="en">Science learning kit and charts</span></li>
+        <li><span class="lang-hindi" lang="hi">स्वास्थ्य जांच और टीकाकरण शिविर</span><span class="lang-english" lang="en">Health check-up and vaccination camps</span></li>
+        <li><span class="lang-hindi" lang="hi">—</span><span class="lang-english" lang="en">—</span></li>
+        <li><span class="lang-hindi" lang="hi">पौधरोपण और स्वच्छता गतिविधियाँ</span><span class="lang-english" lang="en">Plantation and cleanliness activities</span></li>
       </ul>
 
-      <h2>उपलब्धियाँ | Achievements</h2>
+      <h2 data-animate>
+        <span class="lang-hindi" lang="hi">उपलब्धियाँ</span>
+        <span class="lang-english" lang="en">Achievements</span>
+      </h2>
       <ul>
-        <li>100% नामांकन और नियमित उपस्थिति | 100% enrollment and regular attendance</li>
-        <li>स्वच्छ भारत अभiyan में सक्रिय भागीदारी | Active participation in Swachh Bharat Abhiyan</li>
-        <li>ब्लॉक-स्तरीय प्रतियोगिताओं में छात्रों की भागीदारी | Students took part in block-level competitions</li>
-        <li>स्वच्छ और हरा-भरा परिसर के लिए मान्यता | Recognized for clean and green campus</li>
+        <li><span class="lang-hindi" lang="hi">100% नामांकन और नियमित उपस्थिति</span><span class="lang-english" lang="en">100% enrollment and regular attendance</span></li>
+        <li><span class="lang-hindi" lang="hi">स्वच्छ भारत अभियान में सक्रिय भागीदारी</span><span class="lang-english" lang="en">Active participation in Swachh Bharat Abhiyan</span></li>
+        <li><span class="lang-hindi" lang="hi">ब्लॉक-स्तरीय प्रतियोगिताओं में छात्रों की भागीदारी</span><span class="lang-english" lang="en">Students took part in block-level competitions</span></li>
+        <li><span class="lang-hindi" lang="hi">स्वच्छ और हरा-भरा परिसर के लिए मान्यता</span><span class="lang-english" lang="en">Recognized for clean and green campus</span></li>
       </ul>
     </section>
   </main>
 
   <footer>
-    <p>© 2025 सरकारी प्राथमिक स्कूल, छिंदिबिरही | Government Primary School, Chhindibirhi</p>
+    <p><span class="lang-hindi" lang="hi">© 2025 सरकारी प्राथमिक स्कूल, छिंदिबिरही</span><span class="lang-english" lang="en">Government Primary School, Chhindibirhi</span></p>
   </footer>
+
+  <script>
+    // Hero slider with touch support
+    const images = document.querySelectorAll('.hero-slider img');
+    const prevBtn = document.querySelector('.slider-prev');
+    const nextBtn = document.querySelector('.slider-next');
+    let current = 0;
+
+    function showImage(index) {
+      images.forEach(img => img.classList.remove('active'));
+      images[index].classList.add('active');
+      current = index;
+    }
+
+    prevBtn.addEventListener('click', () => showImage((current - 1 + images.length) % images.length));
+    nextBtn.addEventListener('click', () => showImage((current + 1) % images.length));
+    setInterval(() => showImage((current + 1) % images.length), 5000);
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const slider = document.querySelector('.hero-slider');
+    slider.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+    slider.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) showImage((current + 1) % images.length);
+      if (touchEndX - touchStartX > 50) showImage((current - 1 + images.length) % images.length);
+    });
+
+    // Sidebar menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      menuToggle.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+    });
+
+    // Close sidebar on link click
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuToggle.textContent = '☰';
+      });
+    });
+  </script>
 </body>
 </html>
