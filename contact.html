@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Contact Government Primary School, Chhindibirhi for inquiries." />
-  <title>संपर्क - सरकारी प्राथमिक स्कूल, छिंदिबिरही</title>
+  <title>संपर्क - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="images/school-logo.png" type="image/png" />
 </head>
@@ -13,7 +13,7 @@
     <a href="index.html" class="header-link" aria-label="Return to homepage">
       <div class="logo-placeholder">
         <img src="images/school-logo.png" alt="Government Primary School Chhindibirhi Logo" class="logo" loading="lazy">
-        <span class="lang-hindi" lang="hi">🏫 सरकारी प्राथमिक स्कूल, छिंदिबिरही</span>
+        <span class="lang-hindi" lang="hi">🏫 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
         <span class="lang-english" lang="en">Government Primary School, Chhindibirhi</span>
       </div>
     </a>
@@ -33,7 +33,6 @@
   <main>
     <section class="contact">
       <h1 data-animate>
-        <span class=" Ascending
         <span class="lang-hindi" lang="hi">संपर्क</span>
         <span class="lang-english" lang="en">Contact Us</span>
       </h1>
@@ -58,77 +57,161 @@
         <span class="lang-hindi" lang="hi">🗺️ स्थान</span>
         <span class="lang-english" lang="en">Location</span>
       </h2>
-      <p><span class="lang-hindi" lang="hi">हमारा स्कूल छिंदिबिरही गाँव के दिल में स्थित है।</span><span class="lang-english" lang="en">Our school is located in the heart of Chhindibirhi village.</span></p>
-      <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      <p><span class="lang-hindi" lang="hi">हमारा स्कूल छिंदिबिरही गाँव में स्थित है।</span><span class="lang-english" lang="en">Our school is located in the heart of Chhindibirhi village.</span></p>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.965734379136!2d80.93361081057029!3d20.908910480630134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a2953ac5a10e631%3A0x6cc660864b7e147a!2z4KS24KS-4KS44KSV4KWA4KSvIOCkquCljeCksOCkvuCkpeCkruCkv-CklSDgpLbgpL7gpLLgpL4g4KSb4KS_4KSC4KSm4KWA4KSs4KS_4KSw4KS54KWA!5e1!3m2!1sen!2sin!4v1760533264065!5m2!1sen!2sin" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
 
       <h2 data-animate>
         <span class="lang-hindi" lang="hi">हमसे संपर्क करें</span>
         <span class="lang-english" lang="en">Get in Touch</span>
       </h2>
       <form id="contactForm" class="contact-form">
-        <label for="name"><span class="lang-hindi" lang="hi">नाम</span><span class="lang-english" lang="en">Name</span></label>
+        <label for="name"><span class="lang-hindi" lang="hi">नाम</span><span class="lang-english" lang="en">Name</span> <span class="required">*</span></label>
         <input type="text" id="name" name="name" placeholder="अपना नाम लिखें | Enter your name" required aria-describedby="name-hint">
         <span id="name-hint" class="sr-only">Please enter your full name</span>
         <label for="email"><span class="lang-hindi" lang="hi">ईमेल</span><span class="lang-english" lang="en">Email</span></label>
-        <input type="email" id="email" name="email" placeholder="अपना ईमेल लिखें | Enter your email">
+        <input type="email" id="email" name="email" placeholder="अपना ईमेल लिखें | Enter your email" aria-describedby="email-hint">
+        <span id="email-hint" class="sr-only">Enter a valid email address (optional, but either email or phone is required)</span>
         <label for="phone"><span class="lang-hindi" lang="hi">फोन</span><span class="lang-english" lang="en">Phone</span></label>
-        <input type="tel" id="phone" name="phone" placeholder="अपना फोन नंबर लिखें | Enter your phone">
-        <label for="message"><span class="lang-hindi" lang="hi">संदेश</span><span class="lang-english" lang="en">Message</span></label>
+        <input type="tel" id="phone" name="phone" placeholder="अपना फोन नंबर लिखें | Enter your phone" value="+91 " aria-describedby="phone-hint">
+        <span id="phone-hint" class="sr-only">Enter a valid 10-digit phone number starting with +91 (optional, but either email or phone is required)</span>
+        <label for="message"><span class="lang-hindi" lang="hi">संदेश</span><span class="lang-english" lang="en">Message</span> <span class="required">*</span></label>
         <textarea id="message" name="message" placeholder="अपना संदेश लिखें | Enter your message" required></textarea>
-        <button type="submit">जमा करें | Submit</button>
+        <button type="submit" id="submitBtn">जमा करें | Submit</button>
         <p id="formResponse" class="form-note" aria-live="polite"></p>
       </form>
     </section>
   </main>
 
   <footer>
-    <p><span class="lang-hindi" lang="hi">© 2025 सरकारी प्राथमिक स्कूल, छिंदिबिरही</span><span class="lang-english" lang="en">Government Primary School, Chhindibirhi</span></p>
+    <p><span class="lang-hindi" lang="hi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span><span class="lang-english" lang="en">Government Primary School, Chhindibirhi</span></p>
   </footer>
 
   <script>
     const form = document.getElementById('contactForm');
     const formResponse = document.getElementById('formResponse');
+    const submitBtn = document.getElementById('submitBtn');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
+      formResponse.textContent = '';
+      
+      // Get form values
       const name = document.getElementById('name').value.trim();
       const email = document.getElementById('email').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const message = document.getElementById('message').value.trim();
 
+      // Reset invalid field styles
+      document.querySelectorAll('.contact-form input, .contact-form textarea').forEach(field => {
+        field.classList.remove('invalid');
+      });
+
+      // Validate required fields
+      if (!name) {
+        formResponse.textContent = 'कृपया अपना नाम दर्ज करें | Please enter your name';
+        formResponse.style.color = '#d32f2f';
+        document.getElementById('name').classList.add('invalid');
+        return;
+      }
+      if (!message) {
+        formResponse.textContent = 'कृपया अपना संदेश दर्ज करें | Please enter your message';
+        formResponse.style.color = '#d32f2f';
+        document.getElementById('message').classList.add('invalid');
+        return;
+      }
+      if (!email && !phone) {
+        formResponse.textContent = 'कृपया ईमेल या फोन नंबर में से एक दर्ज करें | Please enter either an email or phone number';
+        formResponse.style.color = '#d32f2f';
+        document.getElementById('email').classList.add('invalid');
+        document.getElementById('phone').classList.add('invalid');
+        return;
+      }
+
+      // Validate email if provided
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (email && !emailRegex.test(email)) {
         formResponse.textContent = 'कृपया वैध ईमेल दर्ज करें | Please enter a valid email';
         formResponse.style.color = '#d32f2f';
+        document.getElementById('email').classList.add('invalid');
         return;
       }
 
-      const phoneRegex = /^\d{10}$/;
-      if (phone && !phoneRegex.test(phone)) {
-        formResponse.textContent = 'कृपया वैध 10 अंकों का फोन नंबर दर्ज करें | Please enter a valid 10-digit phone number';
+      // Validate phone if provided (must start with +91 and have 10 digits)
+      const phoneRegex = /^\+91\s?\d{10}$/;
+      if (phone && phone !== '+91 ' && !phoneRegex.test(phone)) {
+        formResponse.textContent = 'कृपया वैध 10 अंकों का फोन नंबर दर्ज करें (+91 के साथ) | Please enter a valid 10-digit phone number (with +91)';
         formResponse.style.color = '#d32f2f';
+        document.getElementById('phone').classList.add('invalid');
         return;
       }
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> जमा हो रहा है... | Submitting...';
+      submitBtn.classList.add('loading');
+
+      // Create timeout promise (10 seconds)
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
 
       try {
-        const response = await fetch('https://school-backend-14ld.onrender.com/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, phone, message })
-        });
+        // Fetch with timeout
+        const response = await Promise.race([
+          fetch('https://school-backend-14ld.onrender.com/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, phone: phone === '+91 ' ? '' : phone, message })
+          }),
+          timeoutPromise
+        ]);
 
-        const data = await response.json();
-        formResponse.textContent = data.message || data.error;
-        formResponse.style.color = response.ok ? '#6b4e31' : '#d32f2f';
-
-        if (response.ok) {
-          form.reset();
+        // Check if response is ok (e.g., 200-299)
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          // If JSON parsing fails, assume success since DB saves
+          data = { message: 'आपका संदेश सफलतापूर्वक भेजा गया! | Your message was sent successfully!' };
+          console.warn('JSON parse error, assuming success:', jsonError);
+        }
+
+        formResponse.textContent = data.message || 'आपका संदेश सफलतापूर्वक भेजा गया! | Your message was sent successfully!';
+        formResponse.style.color = '#2e7d32';
+
+        // Clear form on success
+        form.reset();
+        document.getElementById('phone').value = '+91 '; // Reset phone with +91
+
       } catch (error) {
-        formResponse.textContent = 'सर्वर से कनेक्शन त्रुटि। कृपया बाद में पुनः प्रयास करें। | Server error. Please try again later.';
+        // Distinguish between HTTP errors and network/timeout
+        if (error.name === 'TypeError' || error.message.includes('timeout')) {
+          formResponse.textContent = 'सर्वर से कनेक्शन त्रुटि या टाइमआउट। कृपया बाद में पुनः प्रयास करें। | Connection error or timeout. Please try again later.';
+        } else {
+          formResponse.textContent = 'सर्वर त्रुटि। आपका संदेश संभवतः भेजा गया है, लेकिन पुष्टि नहीं हो सकी। | Server error. Your message may have been sent, but confirmation failed.';
+        }
         formResponse.style.color = '#d32f2f';
-        console.error('Error submitting form:', error);
+        console.error('Form submission error:', error);
+
+        // Clear form anyway (since DB saves immediately)
+        form.reset();
+        document.getElementById('phone').value = '+91 ';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'जमा करें | Submit';
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    // Ensure +91 stays in phone input
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('input', () => {
+      if (!phoneInput.value.startsWith('+91 ')) {
+        phoneInput.value = '+91 ' + phoneInput.value.replace(/^\+91\s?/, '');
       }
     });
 
