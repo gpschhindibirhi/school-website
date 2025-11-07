@@ -52,7 +52,7 @@ body {
 [data-lang="hi"] .lang-english { display: none !important; }
 [data-lang="en"] .lang-hindi { display: none !important; }
 
-/* ====== Top Bar ====== */
+/* ====== Top Bar - Government Identity ====== */
 .top-bar {
   background: var(--header-bg);
   color: white;
@@ -81,12 +81,33 @@ body {
 .emblem-placeholder {
   width: 40px;
   height: 40px;
-  background: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  /* Flag gradient: saffron → white → green */
+  background: linear-gradient(180deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
+  position: relative;
+  overflow: hidden;
+  /* Hide the emoji text when using image-based emblem */
+  font-size: 0;
+}
+
+/* Ashoka Chakra overlay (simple ring + center) */
+.emblem-placeholder::after {
+  content: '';
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='28' fill='none' stroke='%23054a91' stroke-width='6'/><circle cx='50' cy='50' r='12' fill='%23054a91'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 .govt-text {
@@ -96,6 +117,11 @@ body {
 .govt-text strong {
   display: block;
   font-size: 0.9rem;
+}
+
+.tricolor-bar {
+  height: 4px;
+  background: linear-gradient(to right, var(--secondary-color) 33%, white 33%, white 66%, var(--accent-color) 66%);
 }
 
 /* Notice link styles */
