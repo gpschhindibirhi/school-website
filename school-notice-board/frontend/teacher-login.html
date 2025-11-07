@@ -1,89 +1,155 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Teacher Login for Government Primary School, Chhindibirhi Notice Board." />
-  <title>शिक्षक लॉगिन | Teacher Login | Govt. Primary School Chhindibirhi</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: 'Hind', Arial, sans-serif;
-      background-color: #f5e8c7; /* Warm earthy background */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .login-container {
-      background: #fff7e6; /* Light terracotta */
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      width: 90%;
-      max-width: 320px;
-      text-align: center;
-    }
-
-    h2 { 
-      margin-bottom: 20px; 
-      color: #4a2c2a; /* Dark brown for formality */
-      font-size: 1.5rem;
-    }
-    input { 
-      width: 100%; 
-      padding: 12px; 
-      margin: 10px 0; 
-      border-radius: 8px; 
-      border: 1px solid #8b5e3c; /* Earthy border */
-      font-size: 1rem;
-    }
-    button { 
-      background-color: #6b4e31; /* Deep brown */
-      color: white; 
-      border: none; 
-      padding: 12px 20px; 
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 1rem;
-      width: 100%;
-    }
-    button:hover { 
-      background-color: #5a4228; 
-    }
-    .error-message { 
-      color: #d32f2f; /* Red for errors */
-      font-size: 0.9rem; 
-      margin-top: 10px; 
-    }
-    .back-link { 
-      display: block; 
-      margin-top: 15px; 
-      text-decoration: none; 
-      color: #6b4e31; 
-      font-weight: bold;
-    }
-    @media (max-width: 400px) {
-      .login-container { padding: 15px; }
-      h2 { font-size: 1.2rem; }
-      input, button { font-size: 0.9rem; padding: 10px; }
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही - शिक्षक लॉगिन पृष्ठ">
+  <meta name="keywords" content="teacher login, school login, Chhindibirhi school">
+  <meta name="author" content="Government Primary School Chhindibirhi">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>शिक्षक लॉगिन | Teacher Login - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <link rel="icon" href="../../images/school-logo.png" type="image/png" />
 </head>
-<body>
-  <div class="login-container">
-    <h2>शिक्षक लॉगिन | Teacher Login</h2>
-    <form id="loginForm">
-      <input type="text" id="email" placeholder="ईमेल | Email" required><br>
-      <input type="password" id="password" placeholder="पासवर्ड | Password" required><br>
-      <button type="submit">लॉगिन | Login</button>
-      <p class="error-message" id="errorMsg"></p>
-      <a href="index.html" class="back-link">⬅ होम पर वापस | Back to Home</a>
-    </form>
+<body data-lang="hi" data-theme="light">
+  <!-- Top Government Bar -->
+  <div class="top-bar">
+    <div class="tricolor-bar"></div>
+    <div class="top-bar-content">
+      <div class="govt-emblem">
+        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="govt-text">
+          <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
+          <strong class="lang-english">Government of Chhattisgarh</strong>
+          <span class="lang-hindi">स्कूल शिक्षा विभाग</span>
+          <span class="lang-english">School Education Department</span>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="toggle-btn" id="langToggle" onclick="toggleLanguage()" aria-label="Toggle Language">
+          <span class="lang-hindi">English</span>
+          <span class="lang-english">हिंदी</span>
+        </button>
+        <button class="toggle-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+          <span>🌙</span>
+        </button>
+      </div>
+    </div>
   </div>
 
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="school-identity">
+        <img src="../../images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <div class="school-name">
+          <h1>
+            <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
+            <span class="lang-english">Government Primary School, Chhindibirhi</span>
+          </h1>
+          <p>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ - 491441</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh - 491441</span>
+          </p>
+        </div>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav id="mainNav">
+    <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
+    <div class="nav-content">
+      <a href="../../index.html">
+        <span class="lang-hindi">मुख्य पृष्ठ</span>
+        <span class="lang-english">Home</span>
+      </a>
+      <a href="../../about.html">
+        <span class="lang-hindi">हमारे बारे में</span>
+        <span class="lang-english">About Us</span>
+      </a>
+      <a href="../../gallery.html">
+        <span class="lang-hindi">फोटो गैलरी</span>
+        <span class="lang-english">Gallery</span>
+      </a>
+      <a href="../../contact.html">
+        <span class="lang-hindi">संपर्क करें</span>
+        <span class="lang-english">Contact</span>
+      </a>
+      <a href="index.html">
+        <span class="lang-hindi">नोटिस बोर्ड</span>
+        <span class="lang-english">Notice Board</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <section class="content-section">
+      <div class="section-title">
+        <h2>
+          <span class="lang-hindi">🔐 शिक्षक लॉगिन</span>
+          <span class="lang-english">🔐 Teacher Login</span>
+        </h2>
+      </div>
+      
+      <div class="login-container">
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <label for="email">
+              <span class="lang-hindi">ईमेल</span>
+              <span class="lang-english">Email</span>
+              <span class="required">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              placeholder="teacher@example.com" 
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              <span class="lang-hindi">पासवर्ड</span>
+              <span class="lang-english">Password</span>
+              <span class="required">*</span>
+            </label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password"
+              placeholder="••••••••" 
+              required
+            />
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <span class="lang-hindi">लॉगिन करें</span>
+            <span class="lang-english">Login</span>
+          </button>
+
+          <p id="errorMsg" class="error-message"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <p>
+        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
+        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
+      </p>
+    </div>
+    <div class="tricolor-bar"></div>
+  </footer>
+
+  <script src="../../script.js"></script>
   <script>
     const backendURL = "https://school-backend-14ld.onrender.com/api/auth/teacher/login";
 
@@ -97,6 +163,15 @@
       const password = document.getElementById('password').value.trim();
 
       try {
+        // Show loading state
+        const submitBtn = form.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <span class="lang-hindi">लॉगिन हो रहा है...</span>
+          <span class="lang-english">Logging in...</span>
+        `;
+
         const res = await fetch(backendURL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -106,14 +181,24 @@
         const data = await res.json();
 
         if (res.ok) {
-          localStorage.setItem('token', data.token); // Store JWT token
+          localStorage.setItem('token', data.token);
           localStorage.setItem('teacherName', data.teacher.name);
-          window.location.href = "index.html"; // Redirect to notice board
+          window.location.href = "index.html";
         } else {
-          errorMsg.textContent = data.message || "अमान्य प्रमाण | Invalid credentials";
+          errorMsg.innerHTML = `
+            <span class="lang-hindi">अमान्य प्रमाण पत्र</span>
+            <span class="lang-english">Invalid credentials</span>
+          `;
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
         }
       } catch (err) {
-        errorMsg.textContent = "सर्वर से कनेक्शन त्रुटि | Error connecting to server";
+        errorMsg.innerHTML = `
+          <span class="lang-hindi">सर्वर से कनेक्शन त्रुटि</span>
+          <span class="lang-english">Error connecting to server</span>
+        `;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
       }
     });
   </script>
