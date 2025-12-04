@@ -65,186 +65,76 @@ let currentSubcategory = '';
 let currentImages = [];
 let currentImageIndex = 0;
 
-// Helper to safely get element
-function $id(id) {
-  return document.getElementById(id);
-}
-
-/*
-  NEW: Render main categories from galleryData
-  - Creates a clickable card for each top-level category
-  - Shows total photos count (sum of subcategories) and falls back gracefully
-*/
-function renderMainCategories() {
-  const main = $id('mainCategories');
-  if (!main) return;
-
-  main.innerHTML = '';
-
-  const keys = Object.keys(galleryData || {});
-  if (keys.length === 0) {
-    main.innerHTML = `
-      <p class="no-notices">
-        <span class="lang-hindi">कोई श्रेणी उपलब्ध नहीं है।</span>
-        <span class="lang-english">No categories available.</span>
-      </p>
-    `;
-    return;
-  }
-
-  keys.forEach(key => {
-    const cat = galleryData[key];
-    // Compute total photos for the category by summing counts of subcategories
-    let totalCount = 0;
-    if (cat && cat.subcategories) {
-      Object.values(cat.subcategories).forEach(sub => {
-        const c = Number(sub.count) || 0;
-        totalCount += c;
-      });
-    }
-
-    const card = document.createElement('div');
-    card.className = 'gallery-category-card';
-    card.onclick = () => showSubcategories(key);
-
-    card.innerHTML = `
-      <div class="category-icon">📁</div>
-      <h3>
-        <span class="lang-hindi">${cat.name_hi || ''}</span>
-        <span class="lang-english">${cat.name_en || ''}</span>
-      </h3>
-      <p>
-        <span class="lang-hindi">${totalCount} फोटो</span>
-        <span class="lang-english">${totalCount} Photos</span>
-      </p>
-    `;
-
-    main.appendChild(card);
-  });
-}
-
 // Show subcategories for a category
 function showSubcategories(category) {
   currentCategory = category;
   const data = galleryData[category];
-
-  // Defensive: if no data, show message
-  if (!data || !data.subcategories) {
-    alert('No folders found for this category.');
-    return;
-  }
-
-  const subcategoriesGrid = $id('subcategoriesGrid');
-  if (!subcategoriesGrid) return;
-
-  const mainEl = $id('mainCategories');
-  if (mainEl) mainEl.style.display = 'none';
-  const subsSection = $id('subcategoriesSection');
-  if (subsSection) subsSection.style.display = 'block';
-  const photoSection = $id('photoSection');
-  if (photoSection) photoSection.style.display = 'none';
-
+  
+  document.getElementById('mainCategories').style.display = 'none';
+  document.getElementById('subcategoriesSection').style.display = 'block';
+  
+  const subcategoriesGrid = document.getElementById('subcategoriesGrid');
   subcategoriesGrid.innerHTML = '';
-
-  const keys = Object.keys(data.subcategories || {});
-  if (keys.length === 0) {
-    subcategoriesGrid.innerHTML = `
-      <p class="no-notices">
-        <span class="lang-hindi">कोई फ़ोल्डर उपलब्ध नहीं है।</span>
-        <span class="lang-english">No folders available.</span>
-      </p>
-    `;
-    return;
-  }
-
-  keys.forEach(subKey => {
+  
+  Object.keys(data.subcategories).forEach(subKey => {
     const sub = data.subcategories[subKey];
     const card = document.createElement('div');
     card.className = 'gallery-category-card';
     card.onclick = () => showPhotos(category, subKey);
-
+    
     card.innerHTML = `
       <div class="category-icon">📸</div>
       <h3>
-        <span class="lang-hindi">${sub.name_hi || ''}</span>
-        <span class="lang-english">${sub.name_en || ''}</span>
+        <span class="lang-hindi">${sub.name_hi}</span>
+        <span class="lang-english">${sub.name_en}</span>
       </h3>
       <p>
-        <span class="lang-hindi">${sub.count || 0} फोटो</span>
-        <span class="lang-english">${sub.count || 0} Photos</span>
+        <span class="lang-hindi">${sub.count} फोटो</span>
+        <span class="lang-english">${sub.count} Photos</span>
       </p>
     `;
-
+    
     subcategoriesGrid.appendChild(card);
   });
 }
 
 // Show main categories
 function showMainCategories() {
-  currentCategory = '';
-  currentSubcategory = '';
-  const main = $id('mainCategories');
-  if (main) {
-    main.style.display = 'grid';
-    // Ensure main categories are rendered/refreshed
-    renderMainCategories();
-  }
-  const subs = $id('subcategoriesSection');
-  if (subs) subs.style.display = 'none';
-  const photos = $id('photoSection');
-  if (photos) photos.style.display = 'none';
+  document.getElementById('mainCategories').style.display = 'grid';
+  document.getElementById('subcategoriesSection').style.display = 'none';
+  document.getElementById('photoSection').style.display = 'none';
 }
 
 // Go back to subcategories
 function goBackToSubcategories() {
-  const subs = $id('subcategoriesSection');
-  const photos = $id('photoSection');
-  if (subs) subs.style.display = 'block';
-  if (photos) photos.style.display = 'none';
+  document.getElementById('subcategoriesSection').style.display = 'block';
+  document.getElementById('photoSection').style.display = 'none';
 }
 
 // Show photos for a subcategory
 function showPhotos(category, subcategory) {
   currentCategory = category;
   currentSubcategory = subcategory;
-
-  const subData = galleryData[category] && galleryData[category].subcategories && galleryData[category].subcategories[subcategory];
-  const photoCount = subData ? Number(subData.count) || 0 : 0;
-
-  const subsSection = $id('subcategoriesSection');
-  if (subsSection) subsSection.style.display = 'none';
-  const photoSection = $id('photoSection');
-  if (photoSection) photoSection.style.display = 'block';
-
-  const photoGrid = $id('photoGrid');
-  if (!photoGrid) return;
+  
+  const photoCount = galleryData[category].subcategories[subcategory].count;
+  
+  document.getElementById('subcategoriesSection').style.display = 'none';
+  document.getElementById('photoSection').style.display = 'block';
+  
+  const photoGrid = document.getElementById('photoGrid');
   photoGrid.innerHTML = '';
-
+  
   currentImages = [];
-
-  if (!photoCount || photoCount === 0) {
-    photoGrid.innerHTML = `
-      <p class="no-notices">
-        <span class="lang-hindi">इस फ़ोल्डर में कोई फोटो उपलब्ध नहीं है।</span>
-        <span class="lang-english">No photos available in this folder.</span>
-      </p>
-    `;
-    const downloadBtn = $id('downloadAllBtn');
-    if (downloadBtn) downloadBtn.style.display = 'none';
-    return;
-  }
-
+  
   // Generate photo paths
   for (let i = 1; i <= photoCount; i++) {
-    // NOTE: this assumes files are named: image (1).jpg etc.
-    // If your files are named differently, update this path/pattern.
     const imagePath = `images/gallery/${category}/${subcategory}/image (${i}).jpg`;
     currentImages.push(imagePath);
-
+    
     const photoCard = document.createElement('div');
     photoCard.className = 'photo-card';
     photoCard.onclick = () => openModal(i - 1);
-
+    
     photoCard.innerHTML = `
       <img 
         src="${imagePath}" 
@@ -257,66 +147,52 @@ function showPhotos(category, subcategory) {
         <span class="lang-english">View</span>
       </div>
     `;
-
+    
     photoGrid.appendChild(photoCard);
   }
-
+  
   // Show/hide download all button
-  const downloadBtn = $id('downloadAllBtn');
-  if (downloadBtn) {
-    if (photoCount > 0) {
-      downloadBtn.style.display = 'inline-flex';
-    } else {
-      downloadBtn.style.display = 'none';
-    }
+  const downloadBtn = document.getElementById('downloadAllBtn');
+  if (photoCount > 0) {
+    downloadBtn.style.display = 'inline-flex';
+  } else {
+    downloadBtn.style.display = 'none';
   }
 }
 
 // Open modal with image
 function openModal(index) {
-  if (!currentImages || currentImages.length === 0) return;
   currentImageIndex = index;
-  const modal = $id('imageModal');
-  const modalImg = $id('modalImage');
-  const downloadBtn = $id('downloadBtn');
-
-  if (!modal || !modalImg) return;
-
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  const downloadBtn = document.getElementById('downloadBtn');
+  
   modal.style.display = 'flex';
   modalImg.src = currentImages[currentImageIndex];
-  if (downloadBtn) {
-    downloadBtn.href = currentImages[currentImageIndex];
-    downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
-  }
-
+  downloadBtn.href = currentImages[currentImageIndex];
+  downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
+  
   // Prevent body scroll
   document.body.style.overflow = 'hidden';
 }
 
 // Close modal
 function closeModal(event) {
-  if (!event) return;
-  if (event.target.id === 'imageModal' || (typeof event.target.className === 'string' && event.target.className.includes('modal-close'))) {
-    const modal = $id('imageModal');
-    if (modal) modal.style.display = 'none';
+  if (event.target.id === 'imageModal' || event.target.className === 'modal-close') {
+    document.getElementById('imageModal').style.display = 'none';
     document.body.style.overflow = 'auto';
   }
 }
 
 // Navigate modal (prev/next)
 function navigateModal(direction) {
-  if (!currentImages || currentImages.length === 0) return;
   currentImageIndex = (currentImageIndex + direction + currentImages.length) % currentImages.length;
-  const modalImg = $id('modalImage');
-  const downloadBtn = $id('downloadBtn');
-
-  if (!modalImg) return;
-
+  const modalImg = document.getElementById('modalImage');
+  const downloadBtn = document.getElementById('downloadBtn');
+  
   modalImg.src = currentImages[currentImageIndex];
-  if (downloadBtn) {
-    downloadBtn.href = currentImages[currentImageIndex];
-    downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
-  }
+  downloadBtn.href = currentImages[currentImageIndex];
+  downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
 }
 
 // Download all photos as ZIP
@@ -325,20 +201,18 @@ async function downloadAllPhotos() {
     alert('JSZip library not loaded. Please refresh the page.');
     return;
   }
-
-  const downloadBtn = $id('downloadAllBtn');
-  if (!downloadBtn) return;
+  
+  const downloadBtn = document.getElementById('downloadAllBtn');
   const originalText = downloadBtn.innerHTML;
   downloadBtn.innerHTML = '<span class="spinner"></span> <span class="lang-hindi">डाउनलोड हो रहा है...</span><span class="lang-english">Downloading...</span>';
   downloadBtn.disabled = true;
-
+  
   try {
     const zip = new JSZip();
-    const folderName = (currentCategory && currentSubcategory) ? `${currentCategory}/${currentSubcategory}` : (currentSubcategory || 'photos');
-    const folder = zip.folder(folderName);
+    const folder = zip.folder(currentSubcategory);
     let loadedImages = 0;
-
-    const loadPromises = (currentImages || []).map((src, index) => {
+    
+    const loadPromises = currentImages.map((src, index) => {
       return fetch(src)
         .then(response => response.blob())
         .then(blob => {
@@ -350,16 +224,16 @@ async function downloadAllPhotos() {
           loadedImages++;
         });
     });
-
+    
     await Promise.all(loadPromises);
-
+    
     const content = await zip.generateAsync({ type: 'blob' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(content);
-    link.download = `${currentSubcategory || 'photos'}_photos.zip`;
+    link.download = `${currentSubcategory}_photos.zip`;
     link.click();
     URL.revokeObjectURL(link.href);
-
+    
   } catch (error) {
     console.error('Error creating ZIP:', error);
     alert('Error downloading photos. Please try again.');
@@ -371,14 +245,14 @@ async function downloadAllPhotos() {
 
 // Keyboard navigation for modal
 document.addEventListener('keydown', (e) => {
-  const modal = $id('imageModal');
-  if (modal && modal.style.display === 'flex') {
+  const modal = document.getElementById('imageModal');
+  if (modal.style.display === 'flex') {
     if (e.key === 'ArrowLeft') {
       navigateModal(-1);
     } else if (e.key === 'ArrowRight') {
       navigateModal(1);
     } else if (e.key === 'Escape') {
-      if (modal) modal.style.display = 'none';
+      modal.style.display = 'none';
       document.body.style.overflow = 'auto';
     }
   }
@@ -388,20 +262,16 @@ document.addEventListener('keydown', (e) => {
 let touchStartX = 0;
 let touchEndX = 0;
 
-const imageModalEl = $id('imageModal');
-if (imageModalEl) {
-  imageModalEl.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
+document.getElementById('imageModal').addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+});
 
-  imageModalEl.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  });
-}
+document.getElementById('imageModal').addEventListener('touchend', (e) => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
 
 function handleSwipe() {
-  if (!currentImages || currentImages.length === 0) return;
   if (touchStartX - touchEndX > 50) {
     navigateModal(1); // Swipe left
   }
@@ -409,8 +279,3 @@ function handleSwipe() {
     navigateModal(-1); // Swipe right
   }
 }
-
-// Initialize on DOM ready: render main categories
-document.addEventListener('DOMContentLoaded', () => {
-  renderMainCategories();
-});
