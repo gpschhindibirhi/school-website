@@ -70,6 +70,59 @@ function $id(id) {
   return document.getElementById(id);
 }
 
+/*
+  NEW: Render main categories from galleryData
+  - Creates a clickable card for each top-level category
+  - Shows total photos count (sum of subcategories) and falls back gracefully
+*/
+function renderMainCategories() {
+  const main = $id('mainCategories');
+  if (!main) return;
+
+  main.innerHTML = '';
+
+  const keys = Object.keys(galleryData || {});
+  if (keys.length === 0) {
+    main.innerHTML = `
+      <p class="no-notices">
+        <span class="lang-hindi">कोई श्रेणी उपलब्ध नहीं है।</span>
+        <span class="lang-english">No categories available.</span>
+      </p>
+    `;
+    return;
+  }
+
+  keys.forEach(key => {
+    const cat = galleryData[key];
+    // Compute total photos for the category by summing counts of subcategories
+    let totalCount = 0;
+    if (cat && cat.subcategories) {
+      Object.values(cat.subcategories).forEach(sub => {
+        const c = Number(sub.count) || 0;
+        totalCount += c;
+      });
+    }
+
+    const card = document.createElement('div');
+    card.className = 'gallery-category-card';
+    card.onclick = () => showSubcategories(key);
+
+    card.innerHTML = `
+      <div class="category-icon">📁</div>
+      <h3>
+        <span class="lang-hindi">${cat.name_hi || ''}</span>
+        <span class="lang-english">${cat.name_en || ''}</span>
+      </h3>
+      <p>
+        <span class="lang-hindi">${totalCount} फोटो</span>
+        <span class="lang-english">${totalCount} Photos</span>
+      </p>
+    `;
+
+    main.appendChild(card);
+  });
+}
+
 // Show subcategories for a category
 function showSubcategories(category) {
   currentCategory = category;
@@ -84,9 +137,12 @@ function showSubcategories(category) {
   const subcategoriesGrid = $id('subcategoriesGrid');
   if (!subcategoriesGrid) return;
 
-  document.getElementById('mainCategories').style.display = 'none';
-  document.getElementById('subcategoriesSection').style.display = 'block';
-  document.getElementById('photoSection').style.display = 'none';
+  const mainEl = $id('mainCategories');
+  if (mainEl) mainEl.style.display = 'none';
+  const subsSection = $id('subcategoriesSection');
+  if (subsSection) subsSection.style.display = 'block';
+  const photoSection = $id('photoSection');
+  if (photoSection) photoSection.style.display = 'none';
 
   subcategoriesGrid.innerHTML = '';
 
@@ -110,12 +166,12 @@ function showSubcategories(category) {
     card.innerHTML = `
       <div class="category-icon">📸</div>
       <h3>
-        <span class="lang-hindi">${sub.name_hi}</span>
-        <span class="lang-english">${sub.name_en}</span>
+        <span class="lang-hindi">${sub.name_hi || ''}</span>
+        <span class="lang-english">${sub.name_en || ''}</span>
       </h3>
       <p>
-        <span class="lang-hindi">${sub.count} फोटो</span>
-        <span class="lang-english">${sub.count} Photos</span>
+        <span class="lang-hindi">${sub.count || 0} फोटो</span>
+        <span class="lang-english">${sub.count || 0} Photos</span>
       </p>
     `;
 
@@ -125,8 +181,14 @@ function showSubcategories(category) {
 
 // Show main categories
 function showMainCategories() {
+  currentCategory = '';
+  currentSubcategory = '';
   const main = $id('mainCategories');
-  if (main) main.style.display = 'grid';
+  if (main) {
+    main.style.display = 'grid';
+    // Ensure main categories are rendered/refreshed
+    renderMainCategories();
+  }
   const subs = $id('subcategoriesSection');
   if (subs) subs.style.display = 'none';
   const photos = $id('photoSection');
@@ -147,10 +209,12 @@ function showPhotos(category, subcategory) {
   currentSubcategory = subcategory;
 
   const subData = galleryData[category] && galleryData[category].subcategories && galleryData[category].subcategories[subcategory];
-  const photoCount = subData ? subData.count : 0;
+  const photoCount = subData ? Number(subData.count) || 0 : 0;
 
-  document.getElementById('subcategoriesSection').style.display = 'none';
-  document.getElementById('photoSection').style.display = 'block';
+  const subsSection = $id('subcategoriesSection');
+  if (subsSection) subsSection.style.display = 'none';
+  const photoSection = $id('photoSection');
+  if (photoSection) photoSection.style.display = 'block';
 
   const photoGrid = $id('photoGrid');
   if (!photoGrid) return;
@@ -232,7 +296,7 @@ function openModal(index) {
 // Close modal
 function closeModal(event) {
   if (!event) return;
-  if (event.target.id === 'imageModal' || (event.target.className && event.target.className.includes('modal-close'))) {
+  if (event.target.id === 'imageModal' || (typeof event.target.className === 'string' && event.target.className.includes('modal-close'))) {
     const modal = $id('imageModal');
     if (modal) modal.style.display = 'none';
     document.body.style.overflow = 'auto';
@@ -270,7 +334,8 @@ async function downloadAllPhotos() {
 
   try {
     const zip = new JSZip();
-    const folder = zip.folder(currentSubcategory || 'photos');
+    const folderName = (currentCategory && currentSubcategory) ? `${currentCategory}/${currentSubcategory}` : (currentSubcategory || 'photos');
+    const folder = zip.folder(folderName);
     let loadedImages = 0;
 
     const loadPromises = (currentImages || []).map((src, index) => {
@@ -344,3 +409,8 @@ function handleSwipe() {
     navigateModal(-1); // Swipe right
   }
 }
+
+// Initialize on DOM ready: render main categories
+document.addEventListener('DOMContentLoaded', () => {
+  renderMainCategories();
+});
