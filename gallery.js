@@ -65,23 +65,48 @@ let currentSubcategory = '';
 let currentImages = [];
 let currentImageIndex = 0;
 
+// Helper to safely get element
+function $id(id) {
+  return document.getElementById(id);
+}
+
 // Show subcategories for a category
 function showSubcategories(category) {
   currentCategory = category;
   const data = galleryData[category];
-  
+
+  // Defensive: if no data, show message
+  if (!data || !data.subcategories) {
+    alert('No folders found for this category.');
+    return;
+  }
+
+  const subcategoriesGrid = $id('subcategoriesGrid');
+  if (!subcategoriesGrid) return;
+
   document.getElementById('mainCategories').style.display = 'none';
   document.getElementById('subcategoriesSection').style.display = 'block';
-  
-  const subcategoriesGrid = document.getElementById('subcategoriesGrid');
+  document.getElementById('photoSection').style.display = 'none';
+
   subcategoriesGrid.innerHTML = '';
-  
-  Object.keys(data.subcategories).forEach(subKey => {
+
+  const keys = Object.keys(data.subcategories || {});
+  if (keys.length === 0) {
+    subcategoriesGrid.innerHTML = `
+      <p class="no-notices">
+        <span class="lang-hindi">कोई फ़ोल्डर उपलब्ध नहीं है।</span>
+        <span class="lang-english">No folders available.</span>
+      </p>
+    `;
+    return;
+  }
+
+  keys.forEach(subKey => {
     const sub = data.subcategories[subKey];
     const card = document.createElement('div');
     card.className = 'gallery-category-card';
     card.onclick = () => showPhotos(category, subKey);
-    
+
     card.innerHTML = `
       <div class="category-icon">📸</div>
       <h3>
@@ -93,48 +118,69 @@ function showSubcategories(category) {
         <span class="lang-english">${sub.count} Photos</span>
       </p>
     `;
-    
+
     subcategoriesGrid.appendChild(card);
   });
 }
 
 // Show main categories
 function showMainCategories() {
-  document.getElementById('mainCategories').style.display = 'grid';
-  document.getElementById('subcategoriesSection').style.display = 'none';
-  document.getElementById('photoSection').style.display = 'none';
+  const main = $id('mainCategories');
+  if (main) main.style.display = 'grid';
+  const subs = $id('subcategoriesSection');
+  if (subs) subs.style.display = 'none';
+  const photos = $id('photoSection');
+  if (photos) photos.style.display = 'none';
 }
 
 // Go back to subcategories
 function goBackToSubcategories() {
-  document.getElementById('subcategoriesSection').style.display = 'block';
-  document.getElementById('photoSection').style.display = 'none';
+  const subs = $id('subcategoriesSection');
+  const photos = $id('photoSection');
+  if (subs) subs.style.display = 'block';
+  if (photos) photos.style.display = 'none';
 }
 
 // Show photos for a subcategory
 function showPhotos(category, subcategory) {
   currentCategory = category;
   currentSubcategory = subcategory;
-  
-  const photoCount = galleryData[category].subcategories[subcategory].count;
-  
+
+  const subData = galleryData[category] && galleryData[category].subcategories && galleryData[category].subcategories[subcategory];
+  const photoCount = subData ? subData.count : 0;
+
   document.getElementById('subcategoriesSection').style.display = 'none';
   document.getElementById('photoSection').style.display = 'block';
-  
-  const photoGrid = document.getElementById('photoGrid');
+
+  const photoGrid = $id('photoGrid');
+  if (!photoGrid) return;
   photoGrid.innerHTML = '';
-  
+
   currentImages = [];
-  
+
+  if (!photoCount || photoCount === 0) {
+    photoGrid.innerHTML = `
+      <p class="no-notices">
+        <span class="lang-hindi">इस फ़ोल्डर में कोई फोटो उपलब्ध नहीं है।</span>
+        <span class="lang-english">No photos available in this folder.</span>
+      </p>
+    `;
+    const downloadBtn = $id('downloadAllBtn');
+    if (downloadBtn) downloadBtn.style.display = 'none';
+    return;
+  }
+
   // Generate photo paths
   for (let i = 1; i <= photoCount; i++) {
+    // NOTE: this assumes files are named: image (1).jpg etc.
+    // If your files are named differently, update this path/pattern.
     const imagePath = `images/gallery/${category}/${subcategory}/image (${i}).jpg`;
     currentImages.push(imagePath);
-    
+
     const photoCard = document.createElement('div');
     photoCard.className = 'photo-card';
     photoCard.onclick = () => openModal(i - 1);
-    
+
     photoCard.innerHTML = `
       <img 
         src="${imagePath}" 
@@ -147,52 +193,66 @@ function showPhotos(category, subcategory) {
         <span class="lang-english">View</span>
       </div>
     `;
-    
+
     photoGrid.appendChild(photoCard);
   }
-  
+
   // Show/hide download all button
-  const downloadBtn = document.getElementById('downloadAllBtn');
-  if (photoCount > 0) {
-    downloadBtn.style.display = 'inline-flex';
-  } else {
-    downloadBtn.style.display = 'none';
+  const downloadBtn = $id('downloadAllBtn');
+  if (downloadBtn) {
+    if (photoCount > 0) {
+      downloadBtn.style.display = 'inline-flex';
+    } else {
+      downloadBtn.style.display = 'none';
+    }
   }
 }
 
 // Open modal with image
 function openModal(index) {
+  if (!currentImages || currentImages.length === 0) return;
   currentImageIndex = index;
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImage');
-  const downloadBtn = document.getElementById('downloadBtn');
-  
+  const modal = $id('imageModal');
+  const modalImg = $id('modalImage');
+  const downloadBtn = $id('downloadBtn');
+
+  if (!modal || !modalImg) return;
+
   modal.style.display = 'flex';
   modalImg.src = currentImages[currentImageIndex];
-  downloadBtn.href = currentImages[currentImageIndex];
-  downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
-  
+  if (downloadBtn) {
+    downloadBtn.href = currentImages[currentImageIndex];
+    downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
+  }
+
   // Prevent body scroll
   document.body.style.overflow = 'hidden';
 }
 
 // Close modal
 function closeModal(event) {
-  if (event.target.id === 'imageModal' || event.target.className === 'modal-close') {
-    document.getElementById('imageModal').style.display = 'none';
+  if (!event) return;
+  if (event.target.id === 'imageModal' || (event.target.className && event.target.className.includes('modal-close'))) {
+    const modal = $id('imageModal');
+    if (modal) modal.style.display = 'none';
     document.body.style.overflow = 'auto';
   }
 }
 
 // Navigate modal (prev/next)
 function navigateModal(direction) {
+  if (!currentImages || currentImages.length === 0) return;
   currentImageIndex = (currentImageIndex + direction + currentImages.length) % currentImages.length;
-  const modalImg = document.getElementById('modalImage');
-  const downloadBtn = document.getElementById('downloadBtn');
-  
+  const modalImg = $id('modalImage');
+  const downloadBtn = $id('downloadBtn');
+
+  if (!modalImg) return;
+
   modalImg.src = currentImages[currentImageIndex];
-  downloadBtn.href = currentImages[currentImageIndex];
-  downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
+  if (downloadBtn) {
+    downloadBtn.href = currentImages[currentImageIndex];
+    downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
+  }
 }
 
 // Download all photos as ZIP
@@ -201,18 +261,19 @@ async function downloadAllPhotos() {
     alert('JSZip library not loaded. Please refresh the page.');
     return;
   }
-  
-  const downloadBtn = document.getElementById('downloadAllBtn');
+
+  const downloadBtn = $id('downloadAllBtn');
+  if (!downloadBtn) return;
   const originalText = downloadBtn.innerHTML;
   downloadBtn.innerHTML = '<span class="spinner"></span> <span class="lang-hindi">डाउनलोड हो रहा है...</span><span class="lang-english">Downloading...</span>';
   downloadBtn.disabled = true;
-  
+
   try {
     const zip = new JSZip();
-    const folder = zip.folder(currentSubcategory);
+    const folder = zip.folder(currentSubcategory || 'photos');
     let loadedImages = 0;
-    
-    const loadPromises = currentImages.map((src, index) => {
+
+    const loadPromises = (currentImages || []).map((src, index) => {
       return fetch(src)
         .then(response => response.blob())
         .then(blob => {
@@ -224,16 +285,16 @@ async function downloadAllPhotos() {
           loadedImages++;
         });
     });
-    
+
     await Promise.all(loadPromises);
-    
+
     const content = await zip.generateAsync({ type: 'blob' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(content);
-    link.download = `${currentSubcategory}_photos.zip`;
+    link.download = `${currentSubcategory || 'photos'}_photos.zip`;
     link.click();
     URL.revokeObjectURL(link.href);
-    
+
   } catch (error) {
     console.error('Error creating ZIP:', error);
     alert('Error downloading photos. Please try again.');
@@ -245,14 +306,14 @@ async function downloadAllPhotos() {
 
 // Keyboard navigation for modal
 document.addEventListener('keydown', (e) => {
-  const modal = document.getElementById('imageModal');
-  if (modal.style.display === 'flex') {
+  const modal = $id('imageModal');
+  if (modal && modal.style.display === 'flex') {
     if (e.key === 'ArrowLeft') {
       navigateModal(-1);
     } else if (e.key === 'ArrowRight') {
       navigateModal(1);
     } else if (e.key === 'Escape') {
-      modal.style.display = 'none';
+      if (modal) modal.style.display = 'none';
       document.body.style.overflow = 'auto';
     }
   }
@@ -262,16 +323,20 @@ document.addEventListener('keydown', (e) => {
 let touchStartX = 0;
 let touchEndX = 0;
 
-document.getElementById('imageModal').addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
+const imageModalEl = $id('imageModal');
+if (imageModalEl) {
+  imageModalEl.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
 
-document.getElementById('imageModal').addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
-});
+  imageModalEl.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  });
+}
 
 function handleSwipe() {
+  if (!currentImages || currentImages.length === 0) return;
   if (touchStartX - touchEndX > 50) {
     navigateModal(1); // Swipe left
   }
