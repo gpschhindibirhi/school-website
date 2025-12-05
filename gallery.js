@@ -70,8 +70,15 @@ function showSubcategories(category) {
   currentCategory = category;
   const data = galleryData[category];
   
+  // Hide main categories
   document.getElementById('mainCategories').style.display = 'none';
-  document.getElementById('subcategoriesSection').style.display = 'block';
+  
+  // Show subcategories section
+  const subcategoriesSection = document.getElementById('subcategoriesSection');
+  subcategoriesSection.style.display = 'block';
+  
+  // Hide photo section
+  document.getElementById('photoSection').style.display = 'none';
   
   const subcategoriesGrid = document.getElementById('subcategoriesGrid');
   subcategoriesGrid.innerHTML = '';
@@ -118,13 +125,30 @@ function showPhotos(category, subcategory) {
   
   const photoCount = galleryData[category].subcategories[subcategory].count;
   
+  // Hide subcategories section
   document.getElementById('subcategoriesSection').style.display = 'none';
+  
+  // Show photo section
   document.getElementById('photoSection').style.display = 'block';
   
   const photoGrid = document.getElementById('photoGrid');
   photoGrid.innerHTML = '';
   
   currentImages = [];
+  
+  // Check if there are photos
+  if (photoCount === 0) {
+    photoGrid.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+        <p style="font-size: 1.2rem; color: var(--text-secondary);">
+          <span class="lang-hindi">इस श्रेणी में कोई फोटो उपलब्ध नहीं है।</span>
+          <span class="lang-english">No photos available in this category.</span>
+        </p>
+      </div>
+    `;
+    document.getElementById('downloadAllBtn').style.display = 'none';
+    return;
+  }
   
   // Generate photo paths
   for (let i = 1; i <= photoCount; i++) {
@@ -151,13 +175,8 @@ function showPhotos(category, subcategory) {
     photoGrid.appendChild(photoCard);
   }
   
-  // Show/hide download all button
-  const downloadBtn = document.getElementById('downloadAllBtn');
-  if (photoCount > 0) {
-    downloadBtn.style.display = 'inline-flex';
-  } else {
-    downloadBtn.style.display = 'none';
-  }
+  // Show download all button if there are photos
+  document.getElementById('downloadAllBtn').style.display = 'inline-flex';
 }
 
 // Open modal with image
@@ -262,13 +281,18 @@ document.addEventListener('keydown', (e) => {
 let touchStartX = 0;
 let touchEndX = 0;
 
-document.getElementById('imageModal').addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('imageModal');
+  if (modal) {
+    modal.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
 
-document.getElementById('imageModal').addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
+    modal.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+  }
 });
 
 function handleSwipe() {
