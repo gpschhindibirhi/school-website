@@ -99,7 +99,7 @@
       
       <!-- Main Gallery Categories -->
       <div id="mainCategories" class="gallery-categories">
-        <div class="gallery-category-card" onclick="showSubcategories('school_photos')">
+        <div class="gallery-category-card" data-category="school_photos">
           <div class="category-icon">🏫</div>
           <h3>
             <span class="lang-hindi">विद्यालय फोटो</span>
@@ -111,7 +111,7 @@
           </p>
         </div>
 
-        <div class="gallery-category-card" onclick="showSubcategories('events')">
+        <div class="gallery-category-card" data-category="events">
           <div class="category-icon">🎉</div>
           <h3>
             <span class="lang-hindi">आयोजन</span>
@@ -123,7 +123,7 @@
           </p>
         </div>
 
-        <div class="gallery-category-card" onclick="showSubcategories('other_folders')">
+        <div class="gallery-category-card" data-category="other_folders">
           <div class="category-icon">📂</div>
           <h3>
             <span class="lang-hindi">अन्य गतिविधियां</span>
@@ -138,7 +138,7 @@
 
       <!-- Subcategories -->
       <div id="subcategoriesSection" class="gallery-subcategories" style="display: none;">
-        <button class="back-btn" onclick="showMainCategories()">
+        <button class="back-btn" id="backToMain">
           <span class="lang-hindi">← वापस जाएं</span>
           <span class="lang-english">← Go Back</span>
         </button>
@@ -148,11 +148,11 @@
       <!-- Photo Grid -->
       <div id="photoSection" class="gallery-photos-section" style="display: none;">
         <div class="photo-header">
-          <button class="back-btn" onclick="goBackToSubcategories()">
+          <button class="back-btn" id="backToSub">
             <span class="lang-hindi">← वापस जाएं</span>
             <span class="lang-english">← Go Back</span>
           </button>
-          <button id="downloadAllBtn" class="download-all-btn" style="display: none;" onclick="downloadAllPhotos()">
+          <button id="downloadAllBtn" class="download-all-btn" style="display: none;">
             <span class="lang-hindi">📥 सभी फोटो डाउनलोड करें</span>
             <span class="lang-english">📥 Download All Photos</span>
           </button>
@@ -168,11 +168,11 @@
   </main>
 
   <!-- Image Modal -->
-  <div id="imageModal" class="image-modal" style="display: none;" onclick="closeModal(event)">
-    <span class="modal-close" onclick="closeModal(event)">&times;</span>
+  <div id="imageModal" class="image-modal" style="display: none;">
+    <span class="modal-close" id="modalClose">&times;</span>
     <img id="modalImage" class="modal-image" alt="Full size image">
     <div class="modal-controls">
-      <button class="modal-nav-btn" onclick="navigateModal(-1); event.stopPropagation();">
+      <button class="modal-nav-btn" id="modalPrev">
         <span class="lang-hindi">❮ पिछला</span>
         <span class="lang-english">❮ Previous</span>
       </button>
@@ -180,7 +180,7 @@
         <span class="lang-hindi">📥 डाउनलोड</span>
         <span class="lang-english">📥 Download</span>
       </a>
-      <button class="modal-nav-btn" onclick="navigateModal(1); event.stopPropagation();">
+      <button class="modal-nav-btn" id="modalNext">
         <span class="lang-hindi">अगला ❯</span>
         <span class="lang-english">Next ❯</span>
       </button>
