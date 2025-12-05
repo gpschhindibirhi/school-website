@@ -65,17 +65,63 @@ let currentSubcategory = '';
 let currentImages = [];
 let currentImageIndex = 0;
 
+// Initialize gallery when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Gallery initialized');
+  initializeGallery();
+});
+
+function initializeGallery() {
+  // Setup main category cards
+  const categoryCards = document.querySelectorAll('#mainCategories .gallery-category-card');
+  categoryCards.forEach(card => {
+    const category = card.getAttribute('data-category');
+    card.addEventListener('click', function() {
+      console.log('Category clicked:', category);
+      showSubcategories(category);
+    });
+  });
+  
+  // Setup back buttons
+  const backToMain = document.getElementById('backToMain');
+  if (backToMain) {
+    backToMain.addEventListener('click', showMainCategories);
+  }
+  
+  const backToSub = document.getElementById('backToSub');
+  if (backToSub) {
+    backToSub.addEventListener('click', goBackToSubcategories);
+  }
+  
+  // Setup download all button
+  const downloadAllBtn = document.getElementById('downloadAllBtn');
+  if (downloadAllBtn) {
+    downloadAllBtn.addEventListener('click', downloadAllPhotos);
+  }
+  
+  // Setup modal
+  setupModal();
+  
+  // Setup keyboard navigation
+  setupKeyboardNavigation();
+}
+
 // Show subcategories for a category
 function showSubcategories(category) {
+  console.log('Showing subcategories for:', category);
   currentCategory = category;
   const data = galleryData[category];
+  
+  if (!data) {
+    console.error('Category not found:', category);
+    return;
+  }
   
   // Hide main categories
   document.getElementById('mainCategories').style.display = 'none';
   
   // Show subcategories section
-  const subcategoriesSection = document.getElementById('subcategoriesSection');
-  subcategoriesSection.style.display = 'block';
+  document.getElementById('subcategoriesSection').style.display = 'block';
   
   // Hide photo section
   document.getElementById('photoSection').style.display = 'none';
@@ -87,7 +133,7 @@ function showSubcategories(category) {
     const sub = data.subcategories[subKey];
     const card = document.createElement('div');
     card.className = 'gallery-category-card';
-    card.onclick = () => showPhotos(category, subKey);
+    card.setAttribute('data-subcategory', subKey);
     
     card.innerHTML = `
       <div class="category-icon">📸</div>
@@ -101,12 +147,18 @@ function showSubcategories(category) {
       </p>
     `;
     
+    card.addEventListener('click', function() {
+      console.log('Subcategory clicked:', subKey);
+      showPhotos(category, subKey);
+    });
+    
     subcategoriesGrid.appendChild(card);
   });
 }
 
 // Show main categories
 function showMainCategories() {
+  console.log('Showing main categories');
   document.getElementById('mainCategories').style.display = 'grid';
   document.getElementById('subcategoriesSection').style.display = 'none';
   document.getElementById('photoSection').style.display = 'none';
@@ -114,18 +166,20 @@ function showMainCategories() {
 
 // Go back to subcategories
 function goBackToSubcategories() {
+  console.log('Going back to subcategories');
   document.getElementById('subcategoriesSection').style.display = 'block';
   document.getElementById('photoSection').style.display = 'none';
 }
 
 // Show photos for a subcategory
 function showPhotos(category, subcategory) {
+  console.log('Showing photos for:', category, subcategory);
   currentCategory = category;
   currentSubcategory = subcategory;
   
   const photoCount = galleryData[category].subcategories[subcategory].count;
   
-  // Hide subcategories section
+  // Hide subcategories
   document.getElementById('subcategoriesSection').style.display = 'none';
   
   // Show photo section
@@ -133,7 +187,6 @@ function showPhotos(category, subcategory) {
   
   const photoGrid = document.getElementById('photoGrid');
   photoGrid.innerHTML = '';
-  
   currentImages = [];
   
   // Check if there are photos
@@ -150,14 +203,14 @@ function showPhotos(category, subcategory) {
     return;
   }
   
-  // Generate photo paths
+  // Generate photo cards
   for (let i = 1; i <= photoCount; i++) {
     const imagePath = `images/gallery/${category}/${subcategory}/image (${i}).jpg`;
     currentImages.push(imagePath);
     
     const photoCard = document.createElement('div');
     photoCard.className = 'photo-card';
-    photoCard.onclick = () => openModal(i - 1);
+    photoCard.setAttribute('data-index', i - 1);
     
     photoCard.innerHTML = `
       <img 
@@ -172,16 +225,77 @@ function showPhotos(category, subcategory) {
       </div>
     `;
     
+    photoCard.addEventListener('click', function() {
+      const index = parseInt(this.getAttribute('data-index'));
+      openModal(index);
+    });
+    
     photoGrid.appendChild(photoCard);
   }
   
-  // Show download all button if there are photos
+  // Show download all button
   document.getElementById('downloadAllBtn').style.display = 'inline-flex';
 }
 
-// Open modal with image
+// Setup modal
+function setupModal() {
+  const modal = document.getElementById('imageModal');
+  const closeBtn = document.getElementById('modalClose');
+  const prevBtn = document.getElementById('modalPrev');
+  const nextBtn = document.getElementById('modalNext');
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeModal);
+  }
+  
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target.id === 'imageModal') {
+        closeModal();
+      }
+    });
+  }
+  
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigateModal(-1);
+    });
+  }
+  
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigateModal(1);
+    });
+  }
+  
+  // Touch support
+  if (modal) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    modal.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    modal.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) {
+        navigateModal(1);
+      }
+      if (touchEndX - touchStartX > 50) {
+        navigateModal(-1);
+      }
+    });
+  }
+}
+
+// Open modal
 function openModal(index) {
+  console.log('Opening modal for image:', index);
   currentImageIndex = index;
+  
   const modal = document.getElementById('imageModal');
   const modalImg = document.getElementById('modalImage');
   const downloadBtn = document.getElementById('downloadBtn');
@@ -191,21 +305,22 @@ function openModal(index) {
   downloadBtn.href = currentImages[currentImageIndex];
   downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
   
-  // Prevent body scroll
   document.body.style.overflow = 'hidden';
 }
 
 // Close modal
-function closeModal(event) {
-  if (event.target.id === 'imageModal' || event.target.className === 'modal-close') {
-    document.getElementById('imageModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
+function closeModal() {
+  const modal = document.getElementById('imageModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = 'auto';
 }
 
-// Navigate modal (prev/next)
+// Navigate modal
 function navigateModal(direction) {
+  if (currentImages.length === 0) return;
+  
   currentImageIndex = (currentImageIndex + direction + currentImages.length) % currentImages.length;
+  
   const modalImg = document.getElementById('modalImage');
   const downloadBtn = document.getElementById('downloadBtn');
   
@@ -214,7 +329,23 @@ function navigateModal(direction) {
   downloadBtn.download = `image_${currentImageIndex + 1}.jpg`;
 }
 
-// Download all photos as ZIP
+// Keyboard navigation
+function setupKeyboardNavigation() {
+  document.addEventListener('keydown', function(e) {
+    const modal = document.getElementById('imageModal');
+    if (modal.style.display === 'flex') {
+      if (e.key === 'ArrowLeft') {
+        navigateModal(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigateModal(1);
+      } else if (e.key === 'Escape') {
+        closeModal();
+      }
+    }
+  });
+}
+
+// Download all photos
 async function downloadAllPhotos() {
   if (typeof JSZip === 'undefined') {
     alert('JSZip library not loaded. Please refresh the page.');
@@ -229,18 +360,15 @@ async function downloadAllPhotos() {
   try {
     const zip = new JSZip();
     const folder = zip.folder(currentSubcategory);
-    let loadedImages = 0;
     
     const loadPromises = currentImages.map((src, index) => {
       return fetch(src)
         .then(response => response.blob())
         .then(blob => {
           folder.file(`image_${index + 1}.jpg`, blob);
-          loadedImages++;
         })
         .catch(error => {
           console.warn(`Failed to load image ${index + 1}:`, error);
-          loadedImages++;
         });
     });
     
@@ -259,47 +387,5 @@ async function downloadAllPhotos() {
   } finally {
     downloadBtn.innerHTML = originalText;
     downloadBtn.disabled = false;
-  }
-}
-
-// Keyboard navigation for modal
-document.addEventListener('keydown', (e) => {
-  const modal = document.getElementById('imageModal');
-  if (modal.style.display === 'flex') {
-    if (e.key === 'ArrowLeft') {
-      navigateModal(-1);
-    } else if (e.key === 'ArrowRight') {
-      navigateModal(1);
-    } else if (e.key === 'Escape') {
-      modal.style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
-  }
-});
-
-// Touch support for modal (swipe)
-let touchStartX = 0;
-let touchEndX = 0;
-
-document.addEventListener('DOMContentLoaded', () => {
-  const modal = document.getElementById('imageModal');
-  if (modal) {
-    modal.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
-    modal.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    });
-  }
-});
-
-function handleSwipe() {
-  if (touchStartX - touchEndX > 50) {
-    navigateModal(1); // Swipe left
-  }
-  if (touchEndX - touchStartX > 50) {
-    navigateModal(-1); // Swipe right
   }
 }
