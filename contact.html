@@ -2,29 +2,31 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही से संपर्क करें। फोन, ईमेल और पता जानकारी।">
   <meta name="keywords" content="contact government primary school Chhindibirhi, school contact, phone, email, address">
   <meta name="author" content="Government Primary School Chhindibirhi">
   <meta name="robots" content="index, follow">
-  
+  <meta name="theme-color" content="#1e40af" />
+
   <!-- Open Graph -->
   <meta property="og:title" content="Contact Us - Government Primary School Chhindibirhi">
   <meta property="og:description" content="Get in touch with Government Primary School Chhindibirhi, Rajnandgaon, Chhattisgarh.">
-  <meta property="og:image" content="https://gps-chhindibirhi.netlify.app/images/school-front.jpg">
-  <meta property="og:url" content="https://gps-chhindibirhi.netlify.app/contact.html">
-  
+  <meta property="og:image" content="https://pschhindibirhi.netlify.app/images/school-front.jpg">
+  <meta property="og:url" content="https://pschhindibirhi.netlify.app/contact.html">
+
   <title>संपर्क करें | Contact Us - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="images/school-logo.png" type="image/png" />
-  <link rel="canonical" href="https://gps-chhindibirhi.netlify.app/contact.html">
-  
+  <link rel="apple-touch-icon" href="images/school-logo.png" />
+  <link rel="canonical" href="https://pschhindibirhi.netlify.app/contact.html">
+
   <!-- Schema Markup -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    "url": "https://gps-chhindibirhi.netlify.app/contact.html",
+    "url": "https://pschhindibirhi.netlify.app/contact.html",
     "mainEntity": {
       "@type": "School",
       "name": "Government Primary School Chhindibirhi",
@@ -43,12 +45,15 @@
   </script>
 </head>
 <body data-lang="hi" data-theme="light">
+
+  <!-- Nav Overlay (mobile slide-in backdrop) -->
+  <div class="nav-overlay" id="navOverlay" onclick="toggleNav()" aria-hidden="true"></div>
+
   <!-- Top Government Bar -->
-  <div class="top-bar">
-    
+  <div class="top-bar" role="banner">
     <div class="top-bar-content">
       <div class="govt-emblem">
-        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="emblem-placeholder" role="img" aria-label="Government Emblem"></div>
         <div class="govt-text">
           <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
           <strong class="lang-english">Government of Chhattisgarh</strong>
@@ -69,223 +74,315 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="siteHeader">
     <div class="header-content">
       <div class="school-identity">
-        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="eager"
+             onerror="this.style.display='none'">
         <div class="school-name">
           <h1>
-            <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-            <span class="lang-english">Government Primary School, Chhindibirhi</span>
+            <span class="lang-hindi">शास. प्राथ. शा. छिंदिबिरही</span>
+            <span class="lang-english">G.P.S. Chhindibirhi</span>
           </h1>
-          <p>
-            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ - 491441</span>
-            <span class="lang-english">Rajnandgaon, Chhattisgarh - 491441</span>
-          </p>
+          <div class="subtitle">
+            <span class="status-dot" title="School Active"></span>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh</span>
+          </div>
         </div>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Open Navigation Menu"
+              aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
-  <!-- Navigation -->
-  <nav id="mainNav">
+  <!-- Desktop + Mobile Slide-in Navigation -->
+  <nav id="mainNav" role="navigation" aria-label="Main Navigation">
     <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
     <div class="nav-content">
       <a href="index.html">
+        <span class="nav-icon">🏠</span>
         <span class="lang-hindi">मुख्य पृष्ठ</span>
         <span class="lang-english">Home</span>
       </a>
       <a href="about.html">
+        <span class="nav-icon">ℹ️</span>
         <span class="lang-hindi">हमारे बारे में</span>
         <span class="lang-english">About Us</span>
       </a>
       <a href="gallery.html">
+        <span class="nav-icon">🖼️</span>
         <span class="lang-hindi">फोटो गैलरी</span>
         <span class="lang-english">Gallery</span>
       </a>
       <a href="contact.html" class="active">
+        <span class="nav-icon">📞</span>
         <span class="lang-hindi">संपर्क करें</span>
         <span class="lang-english">Contact</span>
       </a>
       <a href="school-notice-board/frontend/index.html">
+        <span class="nav-icon">📋</span>
         <span class="lang-hindi">नोटिस बोर्ड</span>
         <span class="lang-english">Notice Board</span>
       </a>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <main>
-    <!-- Contact Information -->
-    <section class="content-section">
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <div class="mnav-items">
+      <a href="index.html" class="mnav-item" aria-label="Home">
+        <span class="mnav-icon">🏠</span>
+        <span class="mnav-label lang-hindi">मुख्य</span>
+        <span class="mnav-label lang-english">Home</span>
+      </a>
+      <a href="about.html" class="mnav-item" aria-label="About">
+        <span class="mnav-icon">ℹ️</span>
+        <span class="mnav-label lang-hindi">बारे में</span>
+        <span class="mnav-label lang-english">About</span>
+      </a>
+      <a href="gallery.html" class="mnav-item" aria-label="Gallery">
+        <span class="mnav-icon">🖼️</span>
+        <span class="mnav-label lang-hindi">गैलरी</span>
+        <span class="mnav-label lang-english">Gallery</span>
+      </a>
+      <a href="contact.html" class="mnav-item active" aria-label="Contact">
+        <span class="mnav-icon">📞</span>
+        <span class="mnav-label lang-hindi">संपर्क</span>
+        <span class="mnav-label lang-english">Contact</span>
+      </a>
+      <a href="school-notice-board/frontend/index.html" class="mnav-item" aria-label="Notice Board">
+        <span class="mnav-icon">📋</span>
+        <span class="mnav-label lang-hindi">नोटिस</span>
+        <span class="mnav-label lang-english">Notice</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main id="mainContent">
+
+    <!-- Contact Information Cards -->
+    <section class="content-section" aria-labelledby="contact-info-title">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">📞 संपर्क जानकारी</span>
-          <span class="lang-english">📞 Contact Information</span>
+        <span class="section-title-icon">📞</span>
+        <h2 id="contact-info-title">
+          <span class="lang-hindi">संपर्क जानकारी</span>
+          <span class="lang-english">Contact Information</span>
         </h2>
       </div>
-      
+
       <div class="contact-info-grid">
-        <div class="info-card">
+
+        <div class="info-card contact-card">
           <div class="info-icon">🏫</div>
           <div class="info-card-title">
             <span class="lang-hindi">विद्यालय का नाम</span>
             <span class="lang-english">School Name</span>
           </div>
-          <div class="info-card-value">
+          <div class="info-card-value" style="font-size:0.9rem; font-weight:600; line-height:1.5;">
             <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
             <span class="lang-english">Government Primary School, Chhindibirhi</span>
           </div>
         </div>
 
-        <div class="info-card">
+        <div class="info-card contact-card">
           <div class="info-icon">📍</div>
           <div class="info-card-title">
             <span class="lang-hindi">पता</span>
             <span class="lang-english">Address</span>
           </div>
-          <div class="info-card-value">
-            <span class="lang-hindi">ग्राम छिंदिबिरही, ब्लॉक छुरिया<br>जिला राजनांदगाँव, छत्तीसगढ़ - 491441</span>
-            <span class="lang-english">Village Chhindibirhi, Block Churiya<br>District Rajnandgaon, Chhattisgarh - 491441</span>
+          <div class="info-card-value" style="font-size:0.88rem; line-height:1.65;">
+            <span class="lang-hindi">ग्राम छिंदिबिरही, ब्लॉक छुरिया<br>
+              जिला राजनांदगाँव, छत्तीसगढ़ – 491441</span>
+            <span class="lang-english">Village Chhindibirhi, Block Churiya<br>
+              District Rajnandgaon, Chhattisgarh – 491441</span>
           </div>
         </div>
 
-        <div class="info-card">
+        <div class="info-card contact-card">
           <div class="info-icon">📞</div>
           <div class="info-card-title">
             <span class="lang-hindi">फोन नंबर</span>
             <span class="lang-english">Phone Number</span>
           </div>
           <div class="info-card-value">
-            <a href="tel:+917000810232">+91 7000810232</a>
+            <a href="tel:+917000810232"
+               style="font-size:1.05rem; font-weight:700; text-decoration:none; color:var(--primary);">
+              +91 7000810232
+            </a>
           </div>
         </div>
 
-        <div class="info-card">
+        <div class="info-card contact-card">
           <div class="info-icon">✉️</div>
           <div class="info-card-title">
             <span class="lang-hindi">ईमेल पता</span>
             <span class="lang-english">Email Address</span>
           </div>
           <div class="info-card-value">
-            <a href="mailto:gps.chhindibirhi@gmail.com">gps.chhindibirhi@gmail.com</a>
+            <a href="mailto:gps.chhindibirhi@gmail.com"
+               style="font-size:0.85rem; word-break:break-all; text-decoration:none; color:var(--primary);">
+              gps.chhindibirhi@gmail.com
+            </a>
           </div>
         </div>
+
       </div>
     </section>
 
     <!-- School Timings -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="timing-title">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">🕒 विद्यालय समय</span>
-          <span class="lang-english">🕒 School Timings</span>
+        <span class="section-title-icon">🕒</span>
+        <h2 id="timing-title">
+          <span class="lang-hindi">विद्यालय समय</span>
+          <span class="lang-english">School Timings</span>
         </h2>
       </div>
-      <ul class="feature-list">
+      <ul class="feature-list" role="list">
         <li>
-          <span class="lang-hindi"><strong>सोमवार - शुक्रवार:</strong> सुबह 10:00 - शाम 4:00</span>
-          <span class="lang-english"><strong>Monday - Friday:</strong> 10:00 AM - 4:00 PM</span>
+          <span class="lang-hindi"><strong>सोमवार – शुक्रवार:</strong> सुबह 10:00 – शाम 4:00 बजे</span>
+          <span class="lang-english"><strong>Monday – Friday:</strong> 10:00 AM – 4:00 PM</span>
         </li>
         <li>
-          <span class="lang-hindi"><strong>शनिवार:</strong> सुबह 7:30 - सुबह 11:30</span>
-          <span class="lang-english"><strong>Saturday:</strong> 7:30 AM - 11:30 AM</span>
+          <span class="lang-hindi"><strong>शनिवार:</strong> सुबह 7:30 – 11:30 बजे</span>
+          <span class="lang-english"><strong>Saturday:</strong> 7:30 AM – 11:30 AM</span>
         </li>
         <li>
-          <span class="lang-hindi"><strong>रविवार:</strong> अवकाश</span>
-          <span class="lang-english"><strong>Sunday:</strong> Closed</span>
+          <span class="lang-hindi"><strong>रविवार:</strong> 🔴 अवकाश</span>
+          <span class="lang-english"><strong>Sunday:</strong> 🔴 Closed</span>
         </li>
       </ul>
     </section>
 
     <!-- Location Map -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="map-title">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">🗺️ विद्यालय का स्थान</span>
-          <span class="lang-english">🗺️ School Location</span>
+        <span class="section-title-icon">🗺️</span>
+        <h2 id="map-title">
+          <span class="lang-hindi">विद्यालय का स्थान</span>
+          <span class="lang-english">School Location</span>
         </h2>
       </div>
-      <p class="lang-hindi">हमारा विद्यालय छिंदिबिरही गाँव के मध्य में स्थित है।</p>
-      <p class="lang-english">Our school is located in the heart of Chhindibirhi village.</p>
+      <p class="lang-hindi" style="margin-bottom:14px; color:var(--text-muted); font-size:0.92rem;">
+        हमारा विद्यालय छिंदिबिरही गाँव के मध्य में स्थित है।
+      </p>
+      <p class="lang-english" style="margin-bottom:14px; color:var(--text-muted); font-size:0.92rem;">
+        Our school is located in the heart of Chhindibirhi village.
+      </p>
       <div class="map-container">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.965734379136!2d80.93361081057029!3d20.908910480630134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a2953ac5a10e631%3A0x6cc660864b7e147a!2z4KS24KS-4KS44KSV4KWA4KSvIOCkquCljeCksOCkvuCkpeCkruCkv-CklSDgpLbgpL7gpLLgpL4g4KSb4KS_4KSC4KSm4KWB4KSs4KS_4KSw4KS54KWA!5e1!3m2!1sen!2sin!4v1760533264065!5m2!1sen!2sin" 
-          width="100%" 
-          height="350" 
-          style="border:0; border-radius: 8px;" 
-          allowfullscreen="" 
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.965734379136!2d80.93361081057029!3d20.908910480630134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a2953ac5a10e631%3A0x6cc660864b7e147a!2z4KS24KS-4KS44KSV4KWA4KSvIOCkquCljeCksOCkvuCkpeCkruCkv-CklSDgpLbgpL7gpLLgpL4g4KSb4KS_4KSC4KSm4KWB4KSs4KS_4KSw4KS54KWA!5e1!3m2!1sen!2sin!4v1760533264065!5m2!1sen!2sin"
+          width="100%"
+          height="320"
+          style="border:0; display:block;"
+          allowfullscreen=""
           loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
+          referrerpolicy="no-referrer-when-downgrade"
+          title="School Location on Google Maps">
         </iframe>
+      </div>
+      <!-- Get Directions button -->
+      <div style="margin-top:12px; text-align:center;">
+        <a href="https://www.google.com/maps/dir/?api=1&destination=20.908910,80.935186"
+           target="_blank"
+           rel="noopener noreferrer"
+           style="display:inline-flex; align-items:center; gap:8px; background:var(--primary);
+                  color:white; text-decoration:none; padding:10px 22px;
+                  border-radius:var(--radius-sm, 8px); font-weight:600; font-size:0.9rem;
+                  transition:background 0.25s;"
+           onmouseover="this.style.background='var(--accent)'"
+           onmouseout="this.style.background='var(--primary)'">
+          🧭
+          <span class="lang-hindi">रास्ता पाएं</span>
+          <span class="lang-english">Get Directions</span>
+        </a>
       </div>
     </section>
 
     <!-- Contact Form -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="form-title">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">📝 हमसे संपर्क करें</span>
-          <span class="lang-english">📝 Get in Touch</span>
+        <span class="section-title-icon">📝</span>
+        <h2 id="form-title">
+          <span class="lang-hindi">हमसे संपर्क करें</span>
+          <span class="lang-english">Get in Touch</span>
         </h2>
       </div>
-      <p class="lang-hindi" style="margin-bottom: 20px;">किसी भी प्रश्न या सुझाव के लिए कृपया नीचे दिया गया फॉर्म भरें। हम जल्द ही आपसे संपर्क करेंगे।</p>
-      <p class="lang-english" style="margin-bottom: 20px;">For any questions or suggestions, please fill out the form below. We will get back to you soon.</p>
-      
-      <form id="contactForm" class="contact-form">
+
+      <p class="lang-hindi" style="margin-bottom:18px; color:var(--text-muted); font-size:0.92rem;">
+        किसी भी प्रश्न या सुझाव के लिए कृपया नीचे दिया गया फॉर्म भरें।
+        हम जल्द ही आपसे संपर्क करेंगे।
+      </p>
+      <p class="lang-english" style="margin-bottom:18px; color:var(--text-muted); font-size:0.92rem;">
+        For any questions or suggestions, please fill out the form below.
+        We will get back to you soon.
+      </p>
+
+      <form id="contactForm" class="contact-form" novalidate>
+
+        <!-- Name -->
         <div class="form-group">
           <label for="name">
             <span class="lang-hindi">नाम</span>
             <span class="lang-english">Name</span>
-            <span class="required">*</span>
+            <span class="required" aria-hidden="true">*</span>
           </label>
-          <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            required 
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
             aria-required="true"
+            autocomplete="name"
             placeholder="अपना नाम लिखें | Enter your name"
           >
         </div>
 
+        <!-- Email -->
         <div class="form-group">
           <label for="email">
             <span class="lang-hindi">ईमेल</span>
             <span class="lang-english">Email</span>
           </label>
-          <input 
-            type="email" 
-            id="email" 
+          <input
+            type="email"
+            id="email"
             name="email"
+            autocomplete="email"
+            inputmode="email"
             placeholder="अपना ईमेल लिखें | Enter your email"
           >
         </div>
 
+        <!-- Phone -->
         <div class="form-group">
           <label for="phone">
             <span class="lang-hindi">फोन नंबर</span>
             <span class="lang-english">Phone Number</span>
           </label>
-          <input 
-            type="tel" 
-            id="phone" 
+          <input
+            type="tel"
+            id="phone"
             name="phone"
+            autocomplete="tel"
+            inputmode="tel"
             value="+91 "
-            placeholder="+91 1234567890"
+            placeholder="+91 9876543210"
           >
         </div>
 
+        <!-- Message -->
         <div class="form-group">
           <label for="message">
             <span class="lang-hindi">संदेश</span>
             <span class="lang-english">Message</span>
-            <span class="required">*</span>
+            <span class="required" aria-hidden="true">*</span>
           </label>
-          <textarea 
-            id="message" 
-            name="message" 
+          <textarea
+            id="message"
+            name="message"
             required
             aria-required="true"
             rows="5"
@@ -294,27 +391,58 @@
         </div>
 
         <button type="submit" id="submitBtn" class="submit-btn">
-          <span class="lang-hindi">संदेश भेजें</span>
-          <span class="lang-english">Send Message</span>
+          <span class="lang-hindi">📤 संदेश भेजें</span>
+          <span class="lang-english">📤 Send Message</span>
         </button>
 
+        <!-- Inline response banner -->
         <p id="formResponse" class="form-response" role="alert" aria-live="polite"></p>
+
       </form>
     </section>
+
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer role="contentinfo">
     <div class="footer-content">
+      <div class="footer-logo">🏫</div>
       <p>
-        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
+        <span class="lang-hindi"><strong>शासकीय प्राथमिक शाला, छिंदिबिरही</strong></span>
+        <span class="lang-english"><strong>Government Primary School, Chhindibirhi</strong></span>
       </p>
+      <p>
+        <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ – 491441</span>
+        <span class="lang-english">Rajnandgaon, Chhattisgarh – 491441</span>
+      </p>
+      <nav class="footer-links" aria-label="Footer Links">
+        <a href="index.html"><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+        <a href="about.html"><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About</span></a>
+        <a href="gallery.html"><span class="lang-hindi">गैलरी</span><span class="lang-english">Gallery</span></a>
+        <a href="contact.html"><span class="lang-hindi">संपर्क</span><span class="lang-english">Contact</span></a>
+      </nav>
+      <hr class="footer-divider">
+      <p>© 2025 — <span class="lang-hindi">सर्वाधिकार सुरक्षित</span><span class="lang-english">All rights reserved</span></p>
     </div>
-  
   </footer>
 
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!--
+    ✅ Only TWO scripts needed here:
+       1. script.js        — site-wide utilities (nav, theme, lang, back-to-top, toast)
+       2. contact-form.js  — contact form handler only
+
+    ❌ NEVER add backend Node.js route files as browser scripts.
+       The old line below was the ROOT CAUSE of the broken contact form:
+         <script src="school-notice-board/backend/routes/contactRoutes.js"></script>
+  -->
   <script src="script.js"></script>
   <script src="contact-form.js"></script>
+
 </body>
 </html>

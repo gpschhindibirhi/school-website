@@ -1,69 +1,89 @@
-// ====== School Notice Board Script ======
-const backendURL = "https://school-backend-14ld.onrender.com/api/notices";
+'use strict';
 
-// Get elements
-const form = document.getElementById("noticeForm");
-const noticeList = document.getElementById("noticeList");
-const teacherTools = document.getElementById("teacherTools");
-const loginLink = document.getElementById("loginLink");
-const logoutBtn = document.getElementById("logoutBtn");
-const submitBtn = document.getElementById("submitBtn");
+// ====== Notice Board Script ======
+const BACKEND_URL = 'https://school-backend-14ld.onrender.com/api/notices';
+
+// DOM refs
+const form           = document.getElementById('noticeForm');
+const noticeList     = document.getElementById('noticeList');
+const teacherTools   = document.getElementById('teacherTools');
+const loginLinkDiv   = document.getElementById('loginLink');
+const logoutBtn      = document.getElementById('logoutBtn');
+const submitBtn      = document.getElementById('submitBtn');
+const cancelEditBtn  = document.getElementById('cancelEditBtn');
+const countBadge     = document.getElementById('noticeCountBadge');
+const teacherWelcome = document.getElementById('teacherWelcome');
+const teacherNameEl  = document.getElementById('teacherNameDisplay');
 
 // State
-let allNotices = [];
-let showingAll = false;
+let allNotices      = [];
+let showingAll      = false;
 let editingNoticeId = null;
 
-// ====== Helper Functions ======
+// ====== Helpers ======
 
-// Escape HTML to prevent XSS
 function escapeHtml(str) {
   if (!str) return '';
-  return str.replace(/[&<>"']/g, match => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[match]);
+  return str.replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m]);
 }
 
-// Format date
 function formatDate(dateString) {
-  if (!dateString) return 'No date';
-  const date = new Date(dateString);
-  return date.toLocaleString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+  if (!dateString) return '—';
+  const d = new Date(dateString);
+  return d.toLocaleString('en-IN', {
+    day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata'
   });
 }
 
-// ====== Authentication ======
+function toast(msg, duration = 2400) {
+  // Use global toast from script.js if available
+  if (typeof showToast === 'function') {
+    showToast(msg, duration);
+    return;
+  }
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), duration);
+}
 
-// Check if user is authenticated
+// ====== Auth ======
+
+function getToken() { return localStorage.getItem('token'); }
+
 function checkAuth() {
-  const token = localStorage.getItem('token');
-  
-  if (token && teacherTools && loginLink) {
-    teacherTools.style.display = 'block';
-    loginLink.style.display = 'none';
-  } else if (teacherTools && loginLink) {
-    teacherTools.style.display = 'none';
-    loginLink.style.display = 'block';
+  const token = getToken();
+  if (token) {
+    if (teacherTools)  teacherTools.style.display  = 'block';
+    if (loginLinkDiv)  loginLinkDiv.style.display   = 'none';
+
+    // Show teacher name
+    const name = localStorage.getItem('teacherName');
+    if (teacherWelcome && teacherNameEl && name) {
+      teacherNameEl.textContent = name;
+      teacherWelcome.style.display = 'flex';
+    }
+  } else {
+    if (teacherTools)  teacherTools.style.display  = 'none';
+    if (loginLinkDiv)  loginLinkDiv.style.display   = 'block';
   }
 }
 
-// Logout handler
+// Logout
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
-    if (confirm('क्या आप लॉगआउट करना चाहते हैं? | Do you want to logout?')) {
+    const lang = document.body.getAttribute('data-lang') || 'hi';
+    const msg  = lang === 'hi'
+      ? 'क्या आप लॉगआउट करना चाहते हैं?'
+      : 'Do you want to logout?';
+    if (confirm(msg)) {
       localStorage.removeItem('token');
       localStorage.removeItem('teacherName');
       localStorage.removeItem('cachedNotices');
-      window.location.href = "index.html";
+      toast('✅ Logged out');
+      setTimeout(() => window.location.reload(), 600);
     }
   });
 }
@@ -73,118 +93,148 @@ if (logoutBtn) {
 async function fetchNotices() {
   if (!noticeList) return;
 
-  noticeList.innerHTML = '<p class="loading-text"><span class="lang-hindi">लोड हो रहा है...</span><span class="lang-english">Loading...</span></p>';
+  // Show skeletons while loading (only on first load)
+  if (allNotices.length === 0) {
+    showSkeletons();
+  }
 
-  // Try to load from cache first
-  const cachedNotices = localStorage.getItem('cachedNotices');
-  if (cachedNotices) {
+  // Serve cache instantly while fetching fresh data
+  const cached = localStorage.getItem('cachedNotices');
+  if (cached) {
     try {
-      allNotices = JSON.parse(cachedNotices);
+      allNotices = JSON.parse(cached);
       renderNotices(showingAll);
-    } catch (e) {
-      console.error('Error parsing cached notices:', e);
-    }
+    } catch (_) {}
   }
 
   try {
-    const headers = {};
-    const token = localStorage.getItem('token');
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
+    const res = await fetch(BACKEND_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-    const response = await fetch(backendURL, { headers });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const notices = await response.json();
-
-    allNotices = Array.isArray(notices)
-      ? notices.slice().sort((a, b) => new Date(b.date) - new Date(a.date))
+    const data = await res.json();
+    allNotices = Array.isArray(data)
+      ? [...data].sort((a, b) => new Date(b.date) - new Date(a.date))
       : [];
 
-    // Cache the notices
     localStorage.setItem('cachedNotices', JSON.stringify(allNotices));
     renderNotices(showingAll);
 
-  } catch (error) {
-    console.error('Error fetching notices:', error);
-    if (!cachedNotices) {
+  } catch (err) {
+    console.error('Fetch notices error:', err);
+    if (!cached) {
       noticeList.innerHTML = `
-        <p class="no-notices">
-          <span class="lang-hindi">नोटिस लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।</span>
-          <span class="lang-english">Failed to load notices. Please try again later.</span>
-        </p>
+        <div class="no-notices">
+          <div style="font-size:2.5rem; margin-bottom:12px;">📡</div>
+          <p>
+            <span class="lang-hindi">नोटिस लोड नहीं हो सके। कृपया बाद में पुनः प्रयास करें।</span>
+            <span class="lang-english">Could not load notices. Please try again later.</span>
+          </p>
+        </div>
       `;
     }
   }
+}
+
+function showSkeletons() {
+  noticeList.innerHTML = `
+    <div class="notice-skeleton" aria-hidden="true">
+      <div class="skeleton-line skeleton-title"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line skeleton-short"></div>
+    </div>
+    <div class="notice-skeleton" aria-hidden="true">
+      <div class="skeleton-line skeleton-title"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line skeleton-short"></div>
+    </div>
+    <div class="notice-skeleton" aria-hidden="true">
+      <div class="skeleton-line skeleton-title"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line skeleton-short"></div>
+    </div>
+  `;
 }
 
 // ====== Render Notices ======
 
 function renderNotices(showAll = false) {
   if (!noticeList) return;
-
   noticeList.innerHTML = '';
-  const token = localStorage.getItem('token');
-  const noticesToShow = showAll ? allNotices : allNotices.slice(0, 10);
 
-  if (!noticesToShow || noticesToShow.length === 0) {
+  const token        = getToken();
+  const toShow       = showAll ? allNotices : allNotices.slice(0, 10);
+  const lang         = document.body.getAttribute('data-lang') || 'hi';
+
+  // Update count badge
+  if (countBadge) {
+    countBadge.textContent = allNotices.length;
+    countBadge.style.display = allNotices.length > 0 ? 'inline-flex' : 'none';
+  }
+
+  if (toShow.length === 0) {
     noticeList.innerHTML = `
-      <p class="no-notices">
-        <span class="lang-hindi">कोई नोटिस उपलब्ध नहीं है।</span>
-        <span class="lang-english">No notices available.</span>
-      </p>
+      <div class="no-notices">
+        <div style="font-size:2.5rem; margin-bottom:12px;">📭</div>
+        <p>
+          <span class="lang-hindi">कोई नोटिस उपलब्ध नहीं है।</span>
+          <span class="lang-english">No notices available.</span>
+        </p>
+      </div>
     `;
     return;
   }
 
-  noticesToShow.forEach((notice) => {
-    const div = document.createElement('div');
-    div.className = 'notice-card';
+  toShow.forEach((notice, i) => {
+    const card = document.createElement('div');
+    card.className = 'notice-card';
+    card.setAttribute('role', 'listitem');
+    card.style.animationDelay = `${i * 0.05}s`;
 
-    div.innerHTML = `
-      <h4>${escapeHtml(notice.title || 'Untitled')}</h4>
-      <p>${escapeHtml(notice.content || 'No content')}</p>
-      <small class="notice-date">${formatDate(notice.date)}</small>
+    card.innerHTML = `
+      <div class="notice-card-header">
+        <h4 class="notice-title">${escapeHtml(notice.title || 'Untitled')}</h4>
+        <span class="notice-date-badge">${formatDate(notice.date)}</span>
+      </div>
+      <p class="notice-body">${escapeHtml(notice.content || '')}</p>
     `;
 
-    // Add edit/delete buttons for teachers
+    // Teacher action buttons
     if (token) {
-      const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'notice-actions';
+      const actions = document.createElement('div');
+      actions.className = 'notice-actions';
 
       const editBtn = document.createElement('button');
       editBtn.className = 'editBtn';
-      editBtn.innerHTML = '<span class="lang-hindi">✏️ संपादित करें</span><span class="lang-english">✏️ Edit</span>';
+      editBtn.innerHTML = `<span class="lang-hindi">✏️ संपादित</span><span class="lang-english">✏️ Edit</span>`;
+      editBtn.setAttribute('aria-label', `Edit notice: ${notice.title}`);
       editBtn.addEventListener('click', () => editNotice(notice));
-      actionsDiv.appendChild(editBtn);
 
       const deleteBtn = document.createElement('button');
       deleteBtn.className = 'deleteBtn';
-      deleteBtn.innerHTML = '<span class="lang-hindi">🗑️ हटाएं</span><span class="lang-english">🗑️ Delete</span>';
-      deleteBtn.addEventListener('click', () => deleteNotice(notice._id));
-      actionsDiv.appendChild(deleteBtn);
+      deleteBtn.innerHTML = `<span class="lang-hindi">🗑️ हटाएं</span><span class="lang-english">🗑️ Delete</span>`;
+      deleteBtn.setAttribute('aria-label', `Delete notice: ${notice.title}`);
+      deleteBtn.addEventListener('click', () => deleteNotice(notice._id, notice.title));
 
-      div.appendChild(actionsDiv);
+      actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
+      card.appendChild(actions);
     }
 
-    noticeList.appendChild(div);
+    noticeList.appendChild(card);
   });
 
-  // Add show more/less button
+  // Show more / less button
   if (allNotices.length > 10) {
     const toggleBtn = document.createElement('button');
     toggleBtn.className = 'toggleBtn';
-    toggleBtn.innerHTML = showAll 
-      ? '<span class="lang-hindi">⬆️ कम दिखाएं</span><span class="lang-english">⬆️ Show Less</span>'
-      : '<span class="lang-hindi">⬇️ और दिखाएं</span><span class="lang-english">⬇️ Show More</span>';
+    toggleBtn.innerHTML = showAll
+      ? `<span class="lang-hindi">⬆️ कम दिखाएं</span><span class="lang-english">⬆️ Show Less</span>`
+      : `<span class="lang-hindi">⬇️ और ${allNotices.length - 10} नोटिस देखें</span><span class="lang-english">⬇️ Show ${allNotices.length - 10} More</span>`;
+
     toggleBtn.addEventListener('click', () => {
       showingAll = !showingAll;
       renderNotices(showingAll);
-      toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      toggleBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
     noticeList.appendChild(toggleBtn);
   }
@@ -193,187 +243,148 @@ function renderNotices(showAll = false) {
 // ====== Edit Notice ======
 
 function editNotice(notice) {
-  const titleInput = document.getElementById('title');
-  const contentInput = document.getElementById('content');
+  const titleEl   = document.getElementById('title');
+  const contentEl = document.getElementById('content');
+  if (!titleEl || !contentEl) return;
 
-  if (titleInput && contentInput && submitBtn) {
-    titleInput.value = notice.title || '';
-    contentInput.value = notice.content || '';
-    submitBtn.innerHTML = '<span class="lang-hindi">अपडेट करें</span><span class="lang-english">Update Notice</span>';
-    editingNoticeId = notice._id;
+  titleEl.value   = notice.title   || '';
+  contentEl.value = notice.content || '';
+  editingNoticeId = notice._id;
 
-    // Scroll to form
-    document.getElementById('noticeForm')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  const lang = document.body.getAttribute('data-lang') || 'hi';
+  submitBtn.innerHTML = lang === 'hi'
+    ? '💾 अपडेट करें'
+    : '💾 Update Notice';
+
+  if (cancelEditBtn) cancelEditBtn.style.display = 'inline-flex';
+
+  // Scroll to form
+  form?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  titleEl.focus();
+}
+
+function resetForm() {
+  form?.reset();
+  editingNoticeId = null;
+  submitBtn.innerHTML = `<span class="lang-hindi">➕ नई नोटिस जोड़ें</span><span class="lang-english">➕ Add Notice</span>`;
+  if (cancelEditBtn) cancelEditBtn.style.display = 'none';
+}
+
+if (cancelEditBtn) {
+  cancelEditBtn.addEventListener('click', resetForm);
 }
 
 // ====== Delete Notice ======
 
-async function deleteNotice(id) {
-  const token = localStorage.getItem('token');
+async function deleteNotice(id, title) {
+  const token = getToken();
   if (!token) return;
 
-  const confirmDelete = confirm('क्या आप इस नोटिस को हटाना चाहते हैं? | Do you want to delete this notice?');
-  if (!confirmDelete) return;
+  const lang = document.body.getAttribute('data-lang') || 'hi';
+  const msg  = lang === 'hi'
+    ? `"${title}" नोटिस हटाना चाहते हैं?`
+    : `Delete notice "${title}"?`;
+  if (!confirm(msg)) return;
 
   try {
-    const response = await fetch(`${backendURL}/${id}`, {
+    const res = await fetch(`${BACKEND_URL}/${id}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
-    if (response.ok) {
-      alert('✅ नोटिस सफलतापूर्वक हटाई गई! | Notice deleted successfully!');
+    if (res.ok) {
+      toast(lang === 'hi' ? '🗑️ नोटिस हटाई गई' : '🗑️ Notice deleted');
       await fetchNotices();
+    } else if (res.status === 401 || res.status === 403) {
+      handleSessionExpired();
     } else {
-      alert('❌ नोटिस हटाने में त्रुटि। | Failed to delete notice.');
+      toast(lang === 'hi' ? '❌ नोटिस नहीं हटाई जा सकी' : '❌ Could not delete notice');
     }
-  } catch (error) {
-    console.error('Error deleting notice:', error);
-    alert('सर्वर से कनेक्शन त्रुटि। | Error connecting to server.');
+  } catch (err) {
+    console.error('Delete error:', err);
+    toast('❌ Connection error');
   }
 }
 
-// ====== Add/Update Notice ======
+// ====== Add / Update Notice ======
 
 if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const titleInput = document.getElementById('title');
-    const contentInput = document.getElementById('content');
-    const title = (titleInput?.value || '').trim();
-    const content = (contentInput?.value || '').trim();
+    const titleVal   = (document.getElementById('title')?.value   || '').trim();
+    const contentVal = (document.getElementById('content')?.value || '').trim();
+    const lang       = document.body.getAttribute('data-lang') || 'hi';
 
-    if (!title || !content) {
-      alert('⚠️ कृपया शीर्षक और विवरण भरें। | Please fill in both title and content.');
+    if (!titleVal || !contentVal) {
+      toast(lang === 'hi'
+        ? '⚠️ शीर्षक और विवरण दोनों भरें'
+        : '⚠️ Please fill in both title and content');
       return;
     }
 
-    const token = localStorage.getItem('token');
+    const token = getToken();
     if (!token) {
-      alert('⚠️ कृपया पहले लॉगिन करें। | Please login first.');
+      toast(lang === 'hi' ? '⚠️ कृपया पहले लॉगिन करें' : '⚠️ Please login first');
       return;
     }
 
-    const method = editingNoticeId ? 'PUT' : 'POST';
-    const url = editingNoticeId ? `${backendURL}/${editingNoticeId}` : backendURL;
+    const isEdit = !!editingNoticeId;
+    const method = isEdit ? 'PUT' : 'POST';
+    const url    = isEdit ? `${BACKEND_URL}/${editingNoticeId}` : BACKEND_URL;
 
-    // Show loading
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="spinner"></span> <span class="lang-hindi">सहेजा जा रहा है...</span><span class="lang-english">Saving...</span>';
-    }
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<span class="spinner"></span> <span class="lang-hindi">सहेजा जा रहा है…</span><span class="lang-english">Saving…</span>`;
 
     try {
-      const response = await fetch(url, {
-        method: method,
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, content })
+        body: JSON.stringify({ title: titleVal, content: contentVal })
       });
 
-      if (response.ok) {
-        const message = editingNoticeId 
-          ? '✅ नोटिस अपडेट सफल! | Notice updated successfully!'
-          : '✅ नोटिस जोड़ी गई! | Notice added successfully!';
-        alert(message);
+      if (res.ok) {
+        toast(lang === 'hi'
+          ? (isEdit ? '✅ नोटिस अपडेट हुई' : '✅ नोटिस जोड़ी गई')
+          : (isEdit ? '✅ Notice updated' : '✅ Notice added'));
         resetForm();
         await fetchNotices();
+      } else if (res.status === 401 || res.status === 403) {
+        handleSessionExpired();
       } else {
-        alert('❌ नोटिस सहेजने में त्रुटि। लॉगिन स्थिति जांचें। | Failed to save notice. Check login status.');
+        toast(lang === 'hi' ? '❌ नोटिस सहेजने में त्रुटि' : '❌ Failed to save notice');
       }
-    } catch (error) {
-      console.error('Error saving notice:', error);
-      alert('सर्वर से कनेक्शन त्रुटि। | Error connecting to server.');
+
+    } catch (err) {
+      console.error('Submit error:', err);
+      toast('❌ Connection error. Please try again.');
     } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span class="lang-hindi">नई नोटिस जोड़ें</span><span class="lang-english">Add Notice</span>';
-      }
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = isEdit
+        ? `<span class="lang-hindi">💾 अपडेट करें</span><span class="lang-english">💾 Update</span>`
+        : `<span class="lang-hindi">➕ नई नोटिस जोड़ें</span><span class="lang-english">➕ Add Notice</span>`;
     }
   });
 }
 
-// ====== Reset Form ======
+// ====== Session Expired Handler ======
 
-function resetForm() {
-  if (form) {
-    form.reset();
-  }
-  if (submitBtn) {
-    submitBtn.innerHTML = '<span class="lang-hindi">नई नोटिस जोड़ें</span><span class="lang-english">Add Notice</span>';
-  }
-  editingNoticeId = null;
+function handleSessionExpired() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('teacherName');
+  const lang = document.body.getAttribute('data-lang') || 'hi';
+  toast(lang === 'hi'
+    ? '⚠️ सत्र समाप्त हो गया। कृपया पुनः लॉगिन करें।'
+    : '⚠️ Session expired. Please login again.');
+  setTimeout(() => window.location.reload(), 1200);
 }
 
-// ====== Navigation Toggle (Mobile) ======
-
-function toggleNav() {
-  const nav = document.getElementById('mainNav');
-  if (nav) {
-    nav.classList.toggle('active');
-  }
-}
-
-// ====== Language Toggle ======
-
-function toggleLanguage() {
-  const body = document.body;
-  const currentLang = body.getAttribute('data-lang');
-  const newLang = currentLang === 'hi' ? 'en' : 'hi';
-  body.setAttribute('data-lang', newLang);
-  localStorage.setItem('preferred-language', newLang);
-}
-
-// ====== Theme Toggle ======
-
-function toggleTheme() {
-  const body = document.body;
-  const currentTheme = body.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  body.setAttribute('data-theme', newTheme);
-  localStorage.setItem('preferred-theme', newTheme);
-  
-  const themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.innerHTML = newTheme === 'light' ? '<span>🌙</span>' : '<span>☀️</span>';
-  }
-}
-
-// ====== Load Preferences ======
-
-function loadPreferences() {
-  const savedLang = localStorage.getItem('preferred-language') || 'hi';
-  const savedTheme = localStorage.getItem('preferred-theme') || 'light';
-  
-  document.body.setAttribute('data-lang', savedLang);
-  document.body.setAttribute('data-theme', savedTheme);
-  
-  const themeBtn = document.getElementById('themeToggle');
-  if (themeBtn) {
-    themeBtn.innerHTML = savedTheme === 'light' ? '<span>🌙</span>' : '<span>☀️</span>';
-  }
-}
-
-// ====== Initialize ======
+// ====== Init ======
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadPreferences();
   checkAuth();
   fetchNotices();
-
-  // Close mobile nav on link click
-  document.querySelectorAll('.nav-content a').forEach(link => {
-    link.addEventListener('click', () => {
-      const nav = document.getElementById('mainNav');
-      if (nav) {
-        nav.classList.remove('active');
-      }
-    });
-  });
 });
-
-// ====== End of Script ======

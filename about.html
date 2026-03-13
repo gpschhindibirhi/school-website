@@ -2,24 +2,29 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही के बारे में - हमारा मिशन, विजन और सुविधाएं।">
   <meta name="keywords" content="about government primary school Chhindibirhi, school mission, vision, facilities">
   <meta name="author" content="Government Primary School Chhindibirhi">
   <meta name="robots" content="index, follow">
-  
+  <meta name="theme-color" content="#1e40af" />
+
   <title>हमारे बारे में | About Us - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="images/school-logo.png" type="image/png" />
-  <link rel="canonical" href="https://gps-chhindibirhi.netlify.app/about.html">
+  <link rel="apple-touch-icon" href="images/school-logo.png" />
+  <link rel="canonical" href="https://pschhindibirhi.netlify.app/about.html">
 </head>
 <body data-lang="hi" data-theme="light">
+
+  <!-- Nav Overlay (mobile) -->
+  <div class="nav-overlay" id="navOverlay" onclick="toggleNav()" aria-hidden="true"></div>
+
   <!-- Top Government Bar -->
-  <div class="top-bar">
-    
+  <div class="top-bar" role="banner">
     <div class="top-bar-content">
       <div class="govt-emblem">
-        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="emblem-placeholder" role="img" aria-label="Government Emblem"></div>
         <div class="govt-text">
           <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
           <strong class="lang-english">Government of Chhattisgarh</strong>
@@ -40,76 +45,152 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="siteHeader">
     <div class="header-content">
       <div class="school-identity">
-        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="eager" onerror="this.style.display='none'">
         <div class="school-name">
           <h1>
-            <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-            <span class="lang-english">Government Primary School, Chhindibirhi</span>
+            <span class="lang-hindi">शास. प्राथ. शा. छिंदिबिरही</span>
+            <span class="lang-english">G.P.S. Chhindibirhi</span>
           </h1>
-          <p>
-            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ - 491441</span>
-            <span class="lang-english">Rajnandgaon, Chhattisgarh - 491441</span>
-          </p>
+          <div class="subtitle">
+            <span class="status-dot" title="School Active"></span>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh</span>
+          </div>
         </div>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
-  <!-- Navigation -->
-  <nav id="mainNav">
+  <!-- Desktop + Mobile Slide-in Navigation -->
+  <nav id="mainNav" role="navigation" aria-label="Main Navigation">
     <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
     <div class="nav-content">
       <a href="index.html">
+        <span class="nav-icon">🏠</span>
         <span class="lang-hindi">मुख्य पृष्ठ</span>
         <span class="lang-english">Home</span>
       </a>
       <a href="about.html" class="active">
+        <span class="nav-icon">ℹ️</span>
         <span class="lang-hindi">हमारे बारे में</span>
         <span class="lang-english">About Us</span>
       </a>
       <a href="gallery.html">
+        <span class="nav-icon">🖼️</span>
         <span class="lang-hindi">फोटो गैलरी</span>
         <span class="lang-english">Gallery</span>
       </a>
       <a href="contact.html">
+        <span class="nav-icon">📞</span>
         <span class="lang-hindi">संपर्क करें</span>
         <span class="lang-english">Contact</span>
       </a>
       <a href="school-notice-board/frontend/index.html">
+        <span class="nav-icon">📋</span>
         <span class="lang-hindi">नोटिस बोर्ड</span>
         <span class="lang-english">Notice Board</span>
       </a>
     </div>
   </nav>
 
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <div class="mnav-items">
+      <a href="index.html" class="mnav-item" aria-label="Home">
+        <span class="mnav-icon">🏠</span>
+        <span class="mnav-label lang-hindi">मुख्य</span>
+        <span class="mnav-label lang-english">Home</span>
+      </a>
+      <a href="about.html" class="mnav-item active" aria-label="About">
+        <span class="mnav-icon">ℹ️</span>
+        <span class="mnav-label lang-hindi">बारे में</span>
+        <span class="mnav-label lang-english">About</span>
+      </a>
+      <a href="gallery.html" class="mnav-item" aria-label="Gallery">
+        <span class="mnav-icon">🖼️</span>
+        <span class="mnav-label lang-hindi">गैलरी</span>
+        <span class="mnav-label lang-english">Gallery</span>
+      </a>
+      <a href="contact.html" class="mnav-item" aria-label="Contact">
+        <span class="mnav-icon">📞</span>
+        <span class="mnav-label lang-hindi">संपर्क</span>
+        <span class="mnav-label lang-english">Contact</span>
+      </a>
+      <a href="school-notice-board/frontend/index.html" class="mnav-item" aria-label="Notice Board">
+        <span class="mnav-icon">📋</span>
+        <span class="mnav-label lang-hindi">नोटिस</span>
+        <span class="mnav-label lang-english">Notice</span>
+      </a>
+    </div>
+  </nav>
+
   <!-- Main Content -->
-  <main>
+  <main id="mainContent">
+
     <!-- Introduction -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="about-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">🏫</span>
+        <h2 id="about-title">
           <span class="lang-hindi">हमारे बारे में</span>
           <span class="lang-english">About Us</span>
         </h2>
       </div>
-      <p class="lang-hindi">
-        शासकीय प्राथमिक शाला, छिंदिबिरही छत्तीसगढ़ शासन, स्कूल शिक्षा विभाग के अंतर्गत संचालित एक सरकारी विद्यालय है। इसकी स्थापना 1995 में छिंदिबिरही गाँव एवं आसपास के क्षेत्रों के सभी बच्चों को निःशुल्क एवं गुणवत्तापूर्ण प्राथमिक शिक्षा प्रदान करने के उद्देश्य से की गई थी। यह विद्यालय बुनियादी शिक्षा, अनुशासन, स्वच्छता एवं सांस्कृतिक मूल्यों पर विशेष ध्यान देता है ताकि प्रत्येक बच्चा आत्मविश्वासी एवं जिम्मेदार नागरिक बन सके।
+      <p class="lang-hindi" style="line-height:1.85; color:var(--text-muted); font-size:0.95rem;">
+        शासकीय प्राथमिक शाला, छिंदिबिरही छत्तीसगढ़ शासन, स्कूल शिक्षा विभाग के अंतर्गत संचालित एक सरकारी विद्यालय है। इसकी स्थापना <strong>1995</strong> में छिंदिबिरही गाँव एवं आसपास के क्षेत्रों के सभी बच्चों को निःशुल्क एवं गुणवत्तापूर्ण प्राथमिक शिक्षा प्रदान करने के उद्देश्य से की गई थी। यह विद्यालय बुनियादी शिक्षा, अनुशासन, स्वच्छता एवं सांस्कृतिक मूल्यों पर विशेष ध्यान देता है ताकि प्रत्येक बच्चा आत्मविश्वासी एवं जिम्मेदार नागरिक बन सके।
       </p>
-      <p class="lang-english">
-        Government Primary School, Chhindibirhi is a government-run institution under the School Education Department, Government of Chhattisgarh. Established in 1995, it was founded to provide free and quality primary education to all children in and around Chhindibirhi village. The school emphasizes fundamental learning, discipline, cleanliness, and cultural values to ensure every child becomes a confident and responsible citizen.
+      <p class="lang-english" style="line-height:1.85; color:var(--text-muted); font-size:0.95rem;">
+        Government Primary School, Chhindibirhi is a government-run institution under the School Education Department, Government of Chhattisgarh. Established in <strong>1995</strong>, it was founded to provide free and quality primary education to all children in and around Chhindibirhi village. The school emphasizes fundamental learning, discipline, cleanliness, and cultural values to ensure every child becomes a confident and responsible citizen.
       </p>
+
+      <!-- Quick Stats Strip -->
+      <div class="info-grid" style="margin-top:20px;">
+        <div class="info-card">
+          <div class="info-card-icon">🏫</div>
+          <div class="info-card-value">1995</div>
+          <div class="info-card-title">
+            <span class="lang-hindi">स्थापना वर्ष</span>
+            <span class="lang-english">Established</span>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">👨‍🏫</div>
+          <div class="info-card-value">1</div>
+          <div class="info-card-title">
+            <span class="lang-hindi">कुल शिक्षक</span>
+            <span class="lang-english">Teachers</span>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">👨‍🎓</div>
+          <div class="info-card-value">21</div>
+          <div class="info-card-title">
+            <span class="lang-hindi">कुल छात्र</span>
+            <span class="lang-english">Students</span>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">📚</div>
+          <div class="info-card-value">1–5</div>
+          <div class="info-card-title">
+            <span class="lang-hindi">कक्षाएं</span>
+            <span class="lang-english">Classes</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Mission and Vision -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="mv-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">🎯</span>
+        <h2 id="mv-title">
           <span class="lang-hindi">हमारा मिशन एवं विजन</span>
-          <span class="lang-english">Our Mission and Vision</span>
+          <span class="lang-english">Our Mission &amp; Vision</span>
         </h2>
       </div>
       <div class="mission-vision-grid">
@@ -118,10 +199,10 @@
             <span class="lang-hindi">🎯 मिशन</span>
             <span class="lang-english">🎯 Mission</span>
           </h3>
-          <p class="lang-hindi">
+          <p class="lang-hindi" style="color:var(--text-muted); line-height:1.75; font-size:0.93rem;">
             प्रत्येक बच्चे को समान एवं गुणवत्तापूर्ण शिक्षा प्रदान करना, जो उन्हें समाज में सकारात्मक योगदान देने के लिए सशक्त बनाए। हम शिक्षा के माध्यम से बच्चों में नैतिक मूल्यों, आत्मविश्वास और सामाजिक जिम्मेदारी का विकास करते हैं।
           </p>
-          <p class="lang-english">
+          <p class="lang-english" style="color:var(--text-muted); line-height:1.75; font-size:0.93rem;">
             To provide equal and quality education to every child, empowering them to contribute positively to society. We develop moral values, confidence, and social responsibility in children through education.
           </p>
         </div>
@@ -130,10 +211,10 @@
             <span class="lang-hindi">🌟 विजन</span>
             <span class="lang-english">🌟 Vision</span>
           </h3>
-          <p class="lang-hindi">
+          <p class="lang-hindi" style="color:var(--text-muted); line-height:1.75; font-size:0.93rem;">
             एक ऐसे विद्यालय का निर्माण करना जो न केवल शिक्षा प्रदान करे, बल्कि नैतिकता, नेतृत्व क्षमता एवं सामुदायिक जिम्मेदारी को भी प्रोत्साहित करे। हमारा लक्ष्य प्रत्येक बच्चे को एक जिम्मेदार एवं सक्षम नागरिक बनाना है।
           </p>
-          <p class="lang-english">
+          <p class="lang-english" style="color:var(--text-muted); line-height:1.75; font-size:0.93rem;">
             To create a school that not only educates but also fosters ethics, leadership, and community responsibility. Our goal is to make every child a responsible and capable citizen.
           </p>
         </div>
@@ -141,75 +222,60 @@
     </section>
 
     <!-- Teaching Staff -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="staff-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">👩‍🏫</span>
+        <h2 id="staff-title">
           <span class="lang-hindi">शिक्षण स्टाफ विवरण</span>
           <span class="lang-english">Teaching Staff Details</span>
         </h2>
       </div>
       <div class="table-container">
-        <table role="table">
+        <table role="table" aria-label="Staff Details">
           <thead>
             <tr>
-              <th>
-                <span class="lang-hindi">क्र.</span>
-                <span class="lang-english">S.No.</span>
-              </th>
-              <th>
-                <span class="lang-hindi">नाम</span>
-                <span class="lang-english">Name</span>
-              </th>
-              <th>
-                <span class="lang-hindi">पद</span>
-                <span class="lang-english">Designation</span>
-              </th>
-              <th>
-                <span class="lang-hindi">विषय</span>
-                <span class="lang-english">Subjects</span>
-              </th>
-              <th>
-                <span class="lang-hindi">कक्षा</span>
-                <span class="lang-english">Classes</span>
-              </th>
-              <th>
-                <span class="lang-hindi">ज्वाइनिंग तिथि</span>
-                <span class="lang-english">Joining Date</span>
-              </th>
+              <th scope="col"><span class="lang-hindi">क्र.</span><span class="lang-english">S.No.</span></th>
+              <th scope="col"><span class="lang-hindi">नाम</span><span class="lang-english">Name</span></th>
+              <th scope="col"><span class="lang-hindi">पद</span><span class="lang-english">Designation</span></th>
+              <th scope="col"><span class="lang-hindi">विषय</span><span class="lang-english">Subjects</span></th>
+              <th scope="col"><span class="lang-hindi">कक्षा</span><span class="lang-english">Classes</span></th>
+              <th scope="col"><span class="lang-hindi">योग्यता</span><span class="lang-english">Qualification</span></th>
+              <th scope="col"><span class="lang-hindi">ज्वाइनिंग</span><span class="lang-english">Joining</span></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>1</td>
               <td>
-                <span class="lang-hindi">श्री भोज कुमार</span>
-                <span class="lang-english">Shri Bhoj Kumar</span>
+                <strong>
+                  <span class="lang-hindi">श्री भोज कुमार</span>
+                  <span class="lang-english">Shri Bhoj Kumar</span>
+                </strong>
               </td>
               <td>
                 <span class="lang-hindi">सहायक शिक्षक</span>
                 <span class="lang-english">Assistant Teacher</span>
               </td>
               <td>
-                <span class="lang-hindi">हिंदी, अंग्रेजी, गणित, पर्यावरण अध्ययन</span>
+                <span class="lang-hindi">हिंदी, अंग्रेजी, गणित, पर्यावरण</span>
                 <span class="lang-english">Hindi, English, Math, EVS</span>
               </td>
-              <td>1-5</td>
-              <td>22/08/2008</td>
+              <td>1–5</td>
+              <td>
+                <span class="lang-hindi" style="color:var(--text-muted); font-style:italic;">जानकारी नहीं</span>
+                <span class="lang-english" style="color:var(--text-muted); font-style:italic;">No Data</span>
+              </td>
+              <td style="white-space:nowrap;">22/08/2008</td>
             </tr>
-            <tr>
+            <tr style="opacity:0.6;">
               <td>2</td>
+              <td>—</td>
               <td>
-                <span class="lang-hindi">—</span>
-                <span class="lang-english">—</span>
+                <span class="lang-hindi">सहायक शिक्षक <span style="color:#ef4444; font-size:0.78rem;">(रिक्त)</span></span>
+                <span class="lang-english">Asst. Teacher <span style="color:#ef4444; font-size:0.78rem;">(Vacant)</span></span>
               </td>
-              <td>
-                <span class="lang-hindi">सहायक शिक्षक (रिक्त)</span>
-                <span class="lang-english">Assistant Teacher (Vacant)</span>
-              </td>
-              <td>
-                <span class="lang-hindi">—</span>
-                <span class="lang-english">—</span>
-              </td>
+              <td>—</td>
+              <td>—</td>
               <td>—</td>
               <td>—</td>
             </tr>
@@ -219,51 +285,56 @@
     </section>
 
     <!-- School Timings -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="timings-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">⏰</span>
+        <h2 id="timings-title">
           <span class="lang-hindi">विद्यालय समय सारणी</span>
           <span class="lang-english">School Timings</span>
         </h2>
       </div>
       <div class="table-container">
-        <table role="table">
+        <table role="table" aria-label="School Timings">
           <thead>
             <tr>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">दिन</span>
                 <span class="lang-english">Day</span>
               </th>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">समय</span>
                 <span class="lang-english">Timing</span>
+              </th>
+              <th scope="col">
+                <span class="lang-hindi">स्थिति</span>
+                <span class="lang-english">Status</span>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <span class="lang-hindi">सोमवार - शुक्रवार</span>
-                <span class="lang-english">Monday - Friday</span>
+                <span class="lang-hindi">सोमवार – शुक्रवार</span>
+                <span class="lang-english">Monday – Friday</span>
               </td>
-              <td>10:00 AM - 4:00 PM</td>
+              <td>10:00 AM – 4:00 PM</td>
+              <td><span style="color:var(--accent); font-weight:600; font-size:0.85rem;">🟢 <span class="lang-hindi">खुला</span><span class="lang-english">Open</span></span></td>
             </tr>
             <tr>
               <td>
                 <span class="lang-hindi">शनिवार</span>
                 <span class="lang-english">Saturday</span>
               </td>
-              <td>7:30 AM - 11:30 AM</td>
+              <td>7:30 AM – 11:30 AM</td>
+              <td><span style="color:var(--secondary); font-weight:600; font-size:0.85rem;">🟡 <span class="lang-hindi">अर्ध दिवस</span><span class="lang-english">Half Day</span></span></td>
             </tr>
             <tr>
               <td>
                 <span class="lang-hindi">रविवार</span>
                 <span class="lang-english">Sunday</span>
               </td>
-              <td>
-                <span class="lang-hindi">अवकाश</span>
-                <span class="lang-english">Closed</span>
-              </td>
+              <td>—</td>
+              <td><span style="color:#ef4444; font-weight:600; font-size:0.85rem;">🔴 <span class="lang-hindi">अवकाश</span><span class="lang-english">Closed</span></span></td>
             </tr>
           </tbody>
         </table>
@@ -271,48 +342,68 @@
     </section>
 
     <!-- Core Values -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="values-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">💎</span>
+        <h2 id="values-title">
           <span class="lang-hindi">हमारे मूल्य</span>
           <span class="lang-english">Our Core Values</span>
         </h2>
       </div>
-      <ul class="feature-list">
+      <ul class="feature-list" role="list">
         <li>
-          <span class="lang-hindi">समानता - सभी बच्चों को समान अवसर</span>
-          <span class="lang-english">Equality - Equal opportunities for all children</span>
+          <span class="lang-hindi"><strong>समानता</strong> – सभी बच्चों को समान अवसर</span>
+          <span class="lang-english"><strong>Equality</strong> – Equal opportunities for all children</span>
         </li>
         <li>
-          <span class="lang-hindi">गुणवत्ता - उच्च गुणवत्तापूर्ण शिक्षा</span>
-          <span class="lang-english">Quality - High-quality education</span>
+          <span class="lang-hindi"><strong>गुणवत्ता</strong> – उच्च गुणवत्तापूर्ण शिक्षा</span>
+          <span class="lang-english"><strong>Quality</strong> – High-quality education</span>
         </li>
         <li>
-          <span class="lang-hindi">अनुशासन - नियमित एवं अनुशासित वातावरण</span>
-          <span class="lang-english">Discipline - Regular and disciplined environment</span>
+          <span class="lang-hindi"><strong>अनुशासन</strong> – नियमित एवं अनुशासित वातावरण</span>
+          <span class="lang-english"><strong>Discipline</strong> – Regular and disciplined environment</span>
         </li>
         <li>
-          <span class="lang-hindi">स्वच्छता - स्वच्छ एवं स्वस्थ परिसर</span>
-          <span class="lang-english">Cleanliness - Clean and healthy campus</span>
+          <span class="lang-hindi"><strong>स्वच्छता</strong> – स्वच्छ एवं स्वस्थ परिसर</span>
+          <span class="lang-english"><strong>Cleanliness</strong> – Clean and healthy campus</span>
         </li>
         <li>
-          <span class="lang-hindi">समावेशन - हर बच्चे का स्वागत</span>
-          <span class="lang-english">Inclusion - Welcoming every child</span>
+          <span class="lang-hindi"><strong>समावेशन</strong> – हर बच्चे का स्वागत</span>
+          <span class="lang-english"><strong>Inclusion</strong> – Welcoming every child</span>
         </li>
       </ul>
     </section>
+
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer role="contentinfo">
     <div class="footer-content">
+      <div class="footer-logo">🏫</div>
       <p>
-        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
+        <span class="lang-hindi"><strong>शासकीय प्राथमिक शाला, छिंदिबिरही</strong></span>
+        <span class="lang-english"><strong>Government Primary School, Chhindibirhi</strong></span>
       </p>
+      <p>
+        <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ – 491441</span>
+        <span class="lang-english">Rajnandgaon, Chhattisgarh – 491441</span>
+      </p>
+      <nav class="footer-links" aria-label="Footer Links">
+        <a href="index.html"><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+        <a href="about.html"><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About</span></a>
+        <a href="gallery.html"><span class="lang-hindi">गैलरी</span><span class="lang-english">Gallery</span></a>
+        <a href="contact.html"><span class="lang-hindi">संपर्क</span><span class="lang-english">Contact</span></a>
+      </nav>
+      <hr class="footer-divider">
+      <p>© 2025 — <span class="lang-hindi">सर्वाधिकार सुरक्षित</span><span class="lang-english">All rights reserved</span></p>
     </div>
-  
   </footer>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
 </body>

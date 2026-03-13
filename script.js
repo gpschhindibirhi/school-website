@@ -1,10 +1,39 @@
+/* ============================================================
+   GPS Chhindibirhi — Main Script
+   Improvements: mobile nav overlay, slide counter, back-to-top,
+   toast notifications, header scroll shadow, debounce, 
+   better event delegation, robust preference persistence.
+   ============================================================ */
+
+'use strict';
+
+// ====== Utility Helpers ======
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+function showToast(message, duration = 2200) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), duration);
+}
+
 // ====== Language Toggle ======
 function toggleLanguage() {
   const body = document.body;
   const currentLang = body.getAttribute('data-lang');
   const newLang = currentLang === 'hi' ? 'en' : 'hi';
   body.setAttribute('data-lang', newLang);
-  localStorage.setItem('preferred-language', newLang);
+  try { localStorage.setItem('preferred-language', newLang); } catch(e) {}
+
+  const msg = newLang === 'en' ? 'Switched to English' : 'हिंदी में बदला गया';
+  showToast(msg);
 }
 
 // ====== Theme Toggle ======
@@ -13,126 +42,179 @@ function toggleTheme() {
   const currentTheme = body.getAttribute('data-theme');
   const newTheme = currentTheme === 'light' ? 'dark' : 'light';
   body.setAttribute('data-theme', newTheme);
-  localStorage.setItem('preferred-theme', newTheme);
-  
+  try { localStorage.setItem('preferred-theme', newTheme); } catch(e) {}
+
   const themeBtn = document.getElementById('themeToggle');
-  themeBtn.innerHTML = newTheme === 'light' ? '<span>🌙</span>' : '<span>☀️</span>';
+  if (themeBtn) {
+    themeBtn.innerHTML = newTheme === 'light' ? '<span>🌙</span>' : '<span>☀️</span>';
+  }
+
+  // Update meta theme-color
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) {
+    metaTheme.setAttribute('content', newTheme === 'dark' ? '#0f172a' : '#1e40af');
+  }
 }
 
 // ====== Load Saved Preferences ======
-window.addEventListener('DOMContentLoaded', () => {
-  const savedLang = localStorage.getItem('preferred-language') || 'hi';
-  const savedTheme = localStorage.getItem('preferred-theme') || 'light';
-  
-  document.body.setAttribute('data-lang', savedLang);
+document.addEventListener('DOMContentLoaded', () => {
+  let savedLang = 'hi';
+  let savedTheme = 'light';
+  try {
+    savedLang  = localStorage.getItem('preferred-language') || 'hi';
+    savedTheme = localStorage.getItem('preferred-theme')   || 'light';
+  } catch(e) {}
+
+  document.body.setAttribute('data-lang',  savedLang);
   document.body.setAttribute('data-theme', savedTheme);
-  
+
   const themeBtn = document.getElementById('themeToggle');
   if (themeBtn) {
     themeBtn.innerHTML = savedTheme === 'light' ? '<span>🌙</span>' : '<span>☀️</span>';
   }
 });
 
-// ====== Navigation Toggle for Mobile ======
+// ====== Header Scroll Shadow ======
+const header = document.getElementById('siteHeader');
+if (header) {
+  const onScroll = debounce(() => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  }, 50);
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
+// ====== Back to Top Button ======
+const backToTopBtn = document.getElementById('backToTop');
+
+if (backToTopBtn) {
+  const toggleBackToTop = debounce(() => {
+    backToTopBtn.classList.toggle('visible', window.scrollY > 320);
+  }, 80);
+  window.addEventListener('scroll', toggleBackToTop, { passive: true });
+}
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ====== Navigation Toggle (Mobile Slide-in) ======
 function toggleNav() {
-  const nav = document.getElementById('mainNav');
-  const overlay = document.querySelector('.nav-overlay');
-  nav.classList.toggle('active');
-  
-  // Toggle overlay
-  if (nav.classList.contains('active')) {
-    // Create overlay if it doesn't exist
-    if (!overlay) {
-      const newOverlay = document.createElement('div');
-      newOverlay.className = 'nav-overlay';
-      document.body.appendChild(newOverlay);
-      // Close nav when clicking overlay
-      newOverlay.addEventListener('click', toggleNav);
-    }
-    // Show overlay
-    setTimeout(() => {
-      document.querySelector('.nav-overlay').classList.add('active');
-    }, 0);
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden';
-  } else {
-    // Hide overlay
-    if (overlay) {
-      overlay.classList.remove('active');
-      setTimeout(() => {
-        overlay.remove();
-      }, 300);
-    }
-    // Restore body scroll
-    document.body.style.overflow = '';
+  const nav     = document.getElementById('mainNav');
+  const overlay = document.getElementById('navOverlay');
+  const toggle  = document.querySelector('.nav-toggle');
+
+  if (!nav) return;
+  const isOpen = nav.classList.toggle('active');
+
+  if (overlay) overlay.classList.toggle('active', isOpen);
+  if (toggle)  toggle.setAttribute('aria-expanded', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+
+  // Trap focus inside nav when open
+  if (isOpen) {
+    const firstLink = nav.querySelector('a, button');
+    if (firstLink) setTimeout(() => firstLink.focus(), 100);
   }
 }
 
-// Close nav on escape key
+// Close nav on Escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     const nav = document.getElementById('mainNav');
-    if (nav && nav.classList.contains('active')) {
-      toggleNav();
-    }
+    if (nav && nav.classList.contains('active')) toggleNav();
   }
 });
 
-// ====== Hero Slider ======
-let currentSlide = 0;
-const slides = document.querySelectorAll('.hero-slider img');
-const totalSlides = slides.length;
+// Close nav when a link is clicked (mobile)
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.nav-content a').forEach(link => {
+    link.addEventListener('click', () => {
+      const nav = document.getElementById('mainNav');
+      if (nav && nav.classList.contains('active')) toggleNav();
+    });
+  });
+});
 
-// Create slider dots
+// ====== Active Nav Link Highlight ======
+document.addEventListener('DOMContentLoaded', () => {
+  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+  // Sidebar nav
+  document.querySelectorAll('.nav-content a').forEach(link => {
+    link.classList.remove('active');
+    const href = link.getAttribute('href');
+    if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+      link.classList.add('active');
+    }
+  });
+
+  // Bottom mobile nav
+  document.querySelectorAll('.mnav-item').forEach(link => {
+    link.classList.remove('active');
+    const href = link.getAttribute('href');
+    if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+      link.classList.add('active');
+    }
+  });
+});
+
+// ====== Hero Slider ======
+let currentSlide   = 0;
+let autoSlideInterval;
+const slides       = document.querySelectorAll('.hero-slider img');
+const totalSlides  = slides.length;
+
+function updateSlideCounter() {
+  const counter = document.getElementById('slideCounter');
+  if (counter) counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+}
+
 function createSliderDots() {
   const dotsContainer = document.getElementById('sliderDots');
-  if (!dotsContainer) return;
-  
+  if (!dotsContainer || totalSlides === 0) return;
+
   dotsContainer.innerHTML = '';
   for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('div');
-    dot.className = 'slider-dot';
+    const dot = document.createElement('button');
+    dot.className  = 'slider-dot';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `Slide ${i + 1}`);
+    dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
     if (i === 0) dot.classList.add('active');
-    dot.onclick = () => goToSlide(i);
-    dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+    dot.addEventListener('click', () => { goToSlide(i); restartAutoSlide(); });
     dotsContainer.appendChild(dot);
   }
 }
 
-// Show specific slide
 function showSlide(n) {
-  if (slides.length === 0) return;
-  
-  slides.forEach(slide => slide.classList.remove('active'));
+  if (totalSlides === 0) return;
+
+  slides.forEach(s => s.classList.remove('active'));
   const dots = document.querySelectorAll('.slider-dot');
-  dots.forEach(dot => dot.classList.remove('active'));
-  
+  dots.forEach(d => { d.classList.remove('active'); d.setAttribute('aria-selected', 'false'); });
+
   currentSlide = (n + totalSlides) % totalSlides;
   slides[currentSlide].classList.add('active');
+
   if (dots[currentSlide]) {
     dots[currentSlide].classList.add('active');
+    dots[currentSlide].setAttribute('aria-selected', 'true');
   }
+
+  updateSlideCounter();
 }
 
-// Change slide by direction
-function changeSlide(direction) {
-  showSlide(currentSlide + direction);
-}
-
-// Go to specific slide
-function goToSlide(n) {
-  showSlide(n);
-}
-
-// Auto slide functionality
-let autoSlideInterval;
+function changeSlide(direction) { showSlide(currentSlide + direction); }
+function goToSlide(n) { showSlide(n); }
 
 function startAutoSlide() {
+  if (autoSlideInterval) return;
   autoSlideInterval = setInterval(() => changeSlide(1), 5000);
 }
 
 function stopAutoSlide() {
   clearInterval(autoSlideInterval);
+  autoSlideInterval = null;
 }
 
 function restartAutoSlide() {
@@ -140,116 +222,66 @@ function restartAutoSlide() {
   startAutoSlide();
 }
 
-// Initialize slider when DOM is loaded
-window.addEventListener('DOMContentLoaded', () => {
-  if (slides.length > 0) {
-    createSliderDots();
-    startAutoSlide();
-    
-    // Pause on hover
-    const slider = document.getElementById('heroSlider');
-    if (slider) {
-      slider.addEventListener('mouseenter', stopAutoSlide);
-      slider.addEventListener('mouseleave', startAutoSlide);
-    }
+document.addEventListener('DOMContentLoaded', () => {
+  if (totalSlides === 0) return;
+  createSliderDots();
+  updateSlideCounter();
+  startAutoSlide();
+
+  const slider = document.getElementById('heroSlider');
+  if (slider) {
+    slider.addEventListener('mouseenter', stopAutoSlide);
+    slider.addEventListener('mouseleave', startAutoSlide);
   }
 });
 
-// ====== Touch Support for Slider ======
+// ====== Touch / Swipe Support for Slider ======
 let touchStartX = 0;
-let touchEndX = 0;
+let touchEndX   = 0;
 
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const slider = document.getElementById('heroSlider');
   if (!slider) return;
 
   slider.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  });
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
 
   slider.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  });
-});
-
-function handleSwipe() {
-  const swipeThreshold = 50;
-  if (touchStartX - touchEndX > swipeThreshold) {
-    changeSlide(1);
-    restartAutoSlide();
-  }
-  if (touchEndX - touchStartX > swipeThreshold) {
-    changeSlide(-1);
-    restartAutoSlide();
-  }
-}
-
-// ====== Smooth Scroll for Navigation ======
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        target.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    });
-  });
-});
-
-// ====== Close Mobile Nav on Link Click ======
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.nav-content a').forEach(link => {
-    link.addEventListener('click', () => {
-      const nav = document.getElementById('mainNav');
-      if (nav) {
-        nav.classList.remove('active');
-      }
-    });
-  });
-});
-
-// ====== Add Active Class to Current Page Nav Link ======
-document.addEventListener('DOMContentLoaded', () => {
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-content a').forEach(link => {
-    const linkHref = link.getAttribute('href');
-    if (linkHref === currentPage || 
-        (currentPage === 'index.html' && linkHref === 'index.html')) {
-      link.classList.add('active');
+    touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 40) {
+      changeSlide(diff > 0 ? 1 : -1);
+      restartAutoSlide();
     }
-  });
+  }, { passive: true });
 });
 
-// ====== Accessibility: Keyboard Navigation for Slider ======
+// ====== Keyboard Arrow Navigation for Slider ======
 document.addEventListener('DOMContentLoaded', () => {
   const slider = document.getElementById('heroSlider');
   if (!slider) return;
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') {
-      changeSlide(-1);
-      restartAutoSlide();
-    } else if (e.key === 'ArrowRight') {
-      changeSlide(1);
-      restartAutoSlide();
-    }
+    if (e.key === 'ArrowLeft') { changeSlide(-1); restartAutoSlide(); }
+    else if (e.key === 'ArrowRight') { changeSlide(1); restartAutoSlide(); }
   });
 });
 
-// ====== Performance: Lazy Loading Images ======
+// ====== Smooth Scroll for Anchor Links ======
 document.addEventListener('DOMContentLoaded', () => {
-  if ('loading' in HTMLImageElement.prototype) {
-    const images = document.querySelectorAll('img[loading="lazy"]');
-    images.forEach(img => {
-      img.src = img.src;
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-  } else {
-    // Fallback for browsers that don't support lazy loading
+  });
+});
+
+// ====== Lazy Loading Fallback ======
+document.addEventListener('DOMContentLoaded', () => {
+  if (!('loading' in HTMLImageElement.prototype)) {
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
     document.body.appendChild(script);
@@ -268,40 +300,39 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// ====== Animation on Scroll (Optional Enhancement) ======
-function observeElements() {
+// ====== Scroll-reveal for Content Sections ======
+document.addEventListener('DOMContentLoaded', () => {
+  if (!('IntersectionObserver' in window)) return;
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.animationPlayState = 'running';
+        observer.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.1
-  });
+  }, { threshold: 0.08 });
 
   document.querySelectorAll('.content-section').forEach(section => {
+    section.style.animationPlayState = 'paused';
     observer.observe(section);
   });
-}
+});
 
-// Call on DOM load if you want scroll animations
-// Uncomment the line below to enable
-// window.addEventListener('DOMContentLoaded', observeElements);
-
-// ====== Form Validation Helper (for contact page) ======
+// ====== Form Validation Helpers (for contact page) ======
 function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
 function validatePhone(phone) {
-  const re = /^[6-9]\d{9}$/;
-  return re.test(phone);
+  return /^[6-9]\d{9}$/.test(phone.trim());
 }
 
-// Export functions for use in other pages
+function validateRequired(value) {
+  return value.trim().length > 0;
+}
+
+// ====== Module Exports (Node / CommonJS compat) ======
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     toggleLanguage,
@@ -309,7 +340,10 @@ if (typeof module !== 'undefined' && module.exports) {
     toggleNav,
     changeSlide,
     goToSlide,
+    scrollToTop,
+    showToast,
     validateEmail,
-    validatePhone
+    validatePhone,
+    validateRequired,
   };
 }

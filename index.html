@@ -2,24 +2,26 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही, राजनांदगाँव, छत्तीसगढ़। निःशुल्क गुणवत्तापूर्ण शिक्षा, मध्याह्न भोजन, और सुविधाएँ।">
   <meta name="keywords" content="शासकीय प्राथमिक शाला छिंदिबिरही, government primary school Chhindibirhi, primary school Rajnandgaon, free education Chhattisgarh">
   <meta name="author" content="Government Primary School Chhindibirhi">
   <meta name="robots" content="index, follow">
-  
+  <meta name="theme-color" content="#1e40af" />
+
   <!-- Open Graph -->
   <meta property="og:title" content="Government Primary School Chhindibirhi | Rajnandgaon">
   <meta property="og:description" content="Quality free education at Government Primary School Chhindibirhi, Rajnandgaon, Chhattisgarh.">
-  <meta property="og:image" content="https://gps-chhindibirhi.netlify.app/images/school-front.jpg">
-  <meta property="og:url" content="https://gps-chhindibirhi.netlify.app/">
+  <meta property="og:image" content="https://pschhindibirhi.netlify.app/images/school-front.jpg">
+  <meta property="og:url" content="https://pschhindibirhi.netlify.app/">
   <meta property="og:type" content="website">
-  
+
   <title>शासकीय प्राथमिक शाला, छिंदिबिरही | Government Primary School, Chhindibirhi</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="images/school-logo.png" type="image/png" />
-  <link rel="canonical" href="https://gps-chhindibirhi.netlify.app/">
-  
+  <link rel="apple-touch-icon" href="images/school-logo.png" />
+  <link rel="canonical" href="https://pschhindibirhi.netlify.app/">
+
   <!-- Schema Markup -->
   <script type="application/ld+json">
   {
@@ -28,7 +30,7 @@
     "name": "Government Primary School Chhindibirhi",
     "alternateName": "शासकीय प्राथमिक शाला छिंदिबिरही",
     "description": "Government-run primary school in Chhindibirhi, Rajnandgaon, Chhattisgarh, offering free education, mid-day meals, and modern facilities for Classes 1-5.",
-    "url": "https://gps-chhindibirhi.netlify.app/",
+    "url": "https://pschhindibirhi.netlify.app/",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Chhindibirhi Village",
@@ -42,21 +44,24 @@
     "educationalLevel": "Primary School",
     "curriculum": "Chhattisgarh Board",
     "openingHours": "Mo-Fr 10:00-16:00, Sa 07:30-11:30",
-    "image": "https://gps-chhindibirhi.netlify.app/images/school-front.jpg",
+    "image": "https://pschhindibirhi.netlify.app/images/school-front.jpg",
     "foundingDate": "1995",
     "numberOfStudents": 21
   }
   </script>
-  
+
   <meta name="google-site-verification" content="yLqMZ__QpAUb66g2ORHW6NmWagsnpCkUNnpwdKpG35U" />
 </head>
 <body data-lang="hi" data-theme="light">
+
+  <!-- Nav Overlay (mobile) -->
+  <div class="nav-overlay" id="navOverlay" onclick="toggleNav()" aria-hidden="true"></div>
+
   <!-- Top Government Bar -->
-  <div class="top-bar">
-    
+  <div class="top-bar" role="banner">
     <div class="top-bar-content">
       <div class="govt-emblem">
-        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="emblem-placeholder" role="img" aria-label="Government Emblem"></div>
         <div class="govt-text">
           <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
           <strong class="lang-english">Government of Chhattisgarh</strong>
@@ -77,65 +82,112 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="siteHeader">
     <div class="header-content">
       <div class="school-identity">
-        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="eager" onerror="this.style.display='none'">
         <div class="school-name">
           <h1>
             <span class="lang-hindi">शास. प्राथ. शा. छिंदिबिरही</span>
             <span class="lang-english">G.P.S. Chhindibirhi</span>
           </h1>
+          <div class="subtitle">
+            <span class="status-dot" title="School Active"></span>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh</span>
+          </div>
         </div>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
-  <!-- Navigation -->
-  <nav id="mainNav">
+  <!-- Desktop + Mobile Slide-in Navigation -->
+  <nav id="mainNav" role="navigation" aria-label="Main Navigation">
     <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
     <div class="nav-content">
       <a href="index.html" class="active">
+        <span class="nav-icon">🏠</span>
         <span class="lang-hindi">मुख्य पृष्ठ</span>
         <span class="lang-english">Home</span>
       </a>
       <a href="about.html">
+        <span class="nav-icon">ℹ️</span>
         <span class="lang-hindi">हमारे बारे में</span>
         <span class="lang-english">About Us</span>
       </a>
       <a href="gallery.html">
+        <span class="nav-icon">🖼️</span>
         <span class="lang-hindi">फोटो गैलरी</span>
         <span class="lang-english">Gallery</span>
       </a>
       <a href="contact.html">
+        <span class="nav-icon">📞</span>
         <span class="lang-hindi">संपर्क करें</span>
         <span class="lang-english">Contact</span>
       </a>
       <a href="school-notice-board/frontend/index.html">
+        <span class="nav-icon">📋</span>
         <span class="lang-hindi">नोटिस बोर्ड</span>
         <span class="lang-english">Notice Board</span>
       </a>
     </div>
   </nav>
 
-  <!-- Hero Slider -->
-  <section class="hero-section">
-    <div class="hero-slider" id="heroSlider">
-      <img src="images/school-front.jpg" alt="School Building" class="active" loading="lazy" onerror="this.src='https://via.placeholder.com/1200x400/1e40af/ffffff?text=School+Building'">
-      <img src="images/students-learning.jpg" alt="Students Learning" loading="lazy" onerror="this.src='https://via.placeholder.com/1200x400/138808/ffffff?text=Students+Learning'">
-      <img src="images/image (1).jpg" alt="School Campus" loading="lazy" onerror="this.src='https://via.placeholder.com/1200x400/ff9933/ffffff?text=School+Campus'">
-      <img src="images/image (2).jpg" alt="Activities" loading="lazy" onerror="this.src='https://via.placeholder.com/1200x400/1e40af/ffffff?text=Activities'">
-      <img src="images/image (3).jpg" alt="School Events" loading="lazy" onerror="this.src='https://via.placeholder.com/1200x400/138808/ffffff?text=School+Events'">
-      
-      <div class="slider-controls">
-        <button class="slider-btn" onclick="changeSlide(-1)" aria-label="Previous Slide">❮</button>
-        <button class="slider-btn" onclick="changeSlide(1)" aria-label="Next Slide">❯</button>
-      </div>
-      
-      <div class="slider-nav" id="sliderDots"></div>
+  <!-- ====== Mobile Bottom Navigation ====== -->
+  <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <div class="mnav-items">
+      <a href="index.html" class="mnav-item active" aria-label="Home">
+        <span class="mnav-icon">🏠</span>
+        <span class="mnav-label lang-hindi">मुख्य</span>
+        <span class="mnav-label lang-english">Home</span>
+      </a>
+      <a href="about.html" class="mnav-item" aria-label="About">
+        <span class="mnav-icon">ℹ️</span>
+        <span class="mnav-label lang-hindi">बारे में</span>
+        <span class="mnav-label lang-english">About</span>
+      </a>
+      <a href="gallery.html" class="mnav-item" aria-label="Gallery">
+        <span class="mnav-icon">🖼️</span>
+        <span class="mnav-label lang-hindi">गैलरी</span>
+        <span class="mnav-label lang-english">Gallery</span>
+      </a>
+      <a href="contact.html" class="mnav-item" aria-label="Contact">
+        <span class="mnav-icon">📞</span>
+        <span class="mnav-label lang-hindi">संपर्क</span>
+        <span class="mnav-label lang-english">Contact</span>
+      </a>
+      <a href="school-notice-board/frontend/index.html" class="mnav-item" aria-label="Notice Board">
+        <span class="mnav-icon">📋</span>
+        <span class="mnav-label lang-hindi">नोटिस</span>
+        <span class="mnav-label lang-english">Notice</span>
+      </a>
     </div>
-    
+  </nav>
+
+  <!-- Hero Slider -->
+  <section class="hero-section" aria-label="School Photo Slideshow">
+    <div class="hero-slider" id="heroSlider">
+      <img src="images/school-front.jpg" alt="School Building" class="active" loading="eager"
+           onerror="this.src='https://via.placeholder.com/1200x400/1e40af/ffffff?text=School+Building'">
+      <img src="images/students-learning.jpg" alt="Students Learning" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/1200x400/138808/ffffff?text=Students+Learning'">
+      <img src="images/image (1).jpg" alt="School Campus" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/1200x400/ff9933/ffffff?text=School+Campus'">
+      <img src="images/image (2).jpg" alt="Activities" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/1200x400/1e40af/ffffff?text=Activities'">
+      <img src="images/image (3).jpg" alt="School Events" loading="lazy"
+           onerror="this.src='https://via.placeholder.com/1200x400/138808/ffffff?text=School+Events'">
+
+      <div class="slider-controls" role="group" aria-label="Slider Controls">
+        <button class="slider-btn" onclick="changeSlide(-1); restartAutoSlide();" aria-label="Previous Slide">❮</button>
+        <button class="slider-btn" onclick="changeSlide(1); restartAutoSlide();" aria-label="Next Slide">❯</button>
+      </div>
+
+      <div class="slider-nav" id="sliderDots" role="tablist" aria-label="Slide Navigation"></div>
+      <div class="slide-counter" id="slideCounter" aria-live="polite">1 / 5</div>
+    </div>
+
     <div class="welcome-banner">
       <h2>
         <span class="lang-hindi">शासकीय प्राथमिक शाला में आपका स्वागत है</span>
@@ -149,64 +201,71 @@
   </section>
 
   <!-- Main Content -->
-  <main>
+  <main id="mainContent">
+
     <!-- Quick Info -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="glance-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">📊</span>
+        <h2 id="glance-title">
           <span class="lang-hindi">स्कूल की संक्षिप्त जानकारी</span>
           <span class="lang-english">School at a Glance</span>
         </h2>
       </div>
       <div class="info-grid">
         <div class="info-card">
+          <div class="info-card-icon">🏫</div>
+          <div class="info-card-value">1995</div>
           <div class="info-card-title">
             <span class="lang-hindi">स्थापना वर्ष</span>
             <span class="lang-english">Established</span>
           </div>
-          <div class="info-card-value">1995</div>
         </div>
         <div class="info-card">
+          <div class="info-card-icon">👨‍🏫</div>
+          <div class="info-card-value">1</div>
           <div class="info-card-title">
             <span class="lang-hindi">कुल शिक्षक</span>
             <span class="lang-english">Total Teachers</span>
           </div>
-          <div class="info-card-value">1</div>
         </div>
         <div class="info-card">
+          <div class="info-card-icon">👨‍🎓</div>
+          <div class="info-card-value">21</div>
           <div class="info-card-title">
             <span class="lang-hindi">कुल छात्र</span>
             <span class="lang-english">Total Students</span>
           </div>
-          <div class="info-card-value">21</div>
         </div>
         <div class="info-card">
+          <div class="info-card-icon">📚</div>
+          <div class="info-card-value">1–5</div>
           <div class="info-card-title">
             <span class="lang-hindi">कक्षाएं</span>
             <span class="lang-english">Classes</span>
           </div>
-          <div class="info-card-value">1 - 5</div>
         </div>
       </div>
     </section>
 
     <!-- School Timings -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="timings-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">⏰</span>
+        <h2 id="timings-title">
           <span class="lang-hindi">स्कूल समय सारणी</span>
           <span class="lang-english">School Timings</span>
         </h2>
       </div>
       <div class="table-container">
-        <table role="table">
+        <table role="table" aria-label="School Timings">
           <thead>
             <tr>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">दिन</span>
                 <span class="lang-english">Day</span>
               </th>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">समय</span>
                 <span class="lang-english">Timing</span>
               </th>
@@ -215,17 +274,17 @@
           <tbody>
             <tr>
               <td>
-                <span class="lang-hindi">सोमवार - शुक्रवार</span>
-                <span class="lang-english">Monday - Friday</span>
+                <span class="lang-hindi">सोमवार – शुक्रवार</span>
+                <span class="lang-english">Monday – Friday</span>
               </td>
-              <td>10:00 AM - 4:00 PM</td>
+              <td>10:00 AM – 4:00 PM</td>
             </tr>
             <tr>
               <td>
                 <span class="lang-hindi">शनिवार</span>
                 <span class="lang-english">Saturday</span>
               </td>
-              <td>7:30 AM - 11:30 AM</td>
+              <td>7:30 AM – 11:30 AM</td>
             </tr>
             <tr>
               <td>
@@ -233,8 +292,8 @@
                 <span class="lang-english">Sunday</span>
               </td>
               <td>
-                <span class="lang-hindi">अवकाश</span>
-                <span class="lang-english">Closed</span>
+                <span class="lang-hindi">🔴 अवकाश</span>
+                <span class="lang-english">🔴 Closed</span>
               </td>
             </tr>
           </tbody>
@@ -243,34 +302,35 @@
     </section>
 
     <!-- Teaching Staff -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="staff-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">👩‍🏫</span>
+        <h2 id="staff-title">
           <span class="lang-hindi">शिक्षण स्टाफ विवरण</span>
           <span class="lang-english">Teaching Staff Details</span>
         </h2>
       </div>
       <div class="table-container">
-        <table role="table">
+        <table role="table" aria-label="Staff Details">
           <thead>
             <tr>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">क्र.</span>
                 <span class="lang-english">S.No.</span>
               </th>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">नाम</span>
                 <span class="lang-english">Name</span>
               </th>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">पद</span>
                 <span class="lang-english">Designation</span>
               </th>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">विषय</span>
                 <span class="lang-english">Subjects</span>
               </th>
-              <th>
+              <th scope="col">
                 <span class="lang-hindi">कक्षा</span>
                 <span class="lang-english">Classes</span>
               </th>
@@ -291,7 +351,7 @@
                 <span class="lang-hindi">सभी विषय</span>
                 <span class="lang-english">All Subjects</span>
               </td>
-              <td>1-5</td>
+              <td>1–5</td>
             </tr>
           </tbody>
         </table>
@@ -299,88 +359,84 @@
     </section>
 
     <!-- Facilities -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="facilities-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">🏗️</span>
+        <h2 id="facilities-title">
           <span class="lang-hindi">उपलब्ध सुविधाएं</span>
           <span class="lang-english">Facilities Available</span>
         </h2>
       </div>
-      <ul class="feature-list">
-        <li>
-          <span class="lang-hindi">निःशुल्क पाठ्यपुस्तक एवं गणवेश</span>
-          <span class="lang-english">Free textbooks and uniforms</span>
-        </li>
-        <li>
-          <span class="lang-hindi">मध्याह्न भोजन (MDM) योजना</span>
-          <span class="lang-english">Mid-Day Meal (MDM) Scheme</span>
-        </li>
-        <li>
-          <span class="lang-hindi">शुद्ध पेयजल सुविधा</span>
-          <span class="lang-english">Clean drinking water facility</span>
-        </li>
-        <li>
-          <span class="lang-hindi">बालक-बालिका हेतु पृथक शौचालय</span>
-          <span class="lang-english">Separate toilets for boys and girls</span>
-        </li>
-        <li>
-          <span class="lang-hindi">खेल का मैदान एवं खेल सामग्री</span>
-          <span class="lang-english">Playground and sports equipment</span>
-        </li>
-        <li>
-          <span class="lang-hindi">पुस्तकालय सुविधा</span>
-          <span class="lang-english">Library facility</span>
-        </li>
-        <li>
-          <span class="lang-hindi">स्मार्ट क्लास / प्रोजेक्टर आधारित शिक्षण</span>
-          <span class="lang-english">Smart class / Projector-based teaching</span>
-        </li>
-        <li>
-          <span class="lang-hindi">स्वच्छता एवं पौधरोपण गतिविधियां</span>
-          <span class="lang-english">Cleanliness and plantation activities</span>
-        </li>
+      <ul class="feature-list" role="list">
+        <li><span class="lang-hindi">निःशुल्क पाठ्यपुस्तक एवं गणवेश</span><span class="lang-english">Free textbooks and uniforms</span></li>
+        <li><span class="lang-hindi">मध्याह्न भोजन (MDM) योजना</span><span class="lang-english">Mid-Day Meal (MDM) Scheme</span></li>
+        <li><span class="lang-hindi">शुद्ध पेयजल सुविधा</span><span class="lang-english">Clean drinking water facility</span></li>
+        <li><span class="lang-hindi">बालक-बालिका हेतु पृथक शौचालय</span><span class="lang-english">Separate toilets for boys and girls</span></li>
+        <li><span class="lang-hindi">खेल का मैदान एवं खेल सामग्री</span><span class="lang-english">Playground and sports equipment</span></li>
+        <li><span class="lang-hindi">पुस्तकालय सुविधा</span><span class="lang-english">Library facility</span></li>
+        <li><span class="lang-hindi">स्मार्ट क्लास / प्रोजेक्टर आधारित शिक्षण</span><span class="lang-english">Smart class / Projector-based teaching</span></li>
+        <li><span class="lang-hindi">स्वच्छता एवं पौधरोपण गतिविधियां</span><span class="lang-english">Cleanliness and plantation activities</span></li>
       </ul>
     </section>
 
     <!-- Achievements -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="achievements-title">
       <div class="section-title">
-        <h2>
+        <span class="section-title-icon">🏆</span>
+        <h2 id="achievements-title">
           <span class="lang-hindi">उपलब्धियां एवं गतिविधियां</span>
-          <span class="lang-english">Achievements & Activities</span>
+          <span class="lang-english">Achievements &amp; Activities</span>
         </h2>
       </div>
-      <ul class="feature-list">
-        <li>
-          <span class="lang-hindi">100% नामांकन एवं नियमित उपस्थिति</span>
-          <span class="lang-english">100% enrollment and regular attendance</span>
-        </li>
-        <li>
-          <span class="lang-hindi">स्वच्छ भारत अभियान में सक्रिय भागीदारी</span>
-          <span class="lang-english">Active participation in Swachh Bharat Abhiyan</span>
-        </li>
-        <li>
-          <span class="lang-hindi">ब्लॉक स्तरीय प्रतियोगिताओं में सहभागिता</span>
-          <span class="lang-english">Participation in block-level competitions</span>
-        </li>
-        <li>
-          <span class="lang-hindi">स्वच्छ एवं हरित विद्यालय के लिए मान्यता</span>
-          <span class="lang-english">Recognition for clean and green school</span>
-        </li>
+      <ul class="feature-list" role="list">
+        <li><span class="lang-hindi">100% नामांकन एवं नियमित उपस्थिति</span><span class="lang-english">100% enrollment and regular attendance</span></li>
+        <li><span class="lang-hindi">स्वच्छ भारत अभियान में सक्रिय भागीदारी</span><span class="lang-english">Active participation in Swachh Bharat Abhiyan</span></li>
+        <li><span class="lang-hindi">ब्लॉक स्तरीय प्रतियोगिताओं में सहभागिता</span><span class="lang-english">Participation in block-level competitions</span></li>
+        <li><span class="lang-hindi">स्वच्छ एवं हरित विद्यालय के लिए मान्यता</span><span class="lang-english">Recognition for clean and green school</span></li>
       </ul>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer role="contentinfo">
     <div class="footer-content">
+      <div class="footer-logo">🏫</div>
       <p>
-        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
+        <span class="lang-hindi"><strong>शासकीय प्राथमिक शाला, छिंदिबिरही</strong></span>
+        <span class="lang-english"><strong>Government Primary School, Chhindibirhi</strong></span>
       </p>
-      
+      <p>
+        <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ – 491441</span>
+        <span class="lang-english">Rajnandgaon, Chhattisgarh – 491441</span>
+      </p>
+      <nav class="footer-links" aria-label="Footer Links">
+        <a href="index.html">
+          <span class="lang-hindi">मुख्य पृष्ठ</span>
+          <span class="lang-english">Home</span>
+        </a>
+        <a href="about.html">
+          <span class="lang-hindi">हमारे बारे में</span>
+          <span class="lang-english">About</span>
+        </a>
+        <a href="gallery.html">
+          <span class="lang-hindi">गैलरी</span>
+          <span class="lang-english">Gallery</span>
+        </a>
+        <a href="contact.html">
+          <span class="lang-hindi">संपर्क</span>
+          <span class="lang-english">Contact</span>
+        </a>
+      </nav>
+      <hr class="footer-divider">
+      <p>© 2025 — <span class="lang-hindi">सर्वाधिकार सुरक्षित</span><span class="lang-english">All rights reserved</span></p>
     </div>
   </footer>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
 </body>

@@ -2,23 +2,29 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही का नोटिस बोर्ड - स्कूल की सभी घोषणाओं से अपडेट रहें।">
   <meta name="keywords" content="notice board, school notices, announcements, Chhindibirhi school">
   <meta name="author" content="Government Primary School Chhindibirhi">
   <meta name="robots" content="index, follow">
-  
+  <meta name="theme-color" content="#1e40af" />
+
   <title>नोटिस बोर्ड | Notice Board - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="../../style.css" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="../../images/school-logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="../../images/school-logo.png" />
 </head>
 <body data-lang="hi" data-theme="light">
+
+  <!-- Nav Overlay -->
+  <div class="nav-overlay" id="navOverlay" onclick="toggleNav()" aria-hidden="true"></div>
+
   <!-- Top Government Bar -->
-  <div class="top-bar">
-    
+  <div class="top-bar" role="banner">
     <div class="top-bar-content">
       <div class="govt-emblem">
-        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="emblem-placeholder" role="img" aria-label="Government Emblem"></div>
         <div class="govt-text">
           <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
           <strong class="lang-english">Government of Chhattisgarh</strong>
@@ -39,93 +45,100 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="siteHeader">
     <div class="header-content">
       <div class="school-identity">
-        <img src="../../images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <img src="../../images/school-logo.png" alt="School Logo" class="school-logo" loading="eager" onerror="this.style.display='none'">
         <div class="school-name">
           <h1>
-            <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-            <span class="lang-english">Government Primary School, Chhindibirhi</span>
+            <span class="lang-hindi">शास. प्राथ. शा. छिंदिबिरही</span>
+            <span class="lang-english">G.P.S. Chhindibirhi</span>
           </h1>
-          <p>
-            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ - 491441</span>
-            <span class="lang-english">Rajnandgaon, Chhattisgarh - 491441</span>
-          </p>
+          <div class="subtitle">
+            <span class="status-dot"></span>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh</span>
+          </div>
         </div>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Open Navigation" aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
-  <!-- Navigation -->
-  <nav id="mainNav">
+  <!-- Slide-in Navigation -->
+  <nav id="mainNav" role="navigation" aria-label="Main Navigation">
     <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
     <div class="nav-content">
-      <a href="../../index.html">
-        <span class="lang-hindi">मुख्य पृष्ठ</span>
-        <span class="lang-english">Home</span>
-      </a>
-      <a href="../../about.html">
-        <span class="lang-hindi">हमारे बारे में</span>
-        <span class="lang-english">About Us</span>
-      </a>
-      <a href="../../gallery.html">
-        <span class="lang-hindi">फोटो गैलरी</span>
-        <span class="lang-english">Gallery</span>
-      </a>
-      <a href="../../contact.html">
-        <span class="lang-hindi">संपर्क करें</span>
-        <span class="lang-english">Contact</span>
-      </a>
-      <a href="index.html" class="active">
-        <span class="lang-hindi">नोटिस बोर्ड</span>
-        <span class="lang-english">Notice Board</span>
-      </a>
+      <a href="../../index.html"><span class="nav-icon">🏠</span><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+      <a href="../../about.html"><span class="nav-icon">ℹ️</span><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About Us</span></a>
+      <a href="../../gallery.html"><span class="nav-icon">🖼️</span><span class="lang-hindi">फोटो गैलरी</span><span class="lang-english">Gallery</span></a>
+      <a href="../../contact.html"><span class="nav-icon">📞</span><span class="lang-hindi">संपर्क करें</span><span class="lang-english">Contact</span></a>
+      <a href="index.html" class="active"><span class="nav-icon">📋</span><span class="lang-hindi">नोटिस बोर्ड</span><span class="lang-english">Notice Board</span></a>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <div class="mnav-items">
+      <a href="../../index.html" class="mnav-item"><span class="mnav-icon">🏠</span><span class="mnav-label lang-hindi">मुख्य</span><span class="mnav-label lang-english">Home</span></a>
+      <a href="../../about.html" class="mnav-item"><span class="mnav-icon">ℹ️</span><span class="mnav-label lang-hindi">बारे में</span><span class="mnav-label lang-english">About</span></a>
+      <a href="../../gallery.html" class="mnav-item"><span class="mnav-icon">🖼️</span><span class="mnav-label lang-hindi">गैलरी</span><span class="mnav-label lang-english">Gallery</span></a>
+      <a href="../../contact.html" class="mnav-item"><span class="mnav-icon">📞</span><span class="mnav-label lang-hindi">संपर्क</span><span class="mnav-label lang-english">Contact</span></a>
+      <a href="index.html" class="mnav-item active"><span class="mnav-icon">📋</span><span class="mnav-label lang-hindi">नोटिस</span><span class="mnav-label lang-english">Notice</span></a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main>
-    <!-- Page Title -->
-    <section class="content-section">
+  <main id="mainContent">
+
+    <!-- Page Header -->
+    <section class="content-section" aria-labelledby="notice-board-title">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">📢 नोटिस बोर्ड</span>
-          <span class="lang-english">📢 Notice Board</span>
+        <span class="section-title-icon">📢</span>
+        <h2 id="notice-board-title">
+          <span class="lang-hindi">नोटिस बोर्ड</span>
+          <span class="lang-english">Notice Board</span>
         </h2>
       </div>
-      <p class="lang-hindi" style="text-align: center; margin-bottom: 20px;">
-        स्कूल की सभी महत्वपूर्ण सूचनाएं और घोषणाएं यहां देखें
+      <p class="lang-hindi" style="text-align:center; color:var(--text-muted); font-size:0.92rem;">
+        स्कूल की सभी महत्वपूर्ण सूचनाएं और घोषणाएं यहां देखें।
       </p>
-      <p class="lang-english" style="text-align: center; margin-bottom: 20px;">
-        View all important school notices and announcements here
+      <p class="lang-english" style="text-align:center; color:var(--text-muted); font-size:0.92rem;">
+        View all important school notices and announcements here.
       </p>
     </section>
 
-    <!-- Teacher Tools (Add/Edit Notice) -->
-    <div id="teacherTools" class="teacher-tools" style="display: none;">
-      <section class="content-section">
+    <!-- Teacher Tools — Add/Edit Notice (shown only when logged in) -->
+    <div id="teacherTools" style="display:none;">
+      <section class="content-section" aria-labelledby="notice-mgmt-title">
         <div class="section-title">
-          <h2>
-            <span class="lang-hindi">✏️ नोटिस प्रबंधन</span>
-            <span class="lang-english">✏️ Notice Management</span>
+          <span class="section-title-icon">✏️</span>
+          <h2 id="notice-mgmt-title">
+            <span class="lang-hindi">नोटिस प्रबंधन</span>
+            <span class="lang-english">Notice Management</span>
           </h2>
         </div>
-        
-        <form id="noticeForm" class="notice-form">
+
+        <!-- Teacher welcome bar -->
+        <div class="teacher-welcome" id="teacherWelcome" style="display:none;">
+          <span>👋 </span>
+          <span id="teacherNameDisplay"></span>
+        </div>
+
+        <form id="noticeForm" class="notice-form" novalidate>
           <div class="form-group">
             <label for="title">
               <span class="lang-hindi">नोटिस का शीर्षक</span>
               <span class="lang-english">Notice Title</span>
-              <span class="required">*</span>
+              <span class="required" aria-hidden="true">*</span>
             </label>
-            <input 
-              type="text" 
-              id="title" 
+            <input
+              type="text"
+              id="title"
               name="title"
-              placeholder="नोटिस का शीर्षक लिखें | Enter notice title" 
+              placeholder="नोटिस का शीर्षक लिखें | Enter notice title"
               required
+              aria-required="true"
             />
           </div>
 
@@ -133,64 +146,93 @@
             <label for="content">
               <span class="lang-hindi">नोटिस का विवरण</span>
               <span class="lang-english">Notice Content</span>
-              <span class="required">*</span>
+              <span class="required" aria-hidden="true">*</span>
             </label>
-            <textarea 
-              id="content" 
+            <textarea
+              id="content"
               name="content"
-              placeholder="नोटिस का विवरण लिखें | Enter notice content" 
-              rows="6"
+              placeholder="नोटिस का विवरण लिखें | Enter notice content"
+              rows="5"
               required
+              aria-required="true"
             ></textarea>
           </div>
 
-          <button type="submit" id="submitBtn" class="submit-btn">
-            <span class="lang-hindi">नई नोटिस जोड़ें</span>
-            <span class="lang-english">Add Notice</span>
-          </button>
+          <div class="notice-form-actions">
+            <button type="submit" id="submitBtn" class="submit-btn">
+              <span class="lang-hindi">➕ नई नोटिस जोड़ें</span>
+              <span class="lang-english">➕ Add Notice</span>
+            </button>
+            <button type="button" id="cancelEditBtn" class="cancel-edit-btn" style="display:none;">
+              <span class="lang-hindi">✕ रद्द करें</span>
+              <span class="lang-english">✕ Cancel</span>
+            </button>
+          </div>
         </form>
 
-        <button id="logoutBtn" class="logout-btn">
+        <button id="logoutBtn" class="logout-btn" aria-label="Logout">
           <span class="lang-hindi">🚪 लॉगआउट</span>
           <span class="lang-english">🚪 Logout</span>
         </button>
       </section>
     </div>
 
-    <!-- Login Link for Visitors -->
-    <div id="loginLink" class="login-section" style="text-align: center;">
-      <a href="teacher-login.html" class="login-link-btn">
+    <!-- Login link for visitors -->
+    <div id="loginLink" style="text-align:center; margin-bottom:16px;">
+      <a href="teacher-login.html" class="login-link-btn" aria-label="Teacher Login">
         <span class="lang-hindi">🔐 शिक्षक लॉगिन</span>
         <span class="lang-english">🔐 Teacher Login</span>
       </a>
     </div>
 
     <!-- Notice List -->
-    <section class="content-section">
+    <section class="content-section" aria-labelledby="all-notices-title" aria-live="polite">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">📋 सभी नोटिस</span>
-          <span class="lang-english">📋 All Notices</span>
+        <span class="section-title-icon">📋</span>
+        <h2 id="all-notices-title">
+          <span class="lang-hindi">सभी नोटिस</span>
+          <span class="lang-english">All Notices</span>
         </h2>
+        <!-- Notice count badge -->
+        <span id="noticeCountBadge" class="notice-count-badge" style="display:none;"></span>
       </div>
-      
-      <div id="noticeList" class="notice-list-container">
-        <p class="loading-text">
-          <span class="lang-hindi">लोड हो रहा है...</span>
-          <span class="lang-english">Loading...</span>
-        </p>
+
+      <div id="noticeList" class="notice-list-container" role="list">
+        <!-- Skeleton loader -->
+        <div class="notice-skeleton" aria-hidden="true">
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line skeleton-short"></div>
+        </div>
+        <div class="notice-skeleton" aria-hidden="true">
+          <div class="skeleton-line skeleton-title"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line skeleton-short"></div>
+        </div>
       </div>
     </section>
+
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer role="contentinfo">
     <div class="footer-content">
-      <p>
-        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
-      </p>
+      <div class="footer-logo">🏫</div>
+      <p><span class="lang-hindi"><strong>शासकीय प्राथमिक शाला, छिंदिबिरही</strong></span><span class="lang-english"><strong>Government Primary School, Chhindibirhi</strong></span></p>
+      <p><span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ – 491441</span><span class="lang-english">Rajnandgaon, Chhattisgarh – 491441</span></p>
+      <nav class="footer-links" aria-label="Footer Links">
+        <a href="../../index.html"><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+        <a href="../../about.html"><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About</span></a>
+        <a href="../../gallery.html"><span class="lang-hindi">गैलरी</span><span class="lang-english">Gallery</span></a>
+        <a href="../../contact.html"><span class="lang-hindi">संपर्क</span><span class="lang-english">Contact</span></a>
+      </nav>
+      <hr class="footer-divider">
+      <p>© 2025 — <span class="lang-hindi">सर्वाधिकार सुरक्षित</span><span class="lang-english">All rights reserved</span></p>
+    </div>
   </footer>
+
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="../../script.js"></script>
   <script src="script.js"></script>

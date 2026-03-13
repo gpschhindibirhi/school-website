@@ -1,791 +1,465 @@
-/* ====== Import Main Styles ====== */
-@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;600;700&family=Noto+Sans+Devanagari:wght@300;400;600;700&display=swap');
+/* ============================================================
+   Notice Board + Teacher Login — Scoped Styles
+   These supplement the root style.css
+   ============================================================ */
 
-/* ====== CSS Variables ====== */
-:root {
-  --primary-color: #1e40af;
-  --secondary-color: #ff9933;
-  --accent-color: #138808;
-  --header-bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-  --bg-color: #f8fafc;
-  --card-bg: #ffffff;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --border-color: #e2e8f0;
-  --shadow: 0 1px 3px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
-}
-
-[data-theme="dark"] {
-  --primary-color: #3b82f6;
-  --secondary-color: #fb923c;
-  --accent-color: #22c55e;
-  --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --bg-color: #0f172a;
-  --card-bg: #1e293b;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-color: #334155;
-  --shadow: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
-}
-
-/* ====== Global Styles ====== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Noto Sans Devanagari', 'Hind', sans-serif;
-  background: var(--bg-color);
-  color: var(--text-primary);
-  line-height: 1.6;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.lang-english {
-  font-family: 'Hind', sans-serif;
-}
-
-[data-lang="hi"] .lang-english { display: none !important; }
-[data-lang="en"] .lang-hindi { display: none !important; }
-
-/* ====== Top Bar - Government Identity ====== */
-.top-bar {
-  background: var(--header-bg);
-  color: white;
-  padding: 8px 0;
-  font-size: 0.85rem;
-  border-bottom: 3px solid var(--secondary-color);
-}
-
-.top-bar-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.govt-emblem {
+/* ====== Teacher Welcome Bar ====== */
+.teacher-welcome {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.emblem-placeholder {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Flag gradient: saffron → white → green */
-  background: linear-gradient(180deg, #FF9933 0%, #FFFFFF 50%, #138808 100%);
-  position: relative;
-  overflow: hidden;
-  /* Hide the emoji text when using image-based emblem */
-  font-size: 0;
-}
-
-/* Ashoka Chakra overlay (simple ring + center) */
-.emblem-placeholder::after {
-  content: '';
-  position: absolute;
-  width: 60%;
-  height: 60%;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='28' fill='none' stroke='%23054a91' stroke-width='6'/><circle cx='50' cy='50' r='12' fill='%23054a91'/></svg>");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.govt-text {
-  line-height: 1.3;
-}
-
-.govt-text strong {
-  display: block;
+  gap: 8px;
+  background: rgba(30, 64, 175, 0.08);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 8px);
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  font-weight: 600;
+  color: var(--primary, #1e40af);
   font-size: 0.9rem;
 }
 
-.tricolor-bar {
-  height: 4px;
-  background: linear-gradient(to right, var(--secondary-color) 33%, white 33%, white 66%, var(--accent-color) 66%);
-}
-
-/* Notice link styles */
-.notice-link {
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px dashed var(--text-secondary);
-  transition: border-color 0.3s, opacity 0.3s;
-}
-
-.notice-link:hover {
-  border-bottom-style: solid;
-  border-color: var(--primary-color);
-  opacity: 0.9;
-}
-
-.tricolor-bar {
-  height: 4px;
-  background: linear-gradient(to right, var(--secondary-color) 33%, white 33%, white 66%, var(--accent-color) 66%);
-}
-
-.controls {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.toggle-btn {
-  background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: all 0.3s;
-  min-width: 44px;
-  min-height: 36px;
-}
-
-.toggle-btn:hover {
-  background: rgba(255,255,255,0.3);
-}
-
-.teacher-login-btn {
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.teacher-login-btn:hover {
-  background: rgba(255,255,255,0.3);
-}
-
-/* ====== Header ====== */
-header {
-  background: var(--card-bg);
-  box-shadow: var(--shadow);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.school-identity {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-}
-
-.school-logo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--primary-color);
-}
-
-.school-name h1 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 4px;
-}
-
-.school-name p {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-.nav-toggle {
-  display: none;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  min-width: 44px;
-  min-height: 44px;
-}
-
-/* ====== Navigation ====== */
-nav {
-  background: var(--card-bg);
-  border-top: 1px solid var(--border-color);
-}
-
-.nav-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.nav-content a {
-  padding: 12px 20px;
-  color: var(--text-primary);
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s;
-  border-bottom: 3px solid transparent;
-  font-size: 0.95rem;
-}
-
-.nav-content a:hover,
-.nav-content a.active {
-  color: var(--primary-color);
-  border-bottom-color: var(--secondary-color);
-  background: rgba(30, 64, 175, 0.05);
-}
-
-/* ====== Main Content ====== */
-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 16px;
-}
-
-.content-section {
-  background: var(--card-bg);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: var(--shadow);
-  border-left: 4px solid var(--primary-color);
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid var(--border-color);
-}
-
-.section-title::before {
-  content: '';
-  width: 4px;
-  height: 30px;
-  background: var(--secondary-color);
-  border-radius: 2px;
-}
-
-.section-title h2 {
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-/* ====== Teacher Tools ====== */
-.teacher-tools {
-  margin-bottom: 24px;
-}
-
+/* ====== Notice Form ====== */
 .notice-form {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.required {
-  color: var(--secondary-color);
+  max-width: 760px;
 }
 
 .notice-form input,
 .notice-form textarea {
   width: 100%;
-  padding: 12px;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: var(--radius-sm, 8px);
   font-size: 1rem;
   font-family: inherit;
-  background: var(--bg-color);
-  color: var(--text-primary);
-  transition: all 0.3s;
+  background: var(--bg, #f1f5f9);
+  color: var(--text, #0f172a);
+  transition: all 0.25s;
+  -webkit-appearance: none;
 }
 
 .notice-form input:focus,
 .notice-form textarea:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  border-color: var(--primary, #1e40af);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.12);
+  background: var(--surface, #fff);
 }
 
 .notice-form textarea {
   resize: vertical;
-  min-height: 150px;
+  min-height: 130px;
+  line-height: 1.65;
 }
 
+.notice-form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.cancel-edit-btn {
+  padding: 11px 20px;
+  background: var(--bg, #f1f5f9);
+  color: var(--text, #0f172a);
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: var(--radius-sm, 8px);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 0.92rem;
+  transition: all 0.25s;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cancel-edit-btn:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* ====== Submit / Logout Buttons ====== */
 .submit-btn {
-  width: 100%;
-  max-width: 300px;
-  padding: 14px;
-  background: var(--primary-color);
+  padding: 11px 24px;
+  background: var(--primary, #1e40af);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 0.95rem;
   font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
+  transition: all 0.25s;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin: 0 auto;
+  min-height: 44px;
 }
 
-.submit-btn:hover {
-  background: var(--accent-color);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-}
+.submit-btn:hover { background: var(--primary-dark, #1e3a8a); transform: translateY(-1px); }
+.submit-btn:active { transform: scale(0.97); }
+.submit-btn:disabled { opacity: 0.65; cursor: not-allowed; pointer-events: none; }
 
 .logout-btn {
-  width: 100%;
-  max-width: 200px;
-  padding: 12px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin: 20px auto 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  padding: 10px 22px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1.5px solid #fca5a5;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-top: 16px;
+  min-height: 44px;
 }
 
-.logout-btn:hover {
-  background: #c82333;
-  transform: translateY(-2px);
-}
+.logout-btn:hover { background: #dc2626; color: white; border-color: #dc2626; }
+.logout-btn:active { transform: scale(0.96); }
 
-/* ====== Login Section ====== */
-.login-section {
-  margin-bottom: 24px;
-}
-
+/* ====== Login Link Button ====== */
 .login-link-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
-  background: var(--primary-color);
+  padding: 11px 24px;
+  background: var(--primary, #1e40af);
   color: white;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm, 8px);
   font-weight: 600;
-  transition: all 0.3s;
+  font-size: 0.92rem;
+  transition: all 0.25s;
+  min-height: 44px;
 }
 
 .login-link-btn:hover {
-  background: var(--accent-color);
+  background: var(--accent, #16a34a);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow, 0 4px 6px rgba(0,0,0,0.1));
+}
+
+/* ====== Notice Count Badge ====== */
+.notice-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary, #1e40af);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 700;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 20px;
+  margin-left: 6px;
 }
 
 /* ====== Notice List ====== */
 .notice-list-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
+/* ====== Notice Card ====== */
 .notice-card {
-  background: var(--bg-color);
-  padding: 20px;
-  border-radius: 8px;
-  border-left: 4px solid var(--primary-color);
-  transition: all 0.3s;
-  position: relative;
+  background: var(--bg, #f1f5f9);
+  padding: 16px 18px;
+  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--border, #e2e8f0);
+  border-left: 4px solid var(--primary, #1e40af);
+  transition: all 0.25s;
+  animation: slideUp 0.35s ease-out both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .notice-card:hover {
   transform: translateX(4px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow, 0 4px 6px rgba(0,0,0,0.08));
+  border-left-color: var(--secondary, #f59e0b);
 }
 
-.notice-card h4 {
-  color: var(--primary-color);
-  font-size: 1.2rem;
-  margin-bottom: 12px;
+.notice-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.notice-title {
+  color: var(--primary, #1e40af);
+  font-size: 1.05rem;
   font-weight: 700;
+  line-height: 1.3;
+  flex: 1;
 }
 
-.notice-card p {
-  color: var(--text-primary);
-  margin-bottom: 12px;
-  white-space: pre-wrap;
-  line-height: 1.8;
+.notice-date-badge {
+  font-size: 0.72rem;
+  color: var(--text-muted, #64748b);
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.notice-date {
-  color: var(--text-secondary);
+.notice-body {
+  color: var(--text, #0f172a);
   font-size: 0.9rem;
-  font-style: italic;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
+/* ====== Notice Actions ====== */
 .notice-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 12px;
   flex-wrap: wrap;
 }
 
 .editBtn,
 .deleteBtn {
-  padding: 8px 16px;
+  padding: 7px 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-sm, 8px);
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s;
-  font-size: 0.9rem;
+  font-family: inherit;
+  font-size: 0.82rem;
+  transition: all 0.25s;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.editBtn {
-  background: #ffc107;
-  color: #000;
-}
+.editBtn { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.editBtn:hover { background: #fbbf24; color: #000; transform: translateY(-1px); }
 
-.editBtn:hover {
-  background: #e0a800;
-  transform: translateY(-2px);
-}
+.deleteBtn { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.deleteBtn:hover { background: #dc2626; color: white; border-color: #dc2626; transform: translateY(-1px); }
 
-.deleteBtn {
-  background: #dc3545;
-  color: white;
-}
-
-.deleteBtn:hover {
-  background: #c82333;
-  transform: translateY(-2px);
-}
-
+/* ====== Toggle Show More ====== */
 .toggleBtn {
   width: 100%;
-  max-width: 300px;
-  padding: 12px;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
+  max-width: 280px;
+  padding: 11px;
+  background: var(--surface, #fff);
+  color: var(--primary, #1e40af);
+  border: 1.5px solid var(--primary, #1e40af);
+  border-radius: var(--radius-sm, 8px);
   cursor: pointer;
   font-weight: 600;
-  margin: 20px auto 0;
-  display: block;
-  transition: all 0.3s;
-}
-
-.toggleBtn:hover {
-  background: var(--accent-color);
-  transform: translateY(-2px);
-}
-
-.loading-text {
-  text-align: center;
-  color: var(--text-secondary);
-  font-style: italic;
-}
-
-.no-notices {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--text-secondary);
-}
-
-/* ====== Login Page ====== */
-.login-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.login-container {
-  flex: 1;
+  font-family: inherit;
+  font-size: 0.88rem;
+  margin: 8px auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 16px;
+  gap: 6px;
+  transition: all 0.25s;
+}
+
+.toggleBtn:hover { background: var(--primary, #1e40af); color: white; }
+
+/* ====== Empty / Error states ====== */
+.no-notices {
+  text-align: center;
+  padding: 44px 20px;
+  color: var(--text-muted, #64748b);
+  font-size: 0.95rem;
+}
+
+/* ====== Skeleton Loader ====== */
+.notice-skeleton {
+  background: var(--bg, #f1f5f9);
+  border-radius: var(--radius-sm, 8px);
+  padding: 16px 18px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-left: 4px solid var(--border, #e2e8f0);
+}
+
+.skeleton-line {
+  height: 14px;
+  background: linear-gradient(90deg, var(--border, #e2e8f0) 25%, var(--surface, #fff) 50%, var(--border, #e2e8f0) 75%);
+  background-size: 200% 100%;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  animation: shimmer 1.4s infinite;
+}
+
+.skeleton-line.skeleton-title { height: 18px; width: 60%; }
+.skeleton-line.skeleton-short { width: 35%; margin-bottom: 0; }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ====== Teacher Login Page ====== */
+.login-page-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 40px;
+  min-height: calc(60vh);
 }
 
 .login-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  box-shadow: var(--shadow-lg);
+  background: var(--surface, #fff);
+  border-radius: var(--radius, 12px);
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(0,0,0,0.12));
   width: 100%;
-  max-width: 450px;
+  max-width: 440px;
   overflow: hidden;
+  border: 1px solid var(--border, #e2e8f0);
 }
 
-.login-header {
-  background: var(--primary-color);
+.login-card-header {
+  background: var(--header-bg, linear-gradient(135deg, #1e3a8a, #1e40af));
   color: white;
-  padding: 30px 20px;
+  padding: 28px 24px;
   text-align: center;
 }
 
 .login-logo {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  margin-bottom: 16px;
-  border: 4px solid white;
+  border: 3px solid rgba(255,255,255,0.5);
+  margin-bottom: 14px;
+  object-fit: cover;
 }
 
-.login-header h2 {
-  font-size: 1.8rem;
-  margin-bottom: 8px;
+.login-card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
-.login-header p {
-  opacity: 0.9;
-  font-size: 0.95rem;
+.login-card-header p {
+  font-size: 0.88rem;
+  opacity: 0.88;
 }
 
 .login-form {
-  padding: 30px;
-}
-
-.login-form .form-group {
-  margin-bottom: 20px;
+  padding: 24px;
 }
 
 .login-form input {
   width: 100%;
-  padding: 12px;
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border, #e2e8f0);
+  border-radius: var(--radius-sm, 8px);
   font-size: 1rem;
   font-family: inherit;
-  background: var(--bg-color);
-  color: var(--text-primary);
-  transition: all 0.3s;
+  background: var(--bg, #f1f5f9);
+  color: var(--text, #0f172a);
+  transition: all 0.25s;
+  -webkit-appearance: none;
 }
 
 .login-form input:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+  border-color: var(--primary, #1e40af);
+  box-shadow: 0 0 0 3px rgba(30,64,175,0.12);
+  background: var(--surface, #fff);
 }
 
-.error-message,
-.success-message {
-  padding: 12px;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 600;
-  margin-top: 16px;
+/* Password wrapper */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  line-height: 1;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.password-toggle:hover { opacity: 0.7; }
+
+/* Error / success in login form */
+.form-response {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 0.88rem;
+  font-weight: 500;
   display: none;
 }
 
-.error-message.show,
-.success-message.show {
-  display: block;
-}
+.form-response.error  { background: rgba(239,68,68,0.1);  color: #dc2626; border: 1px solid #fca5a5; }
+.form-response.success{ background: rgba(22,163,74,0.1);  color: #16a34a; border: 1px solid #86efac; }
 
-.error-message {
-  background: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
-  border: 1px solid #dc3545;
-}
-
-.success-message {
-  background: rgba(34, 197, 94, 0.1);
-  color: var(--accent-color);
-  border: 1px solid var(--accent-color);
-}
-
-.back-link-container {
+.login-back-link {
   text-align: center;
-  margin-top: 20px;
+  padding: 14px 24px 20px;
+  border-top: 1px solid var(--border, #e2e8f0);
 }
 
-.back-link {
-  color: var(--primary-color);
+.login-back-link a {
+  color: var(--primary, #1e40af);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.3s;
+  font-size: 0.88rem;
+  transition: color 0.2s;
 }
 
-.back-link:hover {
-  color: var(--accent-color);
-}
-
-.login-footer {
-  background: var(--bg-color);
-  padding: 20px;
-  text-align: center;
-  border-top: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
+.login-back-link a:hover { color: var(--accent, #16a34a); text-decoration: underline; }
 
 /* ====== Spinner ====== */
 .spinner {
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid white;
-  border-top: 2px solid transparent;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: white;
   border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* ====== Footer ====== */
-footer {
-  background: var(--header-bg);
-  color: white;
-  padding: 30px 20px;
-  margin-top: 40px;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.footer-content p {
-  margin: 8px 0;
-  opacity: 0.9;
-}
-
-/* ====== Mobile Responsive ====== */
-@media (max-width: 768px) {
-  .top-bar-content {
-    font-size: 0.75rem;
-  }
-
-  .emblem-placeholder {
-    width: 32px;
-    height: 32px;
-    font-size: 20px;
-  }
-
-  .controls {
-    width: 100%;
-    justify-content: flex-end;
-  }
-
-  .nav-toggle {
-    display: block;
-  }
-
-  nav {
-    display: none;
-  }
-
-  nav.active {
-    display: block;
-  }
-
-  .nav-content {
-    flex-direction: column;
-  }
-
-  .nav-content a {
-    border-bottom: 1px solid var(--border-color);
-    border-left: 3px solid transparent;
-  }
-
-  .nav-content a:hover,
-  .nav-content a.active {
-    border-left-color: var(--secondary-color);
-    border-bottom-color: var(--border-color);
-  }
-
-  .school-logo {
-    width: 50px;
-    height: 50px;
-  }
-
-  .school-name h1 {
-    font-size: 1rem;
-  }
-
-  .school-name p {
-    font-size: 0.75rem;
-  }
-
-  .content-section {
-    padding: 16px;
-  }
-
-  .section-title h2 {
-    font-size: 1.2rem;
-  }
-
-  .login-card {
-    border-radius: 0;
-  }
-
-  .login-header {
-    padding: 20px;
-  }
-
-  .login-logo {
-    width: 60px;
-    height: 60px;
-  }
-
-  .login-form {
-    padding: 20px;
-  }
-}
-
-@media (min-width: 769px) {
-  .school-name h1 {
-    font-size: 1.5rem;
-  }
+/* ====== Mobile ====== */
+@media (max-width: 480px) {
+  .login-card { border-radius: 0; border-left: none; border-right: none; }
+  .login-card-header { padding: 20px 16px; }
+  .login-form { padding: 18px 16px; }
+  .notice-card-header { flex-direction: column; }
+  .notice-date-badge { align-self: flex-start; }
 }

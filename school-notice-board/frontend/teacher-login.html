@@ -2,23 +2,26 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही - शिक्षक लॉगिन पृष्ठ">
-  <meta name="keywords" content="teacher login, school login, Chhindibirhi school">
-  <meta name="author" content="Government Primary School Chhindibirhi">
   <meta name="robots" content="noindex, nofollow">
-  
+  <meta name="theme-color" content="#1e40af" />
+
   <title>शिक्षक लॉगिन | Teacher Login - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="../../style.css" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="../../images/school-logo.png" type="image/png" />
 </head>
 <body data-lang="hi" data-theme="light">
+
+  <!-- Nav Overlay -->
+  <div class="nav-overlay" id="navOverlay" onclick="toggleNav()" aria-hidden="true"></div>
+
   <!-- Top Government Bar -->
-  <div class="top-bar">
-    <div class="tricolor-bar"></div>
+  <div class="top-bar" role="banner">
     <div class="top-bar-content">
       <div class="govt-emblem">
-        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="emblem-placeholder" role="img" aria-label="Government Emblem"></div>
         <div class="govt-text">
           <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
           <strong class="lang-english">Government of Chhattisgarh</strong>
@@ -39,76 +42,85 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="siteHeader">
     <div class="header-content">
       <div class="school-identity">
-        <img src="../../images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <img src="../../images/school-logo.png" alt="School Logo" class="school-logo" loading="eager" onerror="this.style.display='none'">
         <div class="school-name">
           <h1>
-            <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-            <span class="lang-english">Government Primary School, Chhindibirhi</span>
+            <span class="lang-hindi">शास. प्राथ. शा. छिंदिबिरही</span>
+            <span class="lang-english">G.P.S. Chhindibirhi</span>
           </h1>
-          <p>
-            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ - 491441</span>
-            <span class="lang-english">Rajnandgaon, Chhattisgarh - 491441</span>
-          </p>
+          <div class="subtitle">
+            <span class="status-dot"></span>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh</span>
+          </div>
         </div>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Open Navigation" aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
   <!-- Navigation -->
-  <nav id="mainNav">
+  <nav id="mainNav" role="navigation" aria-label="Main Navigation">
     <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
     <div class="nav-content">
-      <a href="../../index.html">
-        <span class="lang-hindi">मुख्य पृष्ठ</span>
-        <span class="lang-english">Home</span>
-      </a>
-      <a href="../../about.html">
-        <span class="lang-hindi">हमारे बारे में</span>
-        <span class="lang-english">About Us</span>
-      </a>
-      <a href="../../gallery.html">
-        <span class="lang-hindi">फोटो गैलरी</span>
-        <span class="lang-english">Gallery</span>
-      </a>
-      <a href="../../contact.html">
-        <span class="lang-hindi">संपर्क करें</span>
-        <span class="lang-english">Contact</span>
-      </a>
-      <a href="index.html">
-        <span class="lang-hindi">नोटिस बोर्ड</span>
-        <span class="lang-english">Notice Board</span>
-      </a>
+      <a href="../../index.html"><span class="nav-icon">🏠</span><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+      <a href="../../about.html"><span class="nav-icon">ℹ️</span><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About Us</span></a>
+      <a href="../../gallery.html"><span class="nav-icon">🖼️</span><span class="lang-hindi">फोटो गैलरी</span><span class="lang-english">Gallery</span></a>
+      <a href="../../contact.html"><span class="nav-icon">📞</span><span class="lang-hindi">संपर्क करें</span><span class="lang-english">Contact</span></a>
+      <a href="index.html"><span class="nav-icon">📋</span><span class="lang-hindi">नोटिस बोर्ड</span><span class="lang-english">Notice Board</span></a>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <div class="mnav-items">
+      <a href="../../index.html" class="mnav-item"><span class="mnav-icon">🏠</span><span class="mnav-label lang-hindi">मुख्य</span><span class="mnav-label lang-english">Home</span></a>
+      <a href="../../about.html" class="mnav-item"><span class="mnav-icon">ℹ️</span><span class="mnav-label lang-hindi">बारे में</span><span class="mnav-label lang-english">About</span></a>
+      <a href="../../gallery.html" class="mnav-item"><span class="mnav-icon">🖼️</span><span class="mnav-label lang-hindi">गैलरी</span><span class="mnav-label lang-english">Gallery</span></a>
+      <a href="../../contact.html" class="mnav-item"><span class="mnav-icon">📞</span><span class="mnav-label lang-hindi">संपर्क</span><span class="mnav-label lang-english">Contact</span></a>
+      <a href="index.html" class="mnav-item"><span class="mnav-icon">📋</span><span class="mnav-label lang-hindi">नोटिस</span><span class="mnav-label lang-english">Notice</span></a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main>
-    <section class="content-section">
-      <div class="section-title">
-        <h2>
-          <span class="lang-hindi">🔐 शिक्षक लॉगिन</span>
-          <span class="lang-english">🔐 Teacher Login</span>
-        </h2>
-      </div>
-      
-      <div class="login-container">
-        <form id="loginForm" class="login-form">
+  <main id="mainContent">
+    <div class="login-page-wrap">
+      <div class="login-card" role="main">
+
+        <!-- Card Header -->
+        <div class="login-card-header">
+          <img src="../../images/school-logo.png" alt="School Logo" class="login-logo" onerror="this.style.display='none'">
+          <h2>
+            <span class="lang-hindi">🔐 शिक्षक लॉगिन</span>
+            <span class="lang-english">🔐 Teacher Login</span>
+          </h2>
+          <p>
+            <span class="lang-hindi">नोटिस बोर्ड प्रबंधन के लिए लॉगिन करें</span>
+            <span class="lang-english">Login to manage the notice board</span>
+          </p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="login-form" novalidate>
+
           <div class="form-group">
             <label for="email">
               <span class="lang-hindi">ईमेल</span>
               <span class="lang-english">Email</span>
-              <span class="required">*</span>
+              <span class="required" aria-hidden="true">*</span>
             </label>
-            <input 
-              type="email" 
-              id="email" 
+            <input
+              type="email"
+              id="email"
               name="email"
-              placeholder="teacher@example.com" 
+              autocomplete="email"
+              inputmode="email"
+              placeholder="teacher@example.com"
               required
+              aria-required="true"
             />
           </div>
 
@@ -116,63 +128,116 @@
             <label for="password">
               <span class="lang-hindi">पासवर्ड</span>
               <span class="lang-english">Password</span>
-              <span class="required">*</span>
+              <span class="required" aria-hidden="true">*</span>
             </label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password"
-              placeholder="••••••••" 
-              required
-            />
+            <!-- Password wrapper for show/hide toggle -->
+            <div class="password-wrapper">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                required
+                aria-required="true"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                id="passwordToggle"
+                aria-label="Show password"
+                tabindex="0"
+              >👁️</button>
+            </div>
           </div>
 
-          <button type="submit" class="submit-btn">
+          <button type="submit" id="loginBtn" class="submit-btn" style="margin-top:8px;">
             <span class="lang-hindi">लॉगिन करें</span>
             <span class="lang-english">Login</span>
           </button>
 
-          <p id="errorMsg" class="error-message"></p>
+          <!-- Error / success messages -->
+          <p id="errorMsg" class="form-response error" role="alert" aria-live="polite"></p>
+          <p id="successMsg" class="form-response success" role="status" aria-live="polite"></p>
         </form>
+
+        <!-- Back link -->
+        <div class="login-back-link">
+          <a href="index.html">
+            <span class="lang-hindi">← नोटिस बोर्ड पर वापस जाएं</span>
+            <span class="lang-english">← Back to Notice Board</span>
+          </a>
+        </div>
+
       </div>
-    </section>
+    </div>
   </main>
 
   <!-- Footer -->
-  <footer>
+  <footer role="contentinfo">
     <div class="footer-content">
-      <p>
-        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
-      </p>
+      <div class="footer-logo">🏫</div>
+      <p><span class="lang-hindi"><strong>शासकीय प्राथमिक शाला, छिंदिबिरही</strong></span><span class="lang-english"><strong>Government Primary School, Chhindibirhi</strong></span></p>
+      <hr class="footer-divider">
+      <p>© 2025 — <span class="lang-hindi">सर्वाधिकार सुरक्षित</span><span class="lang-english">All rights reserved</span></p>
     </div>
-    <div class="tricolor-bar"></div>
   </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="../../script.js"></script>
   <script>
-    const backendURL = "https://school-backend-14ld.onrender.com/api/auth/teacher/login";
+    'use strict';
 
-    const form = document.getElementById('loginForm');
-    const errorMsg = document.getElementById('errorMsg');
+    const BACKEND = 'https://school-backend-14ld.onrender.com/api/auth/teacher/login';
+
+    // ---- Redirect if already logged in ----
+    if (localStorage.getItem('token')) {
+      window.location.replace('index.html');
+    }
+
+    // ---- Password show/hide toggle ----
+    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.getElementById('passwordToggle');
+
+    passwordToggle.addEventListener('click', () => {
+      const isHidden = passwordInput.type === 'password';
+      passwordInput.type = isHidden ? 'text' : 'password';
+      passwordToggle.textContent = isHidden ? '🙈' : '👁️';
+      passwordToggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+    });
+
+    // ---- Form Submit ----
+    const form      = document.getElementById('loginForm');
+    const loginBtn  = document.getElementById('loginBtn');
+    const errorMsg  = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    function setMsg(el, text, show) {
+      el.textContent = text;
+      el.style.display = show ? 'block' : 'none';
+    }
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      // Basic client-side validation
+      if (!email || !password) {
+        setMsg(errorMsg, 'कृपया ईमेल और पासवर्ड दर्ज करें | Please enter email and password', true);
+        return;
+      }
+
+      // Loading state
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<span class="spinner"></span> <span class="lang-hindi">लॉगिन हो रहा है…</span><span class="lang-english">Logging in…</span>';
+      setMsg(errorMsg, '', false);
+      setMsg(successMsg, '', false);
 
       try {
-        // Show loading state
-        const submitBtn = form.querySelector('.submit-btn');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `
-          <span class="lang-hindi">लॉगिन हो रहा है...</span>
-          <span class="lang-english">Logging in...</span>
-        `;
-
-        const res = await fetch(backendURL, {
+        const res  = await fetch(BACKEND, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -182,23 +247,32 @@
 
         if (res.ok) {
           localStorage.setItem('token', data.token);
-          localStorage.setItem('teacherName', data.teacher.name);
-          window.location.href = "index.html";
+          localStorage.setItem('teacherName', data.teacher?.name || 'Teacher');
+
+          setMsg(successMsg, '✅ ' + (document.body.getAttribute('data-lang') === 'hi'
+            ? 'लॉगिन सफल! रीडायरेक्ट हो रहा है…'
+            : 'Login successful! Redirecting…'), true);
+
+          setTimeout(() => window.location.replace('index.html'), 900);
         } else {
-          errorMsg.innerHTML = `
-            <span class="lang-hindi">अमान्य प्रमाण पत्र</span>
-            <span class="lang-english">Invalid credentials</span>
-          `;
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
+          const lang = document.body.getAttribute('data-lang') || 'hi';
+          setMsg(errorMsg,
+            lang === 'hi'
+              ? '❌ अमान्य ईमेल या पासवर्ड। कृपया पुनः प्रयास करें।'
+              : '❌ Invalid email or password. Please try again.',
+            true
+          );
+          loginBtn.disabled = false;
+          loginBtn.innerHTML = '<span class="lang-hindi">लॉगिन करें</span><span class="lang-english">Login</span>';
         }
       } catch (err) {
-        errorMsg.innerHTML = `
-          <span class="lang-hindi">सर्वर से कनेक्शन त्रुटि</span>
-          <span class="lang-english">Error connecting to server</span>
-        `;
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
+        console.error('Login error:', err);
+        setMsg(errorMsg,
+          '❌ सर्वर से कनेक्शन त्रुटि। कृपया बाद में पुनः प्रयास करें। | Connection error. Please try again later.',
+          true
+        );
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<span class="lang-hindi">लॉगिन करें</span><span class="lang-english">Login</span>';
       }
     });
   </script>

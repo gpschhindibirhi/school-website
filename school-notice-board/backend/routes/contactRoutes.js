@@ -1,350 +1,230 @@
-const express = require('express');
-const router = express.Router();
-const ContactMessage = require('./../models/ContactMessage');
-const nodemailer = require('nodemailer');
-const dotenv = require('dotenv');
+const express        = require('express');
+const router         = express.Router();
+const ContactMessage = require('../models/ContactMessage');
+const nodemailer     = require('nodemailer');
+const dotenv         = require('dotenv');
 dotenv.config();
 
-// Email configuration status
-let emailConfigStatus = {
-  ready: false,
-  error: null
-};
+// ===== EMAIL TRANSPORTER =====
 
-// Initialize transporter with better error handling
-let transporter = null;
+let transporter        = null;
+let emailConfigStatus  = { ready: false, error: null };
 
-async function initializeTransporter() {
+async function initTransporter() {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    emailConfigStatus.error = 'Missing EMAIL_USER or EMAIL_PASS in .env';
+    console.warn('⚠️  Email not configured:', emailConfigStatus.error);
+    return;
+  }
+
   try {
-    // Check if email credentials are configured
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.warn('⚠️ Email credentials not configured in .env file');
-      emailConfigStatus.error = 'Missing EMAIL_USER or EMAIL_PASS in .env';
-      return;
-    }
-
     transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        pass: process.env.EMAIL_PASS     // Use Gmail App Password
       },
-      // Simplified config - remove pooling for better reliability
-      tls: {
-        rejectUnauthorized: false // For development, remove in production
-      }
+      tls: { rejectUnauthorized: false } // Remove in strict production
     });
 
-    // Verify transporter
     await transporter.verify();
-    console.log('✅ Email transporter is ready');
-    emailConfigStatus.ready = true;
-    emailConfigStatus.error = null;
-
-  } catch (error) {
-    console.error('❌ Email transporter initialization failed:', error.message);
-    emailConfigStatus.error = error.message;
-    emailConfigStatus.ready = false;
-    
-    // Common issues and solutions
-    if (error.message.includes('Invalid login')) {
-      console.error('💡 Solution: Enable "App Passwords" in Gmail settings');
-      console.error('   Visit: https://myaccount.google.com/apppasswords');
+    emailConfigStatus = { ready: true, error: null };
+    console.log('✅ Email transporter ready');
+  } catch (err) {
+    emailConfigStatus = { ready: false, error: err.message };
+    console.error('❌ Email transporter init failed:', err.message);
+    if (err.message.includes('Invalid login')) {
+      console.error('💡 Enable Gmail App Passwords: https://myaccount.google.com/apppasswords');
     }
   }
 }
 
-// Initialize on startup
-initializeTransporter();
+initTransporter();
 
-// Validation functions
+// ===== HELPERS =====
+
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function validatePhone(phone) {
+  // Accept +91 followed by 10 digits (with optional space)
   return /^\+91\s?\d{10}$/.test(phone);
 }
 
-// Send email with retry logic
-async function sendEmailWithRetry(mailOptions, maxRetries = 2) {
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+// Sanitise input — strip dangerous HTML chars
+function sanitise(str) {
+  if (!str) return '';
+  return String(str).replace(/[<>"'`]/g, '').trim().slice(0, 2000);
+}
+
+async function sendWithRetry(options, retries = 2) {
+  for (let i = 1; i <= retries; i++) {
     try {
-      await transporter.sendMail(mailOptions);
+      await transporter.sendMail(options);
       return { success: true };
-    } catch (error) {
-      console.error(`Email attempt ${attempt} failed:`, error.message);
-      if (attempt === maxRetries) {
-        return { success: false, error: error.message };
-      }
-      // Wait before retry
-      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+    } catch (err) {
+      console.error(`Email attempt ${i} failed:`, err.message);
+      if (i < retries) await new Promise(r => setTimeout(r, 1000 * i));
+      else return { success: false, error: err.message };
     }
   }
 }
 
+function buildSchoolEmail(name, email, phone, message) {
+  const date = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  return {
+    from:    `"GPS Chhindibirhi" <${process.env.EMAIL_USER}>`,
+    to:      process.env.TEACHER_EMAIL || 'gps.chhindibirhi@gmail.com',
+    subject: '🔔 New Contact Form Submission | नया संपर्क फॉर्म',
+    text:    `Name: ${name}\nEmail: ${email || 'N/A'}\nPhone: ${phone || 'N/A'}\n\nMessage:\n${message}\n\n${date}`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+  body{font-family:Arial,sans-serif;color:#333;line-height:1.6}
+  .wrap{max-width:600px;margin:0 auto;padding:20px}
+  .hdr{background:#1e40af;color:#fff;padding:20px;border-radius:8px 8px 0 0;text-align:center}
+  .body{background:#f8fafc;padding:20px;border:1px solid #e2e8f0;border-radius:0 0 8px 8px}
+  .row{background:#fff;margin:10px 0;padding:12px;border-radius:6px;border-left:3px solid #1e40af}
+  .lbl{font-weight:bold;color:#1e40af;font-size:0.85rem;margin-bottom:4px}
+  .ftr{text-align:center;color:#888;font-size:12px;margin-top:16px}
+</style></head><body><div class="wrap">
+  <div class="hdr"><h2>🔔 New Contact Form Submission</h2></div>
+  <div class="body">
+    <div class="row"><div class="lbl">Name / नाम</div><div>${name}</div></div>
+    <div class="row"><div class="lbl">Email / ईमेल</div><div>${email || 'Not provided'}</div></div>
+    <div class="row"><div class="lbl">Phone / फोन</div><div>${phone || 'Not provided'}</div></div>
+    <div class="row"><div class="lbl">Message / संदेश</div><div>${message.replace(/\n/g,'<br>')}</div></div>
+  </div>
+  <div class="ftr"><p>Government Primary School, Chhindibirhi — ${date}</p></div>
+</div></body></html>`
+  };
+}
+
+function buildUserEmail(name, email, message) {
+  return {
+    from:    `"GPS Chhindibirhi" <${process.env.EMAIL_USER}>`,
+    to:      email,
+    subject: '✅ Thank You for Contacting Us | संपर्क करने के लिए धन्यवाद',
+    text:    `Dear ${name},\n\nThank you! We received your message and will contact you soon.\n\nYour message:\n${message}\n\nGovernment Primary School, Chhindibirhi\n📞 +91 7000810232 | ✉️ gps.chhindibirhi@gmail.com`,
+    html: `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+  body{font-family:Arial,sans-serif;color:#333;line-height:1.6}
+  .wrap{max-width:600px;margin:0 auto;padding:20px}
+  .hdr{background:#16a34a;color:#fff;padding:20px;border-radius:8px 8px 0 0;text-align:center}
+  .body{background:#f8fafc;padding:20px;border:1px solid #e2e8f0;border-radius:0 0 8px 8px}
+  .msg{background:#fff;padding:15px;margin:12px 0;border-left:4px solid #16a34a;border-radius:4px}
+  .ftr{text-align:center;color:#888;font-size:12px;margin-top:16px;border-top:1px solid #e2e8f0;padding-top:14px}
+</style></head><body><div class="wrap">
+  <div class="hdr"><h2>✅ धन्यवाद! | Thank You!</h2></div>
+  <div class="body">
+    <p><strong>प्रिय ${name} | Dear ${name},</strong></p>
+    <p>आपका संदेश मिल गया। हम जल्द संपर्क करेंगे।<br>
+    <em>We have received your message and will get back to you soon.</em></p>
+    <div class="msg"><strong>Your message:</strong><br><br>${message.replace(/\n/g,'<br>')}</div>
+  </div>
+  <div class="ftr">
+    <p><strong>Government Primary School, Chhindibirhi</strong><br>
+    Rajnandgaon, Chhattisgarh | 📞 +91 7000810232 | ✉️ gps.chhindibirhi@gmail.com</p>
+  </div>
+</div></body></html>`
+  };
+}
+
+// ===== POST /api/contact =====
+
 router.post('/', async (req, res) => {
   try {
-    const { name, email, phone, message } = req.body;
+    // Sanitise inputs
+    const name    = sanitise(req.body.name);
+    const email   = sanitise(req.body.email);
+    const phone   = sanitise(req.body.phone);
+    const message = sanitise(req.body.message);
 
-    // Input validation
-    if (!name || !message) {
-      return res.status(400).json({ 
-        error: 'Name and message are required | नाम और संदेश आवश्यक हैं' 
-      });
+    // ---- Validation ----
+    if (!name) {
+      return res.status(400).json({ error: 'Name is required | नाम आवश्यक है' });
     }
-    
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required | संदेश आवश्यक है' });
+    }
     if (!email && !phone) {
-      return res.status(400).json({ 
-        error: 'Either email or phone is required | ईमेल या फोन में से एक आवश्यक है' 
-      });
+      return res.status(400).json({ error: 'Email or phone required | ईमेल या फोन आवश्यक है' });
     }
-    
     if (email && !validateEmail(email)) {
-      return res.status(400).json({ 
-        error: 'Invalid email format | अमान्य ईमेल प्रारूप' 
-      });
+      return res.status(400).json({ error: 'Invalid email | अमान्य ईमेल' });
     }
-    
-    if (phone && !validatePhone(phone)) {
-      return res.status(400).json({ 
-        error: 'Invalid phone number (must be +91 followed by 10 digits) | अमान्य फोन नंबर (+91 के बाद 10 अंक)' 
-      });
+    if (phone && phone !== '+91 ' && !validatePhone(phone)) {
+      return res.status(400).json({ error: 'Invalid phone (need +91 + 10 digits) | अमान्य फोन (+91 और 10 अंक)' });
     }
 
-    // Save to database first (priority)
-    const newMessage = new ContactMessage({ 
-      name, 
-      email: email || null, 
-      phone: phone || null, 
-      message 
-    });
-    
-    await newMessage.save();
-    console.log('✅ Message saved to database:', { 
-      name, 
-      email: email || 'N/A', 
-      phone: phone || 'N/A' 
-    });
+    // ---- Save to DB (always, regardless of email status) ----
+    const saved = await new ContactMessage({
+      name,
+      email:   email   || null,
+      phone:   (phone && phone !== '+91 ') ? phone : null,
+      message
+    }).save();
 
-    // Track email sending results
-    let emailResults = {
-      schoolEmail: false,
-      userEmail: false
-    };
+    console.log('✅ Contact message saved:', { id: saved._id, name, email: email || 'N/A' });
 
-    // Try to send emails if transporter is ready
+    // ---- Send emails ----
+    const emailResults = { schoolEmail: false, userEmail: false };
+
     if (emailConfigStatus.ready && transporter) {
-      
-      // 1. Send notification email to school
-      try {
-        const schoolMailOptions = {
-          from: `"Government Primary School" <${process.env.EMAIL_USER}>`,
-          to: process.env.TEACHER_EMAIL || 'gps.chhindibirhi@gmail.com',
-          subject: '🔔 New Contact Form Submission | नया संपर्क फॉर्म सबमिशन',
-          text: `
-नया संदेश प्राप्त हुआ | New message received
+      // Notification to school
+      const schoolResult = await sendWithRetry(buildSchoolEmail(name, email, phone, message));
+      emailResults.schoolEmail = schoolResult.success;
+      if (schoolResult.success) console.log('✅ School notification sent');
+      else console.error('❌ School email failed:', schoolResult.error);
 
-नाम | Name: ${name}
-ईमेल | Email: ${email || 'नहीं दिया गया | Not provided'}
-फोन | Phone: ${phone || 'नहीं दिया गया | Not provided'}
-
-संदेश | Message:
-${message}
-
----
-Government Primary School, Chhindibirhi
-Date: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
-          `,
-          html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #2196F3; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-    .content { background: #f9f9f9; padding: 20px; border: 1px solid #ddd; }
-    .field { margin: 15px 0; padding: 10px; background: white; border-radius: 5px; }
-    .label { font-weight: bold; color: #2196F3; }
-    .footer { text-align: center; margin-top: 20px; color: #777; font-size: 12px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h2>🔔 नया संपर्क फॉर्म | New Contact Form</h2>
-    </div>
-    <div class="content">
-      <div class="field">
-        <div class="label">नाम | Name:</div>
-        <div>${name}</div>
-      </div>
-      <div class="field">
-        <div class="label">ईमेल | Email:</div>
-        <div>${email || 'नहीं दिया गया | Not provided'}</div>
-      </div>
-      <div class="field">
-        <div class="label">फोन | Phone:</div>
-        <div>${phone || 'नहीं दिया गया | Not provided'}</div>
-      </div>
-      <div class="field">
-        <div class="label">संदेश | Message:</div>
-        <div>${message.replace(/\n/g, '<br>')}</div>
-      </div>
-    </div>
-    <div class="footer">
-      <p>Government Primary School, Chhindibirhi</p>
-      <p>${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
-    </div>
-  </div>
-</body>
-</html>
-          `
-        };
-
-        const schoolResult = await sendEmailWithRetry(schoolMailOptions);
-        emailResults.schoolEmail = schoolResult.success;
-        
-        if (schoolResult.success) {
-          console.log('✅ School notification email sent');
-        } else {
-          console.error('❌ School email failed:', schoolResult.error);
-        }
-        
-      } catch (error) {
-        console.error('❌ School email error:', error.message);
-      }
-
-      // 2. Send confirmation email to user (only if email provided)
+      // Confirmation to user (only if email provided)
       if (email) {
-        try {
-          const userMailOptions = {
-            from: `"Government Primary School" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: '✅ Thank You for Contacting Us | संपर्क करने के लिए धन्यवाद',
-            text: `
-प्रिय ${name},
-
-आपका संदेश सफलतापूर्वक प्राप्त हो गया है। हम शीघ्र ही आपके संपर्क में होंगे।
-
-आपका संदेश:
-${message}
-
-धन्यवाद,
-सरकारी प्राथमिक स्कूल, छिंदिबिरही
-राजनांदगाँव, छत्तीसगढ़
-
----
-Dear ${name},
-
-Thank you for your message. We have received it successfully and will get back to you soon.
-
-Your message:
-${message}
-
-Best regards,
-Government Primary School, Chhindibirhi
-Rajnandgaon, Chhattisgarh
-
-Phone: +91 7000810232
-Email: gps.chhindibirhi@gmail.com
-            `,
-            html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #4CAF50; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-    .content { background: #f9f9f9; padding: 20px; border: 1px solid #ddd; }
-    .message-box { background: white; padding: 15px; margin: 15px 0; border-left: 4px solid #4CAF50; }
-    .footer { text-align: center; margin-top: 20px; color: #777; font-size: 12px; border-top: 1px solid #ddd; padding-top: 15px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h2>✅ धन्यवाद! | Thank You!</h2>
-    </div>
-    <div class="content">
-      <p><strong>प्रिय ${name},</strong></p>
-      <p>आपका संदेश सफलतापूर्वक प्राप्त हो गया है। हम शीघ्र ही आपके संपर्क में होंगे।</p>
-      
-      <div class="message-box">
-        <strong>आपका संदेश | Your message:</strong><br><br>
-        ${message.replace(/\n/g, '<br>')}
-      </div>
-      
-      <p><em>Dear ${name},</em></p>
-      <p><em>Thank you for contacting us. We have received your message and will respond soon.</em></p>
-    </div>
-    <div class="footer">
-      <p><strong>सरकारी प्राथमिक स्कूल, छिंदिबिरही</strong><br>
-      <strong>Government Primary School, Chhindibirhi</strong></p>
-      <p>राजनांदगाँव, छत्तीसगढ़ | Rajnandgaon, Chhattisgarh</p>
-      <p>📞 +91 7000810232 | ✉️ gps.chhindibirhi@gmail.com</p>
-    </div>
-  </div>
-</body>
-</html>
-            `
-          };
-
-          const userResult = await sendEmailWithRetry(userMailOptions);
-          emailResults.userEmail = userResult.success;
-          
-          if (userResult.success) {
-            console.log('✅ User confirmation email sent to', email);
-          } else {
-            console.error('❌ User email failed:', userResult.error);
-          }
-          
-        } catch (error) {
-          console.error('❌ User email error:', error.message);
-        }
+        const userResult = await sendWithRetry(buildUserEmail(name, email, message));
+        emailResults.userEmail = userResult.success;
+        if (userResult.success) console.log('✅ User confirmation sent to', email);
+        else console.error('❌ User email failed:', userResult.error);
       }
     } else {
-      console.warn('⚠️ Emails not sent - Transporter not ready');
-      console.warn('   Error:', emailConfigStatus.error || 'Not initialized');
+      console.warn('⚠️  Emails skipped — transporter not ready:', emailConfigStatus.error);
     }
 
-    // Return success response (DB save succeeded)
-    const responseMessage = emailConfigStatus.ready
-      ? (emailResults.schoolEmail || emailResults.userEmail)
-        ? 'आपका संदेश सफलतापूर्वक भेजा गया! हम शीघ्र संपर्क करेंगे। | Your message was sent successfully! We will contact you soon.'
-        : 'आपका संदेश सहेजा गया, लेकिन ईमेल भेजने में त्रुटि। हम संपर्क करेंगे। | Message saved, but email sending failed. We will contact you.'
-      : 'आपका संदेश सहेजा गया है। ईमेल सिस्टम अभी उपलब्ध नहीं है। | Your message is saved. Email system is currently unavailable.';
+    // ---- Response message ----
+    let responseMessage;
+    if (!emailConfigStatus.ready) {
+      responseMessage = 'आपका संदेश सहेजा गया है। | Your message has been saved.';
+    } else if (emailResults.schoolEmail || emailResults.userEmail) {
+      responseMessage = 'आपका संदेश सफलतापूर्वक भेजा गया! हम शीघ्र संपर्क करेंगे। | Message sent successfully! We will contact you soon.';
+    } else {
+      responseMessage = 'आपका संदेश सहेजा गया, ईमेल में देरी हो सकती है। | Message saved, email may be delayed.';
+    }
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: responseMessage,
       emailStatus: {
-        configured: emailConfigStatus.ready,
+        configured:      emailConfigStatus.ready,
         schoolEmailSent: emailResults.schoolEmail,
-        userEmailSent: emailResults.userEmail
+        userEmailSent:   emailResults.userEmail
       }
     });
 
-  } catch (error) {
-    console.error('❌ Route error:', error.message);
-    console.error('Stack:', error.stack);
-    
-    res.status(500).json({ 
-      error: 'सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें। | Server error. Please try again later.',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+  } catch (err) {
+    console.error('❌ Contact route error:', err.message);
+    res.status(500).json({
+      error:   'सर्वर त्रुटि। कृपया बाद में पुनः प्रयास करें। | Server error. Please try again later.',
+      details: process.env.NODE_ENV === 'development' ? err.message : undefined
     });
   }
 });
 
-// Health check endpoint for email system
-router.get('/email-status', (req, res) => {
+// ===== GET /api/contact/email-status =====
+
+router.get('/email-status', (_req, res) => {
   res.json({
     emailConfigured: emailConfigStatus.ready,
-    error: emailConfigStatus.error,
-    emailUser: process.env.EMAIL_USER ? '✅ Configured' : '❌ Not configured',
-    emailPass: process.env.EMAIL_PASS ? '✅ Configured' : '❌ Not configured',
-    teacherEmail: process.env.TEACHER_EMAIL || 'Using default: gps.chhindibirhi@gmail.com'
+    error:           emailConfigStatus.error,
+    emailUser:       process.env.EMAIL_USER  ? '✅ Set' : '❌ Not set',
+    emailPass:       process.env.EMAIL_PASS  ? '✅ Set' : '❌ Not set',
+    teacherEmail:    process.env.TEACHER_EMAIL || 'gps.chhindibirhi@gmail.com (default)'
   });
 });
 

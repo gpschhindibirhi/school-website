@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backend Connection Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 800px;
+      width: 100%;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+    }
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 30px;
+    }
+    button {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn-test {
+      background: #667eea;
+      color: white;
+    }
+    .btn-test:hover:not(:disabled) {
+      background: #5568d3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    .btn-submit {
+      background: #4CAF50;
+      color: white;
+    }
+    .btn-submit:hover:not(:disabled) {
+      background: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+    .btn-clear {
+      background: #ff6b6b;
+      color: white;
+    }
+    .btn-clear:hover:not(:disabled) {
+      background: #ee5a5a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      display: none;
+    }
+    .result.show {
+      display: block;
+    }
+    .result.success {
+      background: #d4edda;
+      border: 2px solid #28a745;
+      color: #155724;
+    }
+    .result.error {
+      background: #f8d7da;
+      border: 2px solid #dc3545;
+      color: #721c24;
+    }
+    .result.info {
+      background: #d1ecf1;
+      border: 2px solid #17a2b8;
+      color: #0c5460;
+    }
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .status-online {
+      background: #4CAF50;
+      box-shadow: 0 0 10px #4CAF50;
+    }
+    .status-offline {
+      background: #f44336;
+      box-shadow: 0 0 10px #f44336;
+    }
+    .info-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #856404;
+    }
+    .info-box strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 Backend Connection Test</h1>
+    <p class="subtitle">Test your contact form backend API connection</p>
+
+    <div class="info-box">
+      <strong>📌 Instructions:</strong>
+      1. Update the API URL below to match your backend<br>
+      2. Click "Test Connection" to check if server is reachable<br>
+      3. Fill the form and click "Submit Test" to test contact form
+    </div>
+
+    <div class="input-group">
+      <label for="apiUrl">🌐 Backend API URL</label>
+      <input 
+        type="text" 
+        id="apiUrl" 
+        value="https://school-backend-14ld.onrender.com"
+        placeholder="http://localhost:5000 or https://your-backend.com"
+      >
+    </div>
+
+    <div class="button-group">
+      <button class="btn-test" onclick="testHealth()">
+        <span id="testIcon">🔍</span>
+        Test Connection
+      </button>
+      <button class="btn-test" onclick="testEmailStatus()">
+        <span>📧</span>
+        Check Email Status
+      </button>
+    </div>
+
+    <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
+
+    <h2 style="margin-bottom: 20px; color: #333;">Test Contact Form</h2>
+
+    <div class="input-group">
+      <label for="name">Name *</label>
+      <input type="text" id="name" value="Test User" required>
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" value="test@example.com">
+    </div>
+
+    <div class="input-group">
+      <label for="phone">Phone</label>
+      <input type="tel" id="phone" value="+91 9876543210">
+    </div>
+
+    <div class="input-group">
+      <label for="message">Message *</label>
+      <textarea id="message" required>This is a test message from the backend tester.</textarea>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-submit" onclick="submitForm()">
+        <span id="submitIcon">📤</span>
+        Submit Test
+      </button>
+      <button class="btn-clear" onclick="clearResults()">
+        <span>🗑️</span>
+        Clear Results
+      </button>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const resultDiv = document.getElementById('result');
+
+    function showResult(message, type = 'info') {
+      resultDiv.textContent = message;
+      resultDiv.className = `result show ${type}`;
+      resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function clearResults() {
+      resultDiv.className = 'result';
+      resultDiv.textContent = '';
+    }
+
+    async function testHealth() {
+      const baseUrl = document.getElementById('apiUrl').value.trim();
+      const testIcon = document.getElementById('testIcon');
+      
+      testIcon.innerHTML = '<span class="spinner"></span>';
+      showResult('Testing connection...', 'info');
+
+      try {
+        const response = await fetch(`${baseUrl}/health`, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
+
+        const data = await response.json();
+        
+        if (response.ok) {
+          showResult(
+            `✅ CONNECTION SUCCESSFUL!\n\n` +
+            `Status: ${data.status}\n` +
+            `MongoDB: ${data.mongodb}\n` +
+            `Timestamp: ${data.timestamp}\n` +
+            `Uptime: ${Math.floor(data.uptime / 60)} minutes\n\n` +
+            `Backend is reachable and MongoDB is ${data.mongodb === 'Connected' ? '✅ connected' : '❌ disconnected'}`,
+            'success'
+          );
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+      } catch (error) {
+        showResult(
+          `❌ CONNECTION FAILED\n\n` +
+          `Error: ${error.message}\n\n` +
+          `Possible issues:\n` +
+          `• Backend server not running\n` +
+          `• Wrong URL: ${baseUrl}\n` +
+          `• CORS blocking request\n` +
+          `• Network/firewall issue\n\n` +
+          `For local testing, use: http://localhost:5000\n` +
+          `For production, check Render.com deployment`,
+          'error'
+        );
+      } finally {
+        testIcon.innerHTML = '🔍';
+      }
+    }
+
+    async function testEmailStatus() {
+      const baseUrl = document.getElementById('apiUrl').value.trim();
+      showResult('Checking email configuration...', 'info');
+
+      try {
+        const response = await fetch(`${baseUrl}/api/contact/email-status`);
+        const data = await response.json();
+
+        if (response.ok) {
+          showResult(
+            `📧 EMAIL CONFIGURATION STATUS\n\n` +
+            `Configured: ${data.emailConfigured ? '✅ Yes' : '❌ No'}\n` +
+            `Email User: ${data.emailUser}\n` +
+            `Email Pass: ${data.emailPass}\n` +
+            `Teacher Email: ${data.teacherEmail}\n` +
+            `${data.error ? `\nError: ${data.error}` : ''}\n\n` +
+            `${data.emailConfigured ? 
+              '✅ Emails will be sent' : 
+              '⚠️ Email system not configured\nMessages will be saved to database only'}`,
+            data.emailConfigured ? 'success' : 'info'
+          );
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+      } catch (error) {
+        showResult(
+          `❌ FAILED TO CHECK EMAIL STATUS\n\n` +
+          `Error: ${error.message}\n\n` +
+          `Make sure /api/contact/email-status endpoint exists`,
+          'error'
+        );
+      }
+    }
+
+    async function submitForm() {
+      const baseUrl = document.getElementById('apiUrl').value.trim();
+      const submitIcon = document.getElementById('submitIcon');
+      
+      const formData = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        message: document.getElementById('message').value.trim()
+      };
+
+      // Validation
+      if (!formData.name || !formData.message) {
+        showResult('❌ Name and message are required', 'error');
+        return;
+      }
+
+      if (!formData.email && !formData.phone) {
+        showResult('❌ Either email or phone is required', 'error');
+        return;
+      }
+
+      submitIcon.innerHTML = '<span class="spinner"></span>';
+      showResult('Submitting form...', 'info');
+
+      try {
+        const response = await fetch(`${baseUrl}/api/contact`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const responseText = await response.text();
+        let data;
+        
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = { message: responseText };
+        }
+
+        if (response.ok) {
+          showResult(
+            `✅ FORM SUBMITTED SUCCESSFULLY!\n\n` +
+            `Response: ${data.message}\n\n` +
+            `Email Status:\n` +
+            `• Configured: ${data.emailStatus?.configured ? '✅' : '❌'}\n` +
+            `• School Email Sent: ${data.emailStatus?.schoolEmailSent ? '✅' : '❌'}\n` +
+            `• User Email Sent: ${data.emailStatus?.userEmailSent ? '✅' : '❌'}\n\n` +
+            `Data submitted:\n${JSON.stringify(formData, null, 2)}`,
+            'success'
+          );
+        } else {
+          throw new Error(`HTTP ${response.status}: ${data.error || responseText}`);
+        }
+      } catch (error) {
+        showResult(
+          `❌ FORM SUBMISSION FAILED\n\n` +
+          `Error: ${error.message}\n\n` +
+          `Request details:\n` +
+          `URL: ${baseUrl}/api/contact\n` +
+          `Method: POST\n` +
+          `Data: ${JSON.stringify(formData, null, 2)}\n\n` +
+          `Troubleshooting:\n` +
+          `• Check backend server logs\n` +
+          `• Verify MongoDB connection\n` +
+          `• Check CORS configuration\n` +
+          `• Ensure /api/contact route exists`,
+          'error'
+        );
+      } finally {
+        submitIcon.innerHTML = '📤';
+      }
+    }
+
+    // Auto-test connection on load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        testHealth();
+      }, 500);
+    });
+  </script>
+</body>
+</html>

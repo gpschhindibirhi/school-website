@@ -2,25 +2,30 @@
 <html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="description" content="शासकीय प्राथमिक शाला छिंदिबिरही की फोटो गैलरी - विद्यालय गतिविधियों की तस्वीरें।">
   <meta name="keywords" content="school gallery, photos, events, activities, Chhindibirhi school">
   <meta name="author" content="Government Primary School Chhindibirhi">
   <meta name="robots" content="index, follow">
-  
+  <meta name="theme-color" content="#1e40af" />
+
   <title>फोटो गैलरी | Gallery - शासकीय प्राथमिक शाला, छिंदिबिरही</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="images/school-logo.png" type="image/png" />
-  <link rel="canonical" href="https://gps-chhindibirhi.netlify.app/gallery.html">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <link rel="apple-touch-icon" href="images/school-logo.png" />
+  <link rel="canonical" href="https://pschhindibirhi.netlify.app/gallery.html">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
 </head>
 <body data-lang="hi" data-theme="light">
+
+  <!-- Nav Overlay -->
+  <div class="nav-overlay" id="navOverlay" onclick="toggleNav()" aria-hidden="true"></div>
+
   <!-- Top Government Bar -->
-  <div class="top-bar">
-    
+  <div class="top-bar" role="banner">
     <div class="top-bar-content">
       <div class="govt-emblem">
-        <div class="emblem-placeholder">🇮🇳</div>
+        <div class="emblem-placeholder" role="img" aria-label="Government Emblem"></div>
         <div class="govt-text">
           <strong class="lang-hindi">छत्तीसगढ़ शासन</strong>
           <strong class="lang-english">Government of Chhattisgarh</strong>
@@ -41,65 +46,93 @@
   </div>
 
   <!-- Header -->
-  <header>
+  <header id="siteHeader">
     <div class="header-content">
       <div class="school-identity">
-        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="lazy" onerror="this.style.display='none'">
+        <img src="images/school-logo.png" alt="School Logo" class="school-logo" loading="eager" onerror="this.style.display='none'">
         <div class="school-name">
           <h1>
-            <span class="lang-hindi">शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-            <span class="lang-english">Government Primary School, Chhindibirhi</span>
+            <span class="lang-hindi">शास. प्राथ. शा. छिंदिबिरही</span>
+            <span class="lang-english">G.P.S. Chhindibirhi</span>
           </h1>
-          <p>
-            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ - 491441</span>
-            <span class="lang-english">Rajnandgaon, Chhattisgarh - 491441</span>
-          </p>
+          <div class="subtitle">
+            <span class="status-dot"></span>
+            <span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़</span>
+            <span class="lang-english">Rajnandgaon, Chhattisgarh</span>
+          </div>
         </div>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()" aria-label="Toggle Navigation">☰</button>
+      <button class="nav-toggle" onclick="toggleNav()" aria-label="Open Navigation" aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
   <!-- Navigation -->
-  <nav id="mainNav">
+  <nav id="mainNav" role="navigation" aria-label="Main Navigation">
     <button class="nav-close" onclick="toggleNav()" aria-label="Close Navigation">✕</button>
     <div class="nav-content">
-      <a href="index.html">
-        <span class="lang-hindi">मुख्य पृष्ठ</span>
-        <span class="lang-english">Home</span>
+      <a href="index.html"><span class="nav-icon">🏠</span><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+      <a href="about.html"><span class="nav-icon">ℹ️</span><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About Us</span></a>
+      <a href="gallery.html" class="active"><span class="nav-icon">🖼️</span><span class="lang-hindi">फोटो गैलरी</span><span class="lang-english">Gallery</span></a>
+      <a href="contact.html"><span class="nav-icon">📞</span><span class="lang-hindi">संपर्क करें</span><span class="lang-english">Contact</span></a>
+      <a href="school-notice-board/frontend/index.html"><span class="nav-icon">📋</span><span class="lang-hindi">नोटिस बोर्ड</span><span class="lang-english">Notice Board</span></a>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <div class="mnav-items">
+      <a href="index.html" class="mnav-item" aria-label="Home">
+        <span class="mnav-icon">🏠</span>
+        <span class="mnav-label lang-hindi">मुख्य</span>
+        <span class="mnav-label lang-english">Home</span>
       </a>
-      <a href="about.html">
-        <span class="lang-hindi">हमारे बारे में</span>
-        <span class="lang-english">About Us</span>
+      <a href="about.html" class="mnav-item" aria-label="About">
+        <span class="mnav-icon">ℹ️</span>
+        <span class="mnav-label lang-hindi">बारे में</span>
+        <span class="mnav-label lang-english">About</span>
       </a>
-      <a href="gallery.html" class="active">
-        <span class="lang-hindi">फोटो गैलरी</span>
-        <span class="lang-english">Gallery</span>
+      <a href="gallery.html" class="mnav-item active" aria-label="Gallery">
+        <span class="mnav-icon">🖼️</span>
+        <span class="mnav-label lang-hindi">गैलरी</span>
+        <span class="mnav-label lang-english">Gallery</span>
       </a>
-      <a href="contact.html">
-        <span class="lang-hindi">संपर्क करें</span>
-        <span class="lang-english">Contact</span>
+      <a href="contact.html" class="mnav-item" aria-label="Contact">
+        <span class="mnav-icon">📞</span>
+        <span class="mnav-label lang-hindi">संपर्क</span>
+        <span class="mnav-label lang-english">Contact</span>
       </a>
-      <a href="school-notice-board/frontend/index.html">
-        <span class="lang-hindi">नोटिस बोर्ड</span>
-        <span class="lang-english">Notice Board</span>
+      <a href="school-notice-board/frontend/index.html" class="mnav-item" aria-label="Notice Board">
+        <span class="mnav-icon">📋</span>
+        <span class="mnav-label lang-hindi">नोटिस</span>
+        <span class="mnav-label lang-english">Notice</span>
       </a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main>
-    <section class="content-section">
+  <main id="mainContent">
+    <section class="content-section" aria-labelledby="gallery-title">
       <div class="section-title">
-        <h2>
-          <span class="lang-hindi">📷 फोटो गैलरी</span>
-          <span class="lang-english">📷 Photo Gallery</span>
+        <span class="section-title-icon">📷</span>
+        <h2 id="gallery-title">
+          <span class="lang-hindi">फोटो गैलरी</span>
+          <span class="lang-english">Photo Gallery</span>
         </h2>
       </div>
-      
+
+      <!-- Breadcrumb trail -->
+      <nav class="gallery-breadcrumb" id="galleryBreadcrumb" aria-label="Gallery Navigation" style="display:none;">
+        <button class="breadcrumb-btn" id="breadcrumbHome" aria-label="All Categories">
+          <span class="lang-hindi">📂 सभी श्रेणियाँ</span>
+          <span class="lang-english">📂 All Categories</span>
+        </button>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+      </nav>
+
       <!-- Main Gallery Categories -->
-      <div id="mainCategories" class="gallery-categories">
-        <div class="gallery-category-card" onclick="showSubcategories('school_photos')">
+      <div id="mainCategories" class="gallery-categories" role="list">
+        <div class="gallery-category-card" data-category="school_photos" role="listitem" tabindex="0">
           <div class="category-icon">🏫</div>
           <h3>
             <span class="lang-hindi">विद्यालय फोटो</span>
@@ -109,9 +142,13 @@
             <span class="lang-hindi">विद्यालय भवन और परिसर</span>
             <span class="lang-english">School building and campus</span>
           </p>
+          <div class="category-count">
+            <span class="lang-hindi">116 फोटो</span>
+            <span class="lang-english">116 Photos</span>
+          </div>
         </div>
 
-        <div class="gallery-category-card" onclick="showSubcategories('events')">
+        <div class="gallery-category-card" data-category="events" role="listitem" tabindex="0">
           <div class="category-icon">🎉</div>
           <h3>
             <span class="lang-hindi">आयोजन</span>
@@ -121,9 +158,13 @@
             <span class="lang-hindi">विभिन्न कार्यक्रम और उत्सव</span>
             <span class="lang-english">Various programs and celebrations</span>
           </p>
+          <div class="category-count">
+            <span class="lang-hindi">3 उपश्रेणियाँ</span>
+            <span class="lang-english">3 Sub-categories</span>
+          </div>
         </div>
 
-        <div class="gallery-category-card" onclick="showSubcategories('other_folders')">
+        <div class="gallery-category-card" data-category="other_folders" role="listitem" tabindex="0">
           <div class="category-icon">📂</div>
           <h3>
             <span class="lang-hindi">अन्य गतिविधियां</span>
@@ -133,70 +174,83 @@
             <span class="lang-hindi">अन्य विद्यालय गतिविधियां</span>
             <span class="lang-english">Other school activities</span>
           </p>
+          <div class="category-count">
+            <span class="lang-hindi">3 उपश्रेणियाँ</span>
+            <span class="lang-english">3 Sub-categories</span>
+          </div>
         </div>
       </div>
 
       <!-- Subcategories -->
-      <div id="subcategoriesSection" class="gallery-subcategories" style="display: none;">
-        <button class="back-btn" onclick="showMainCategories()">
-          <span class="lang-hindi">← वापस जाएं</span>
-          <span class="lang-english">← Go Back</span>
-        </button>
-        <div id="subcategoriesGrid" class="gallery-categories"></div>
+      <div id="subcategoriesSection" class="gallery-subcategories" style="display:none;" aria-live="polite">
+        <div id="subcategoriesGrid" class="gallery-categories" role="list"></div>
       </div>
 
       <!-- Photo Grid -->
-      <div id="photoSection" class="gallery-photos-section" style="display: none;">
+      <div id="photoSection" class="gallery-photos-section" style="display:none;" aria-live="polite">
         <div class="photo-header">
-          <button class="back-btn" onclick="goBackToSubcategories()">
-            <span class="lang-hindi">← वापस जाएं</span>
-            <span class="lang-english">← Go Back</span>
-          </button>
-          <button id="downloadAllBtn" class="download-all-btn" style="display: none;" onclick="downloadAllPhotos()">
-            <span class="lang-hindi">📥 सभी फोटो डाउनलोड करें</span>
-            <span class="lang-english">📥 Download All Photos</span>
+          <div id="photoCountBadge" style="font-size:0.85rem; color:var(--text-muted);"></div>
+          <button id="downloadAllBtn" class="download-all-btn" style="display:none;" aria-label="Download all photos">
+            <span class="lang-hindi">📥 सभी डाउनलोड करें</span>
+            <span class="lang-english">📥 Download All</span>
           </button>
         </div>
-        <div id="photoGrid" class="photo-grid"></div>
+        <div id="photoGrid" class="photo-grid" role="list"></div>
       </div>
 
       <p class="gallery-note">
-        <span class="lang-hindi">नोट: अधिक फोटो के लिए विद्यालय कार्यालय से संपर्क करें।</span>
-        <span class="lang-english">Note: For more photos, please contact the school office.</span>
+        <span class="lang-hindi">💡 अधिक फोटो के लिए विद्यालय कार्यालय से संपर्क करें।</span>
+        <span class="lang-english">💡 For more photos, please contact the school office.</span>
       </p>
     </section>
   </main>
 
   <!-- Image Modal -->
-  <div id="imageModal" class="image-modal" style="display: none;" onclick="closeModal(event)">
-    <span class="modal-close" onclick="closeModal(event)">&times;</span>
-    <img id="modalImage" class="modal-image" alt="Full size image">
+  <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-label="Photo viewer" style="display:none;">
+    <button class="modal-close" id="modalClose" aria-label="Close photo viewer">&times;</button>
+
+    <!-- Image counter inside modal -->
+    <div id="modalCounter" style="position:absolute; top:16px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; padding:4px 14px; border-radius:20px; font-size:0.8rem; backdrop-filter:blur(4px);"></div>
+
+    <img id="modalImage" class="modal-image" alt="Full size photo" loading="lazy">
     <div class="modal-controls">
-      <button class="modal-nav-btn" onclick="navigateModal(-1); event.stopPropagation();">
-        <span class="lang-hindi">❮ पिछला</span>
-        <span class="lang-english">❮ Previous</span>
+      <button class="modal-nav-btn" id="modalPrev" aria-label="Previous photo">
+        <span>❮</span>
+        <span class="lang-hindi">पिछला</span>
+        <span class="lang-english">Prev</span>
       </button>
-      <a id="downloadBtn" class="modal-download-btn" download>
-        <span class="lang-hindi">📥 डाउनलोड</span>
-        <span class="lang-english">📥 Download</span>
+      <a id="downloadBtn" class="modal-download-btn" download aria-label="Download photo">
+        <span>📥</span>
+        <span class="lang-hindi">डाउनलोड</span>
+        <span class="lang-english">Download</span>
       </a>
-      <button class="modal-nav-btn" onclick="navigateModal(1); event.stopPropagation();">
-        <span class="lang-hindi">अगला ❯</span>
-        <span class="lang-english">Next ❯</span>
+      <button class="modal-nav-btn" id="modalNext" aria-label="Next photo">
+        <span class="lang-hindi">अगला</span>
+        <span class="lang-english">Next</span>
+        <span>❯</span>
       </button>
     </div>
   </div>
 
   <!-- Footer -->
-  <footer>
+  <footer role="contentinfo">
     <div class="footer-content">
-      <p>
-        <span class="lang-hindi">© 2025 शासकीय प्राथमिक शाला, छिंदिबिरही</span>
-        <span class="lang-english">© 2025 Government Primary School, Chhindibirhi</span>
-      </p>
+      <div class="footer-logo">🏫</div>
+      <p><span class="lang-hindi"><strong>शासकीय प्राथमिक शाला, छिंदिबिरही</strong></span><span class="lang-english"><strong>Government Primary School, Chhindibirhi</strong></span></p>
+      <p><span class="lang-hindi">राजनांदगाँव, छत्तीसगढ़ – 491441</span><span class="lang-english">Rajnandgaon, Chhattisgarh – 491441</span></p>
+      <nav class="footer-links" aria-label="Footer Links">
+        <a href="index.html"><span class="lang-hindi">मुख्य पृष्ठ</span><span class="lang-english">Home</span></a>
+        <a href="about.html"><span class="lang-hindi">हमारे बारे में</span><span class="lang-english">About</span></a>
+        <a href="gallery.html"><span class="lang-hindi">गैलरी</span><span class="lang-english">Gallery</span></a>
+        <a href="contact.html"><span class="lang-hindi">संपर्क</span><span class="lang-english">Contact</span></a>
+      </nav>
+      <hr class="footer-divider">
+      <p>© 2025 — <span class="lang-hindi">सर्वाधिकार सुरक्षित</span><span class="lang-english">All rights reserved</span></p>
     </div>
-    <div class="tricolor-bar"></div>
   </footer>
+
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
   <script src="gallery.js"></script>
