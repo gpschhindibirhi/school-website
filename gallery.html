@@ -148,7 +148,7 @@
           </div>
         </div>
 
-        <div class="gallery-category-card" data-category="events" role="listitem" tabindex="0">
+        <div class="gallery-category-card" onclick="showSubcategories('events')">
           <div class="category-icon">🎉</div>
           <h3>
             <span class="lang-hindi">आयोजन</span>
@@ -164,7 +164,7 @@
           </div>
         </div>
 
-        <div class="gallery-category-card" data-category="other_folders" role="listitem" tabindex="0">
+        <div class="gallery-category-card" onclick="showSubcategories('other_folders')">
           <div class="category-icon">📂</div>
           <h3>
             <span class="lang-hindi">अन्य गतिविधियां</span>
@@ -182,17 +182,24 @@
       </div>
 
       <!-- Subcategories -->
-      <div id="subcategoriesSection" class="gallery-subcategories" style="display:none;" aria-live="polite">
-        <div id="subcategoriesGrid" class="gallery-categories" role="list"></div>
+      <div id="subcategoriesSection" class="gallery-subcategories" style="display: none;">
+        <button class="back-btn" onclick="showMainCategories()">
+          <span class="lang-hindi">← वापस जाएं</span>
+          <span class="lang-english">← Go Back</span>
+        </button>
+        <div id="subcategoriesGrid" class="gallery-categories"></div>
       </div>
 
       <!-- Photo Grid -->
       <div id="photoSection" class="gallery-photos-section" style="display:none;" aria-live="polite">
         <div class="photo-header">
-          <div id="photoCountBadge" style="font-size:0.85rem; color:var(--text-muted);"></div>
-          <button id="downloadAllBtn" class="download-all-btn" style="display:none;" aria-label="Download all photos">
-            <span class="lang-hindi">📥 सभी डाउनलोड करें</span>
-            <span class="lang-english">📥 Download All</span>
+          <button class="back-btn" onclick="goBackToSubcategories()">
+            <span class="lang-hindi">← वापस जाएं</span>
+            <span class="lang-english">← Go Back</span>
+          </button>
+          <button id="downloadAllBtn" class="download-all-btn" style="display: none;" onclick="downloadAllPhotos()">
+            <span class="lang-hindi">📥 सभी फोटो डाउनलोड करें</span>
+            <span class="lang-english">📥 Download All Photos</span>
           </button>
         </div>
         <div id="photoGrid" class="photo-grid" role="list"></div>
@@ -206,28 +213,22 @@
   </main>
 
   <!-- Image Modal -->
-  <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-label="Photo viewer" style="display:none;">
-    <button class="modal-close" id="modalClose" aria-label="Close photo viewer">&times;</button>
-
-    <!-- Image counter inside modal -->
-    <div id="modalCounter" style="position:absolute; top:16px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; padding:4px 14px; border-radius:20px; font-size:0.8rem; backdrop-filter:blur(4px);"></div>
-
-    <img id="modalImage" class="modal-image" alt="Full size photo" loading="lazy">
+  <div id="imageModal" class="image-modal" style="display: none;" onclick="closeModal(event)">
+    <span class="modal-close" onclick="closeModal(event)">&times;</span>
+    <img id="modalImage" class="modal-image" alt="Full size image">
     <div class="modal-controls">
-      <button class="modal-nav-btn" id="modalPrev" aria-label="Previous photo">
-        <span>❮</span>
-        <span class="lang-hindi">पिछला</span>
-        <span class="lang-english">Prev</span>
+      <button class="modal-nav-btn" onclick="navigateModal(-1); event.stopPropagation();">
+        <span class="lang-hindi">❮ पिछला</span>
+        <span class="lang-english">❮ Previous</span>
       </button>
       <a id="downloadBtn" class="modal-download-btn" download aria-label="Download photo">
         <span>📥</span>
         <span class="lang-hindi">डाउनलोड</span>
         <span class="lang-english">Download</span>
       </a>
-      <button class="modal-nav-btn" id="modalNext" aria-label="Next photo">
-        <span class="lang-hindi">अगला</span>
-        <span class="lang-english">Next</span>
-        <span>❯</span>
+      <button class="modal-nav-btn" onclick="navigateModal(1); event.stopPropagation();">
+        <span class="lang-hindi">अगला ❯</span>
+        <span class="lang-english">Next ❯</span>
       </button>
     </div>
   </div>

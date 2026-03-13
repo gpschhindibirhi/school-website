@@ -86,11 +86,14 @@ function showMainCategories() {
 
 // ====== Show Subcategories ======
 function showSubcategories(category) {
+  console.log('Showing subcategories for:', category);
   currentCategory = category;
   const data = galleryData[category];
   if (!data) return;
 
   document.getElementById('mainCategories').style.display = 'none';
+  
+  // Show subcategories section
   document.getElementById('subcategoriesSection').style.display = 'block';
   document.getElementById('photoSection').style.display = 'none';
 
@@ -143,6 +146,8 @@ function showPhotos(category, subcategory) {
   if (!sub) return;
 
   document.getElementById('subcategoriesSection').style.display = 'none';
+  
+  // Show photo section
   document.getElementById('photoSection').style.display = 'block';
 
   // Update breadcrumb
@@ -254,6 +259,7 @@ function updateModalCounter() {
 }
 
 function openModal(index) {
+  console.log('Opening modal for image:', index);
   currentImageIndex = index;
   const modal     = document.getElementById('imageModal');
   const modalImg  = document.getElementById('modalImage');
@@ -283,6 +289,7 @@ function closeModal() {
 function navigateModal(direction) {
   if (currentImages.length === 0) return;
   currentImageIndex = (currentImageIndex + direction + currentImages.length) % currentImages.length;
+  
   const modalImg = document.getElementById('modalImage');
   const dlBtn    = document.getElementById('downloadBtn');
   if (modalImg) { modalImg.src = currentImages[currentImageIndex]; modalImg.alt = `Photo ${currentImageIndex + 1}`; }
